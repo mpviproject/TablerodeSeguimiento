@@ -1,0 +1,107 @@
+<html>    
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<link rel="stylesheet" href="css/dataTables.bootstrap.min.css">
+<link rel="stylesheet" href="css/estilos.css">
+<!-- Buttons DataTables -->
+<link rel="stylesheet" href="css/buttons.bootstrap.min.css">
+<link rel="stylesheet" href="css/font-awesome.min.css">
+
+<title>
+Tablero de seguimiento
+</title>
+
+
+<div class="row fondo">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+        <h1 class="text-center text-uppercase">Tablero de produccion</h1>
+    </div>
+</div>
+<div class="row">
+    <div id="cuadro1" class="col-sm-12 col-md-12 col-lg-12">
+        <div class="col-sm-offset-2 col-sm-8">
+            <h3 class="text-center"> <small class="mensaje"></small></h3>
+        </div>
+        <div class="table-responsive col-sm-12">
+            <table id="dt_procesos" class="table table-bordered table-hover" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <th>Tipo produccion</th>
+                        <th>Cuando solicito</th>
+                        <th>Orden de produccion</th>
+                        <th>Numero de parte</th>
+                        <th>Cantidad requerida</th>
+                        <th>fecha requerida</th>
+                        <th>No. operadores</th>
+                        <th>UPH</th>
+                        <th>Días de trabajo restante</th>
+                        <th>Necesarios para terminar</th>
+                        <th>fecha inicio produccion</th>
+                        <th>Fecha termino</th>
+                        <th>Ingenieria</th>
+                        <th>Calidad</th>
+                        <th>Forma 72</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+<input id="algo" type="hidden">
+
+
+<script>
+    $(document).on("ready", function() {
+        listar();
+    });
+    $("#btn_listar").on("click", function() {
+        listar();
+    })
+    var listar = function() {
+        var table = $("#dt_procesos").DataTable({
+            "destroy": true,
+            "ajax": {
+                "method": "POST",
+                "url": "listar_procesos.php"
+            },
+            "columns": [{
+                "data": "id_proceso"
+            }, {
+                "data": "nombre_proceso"
+            }, {
+                "data": "descripcion"
+            }, {
+                "data": "id_producto"
+            }, {
+                "data": "tiempo_aprox"
+            }]
+        });
+    }
+</script>
+
+
+
+
+
+
+
+
+
+<script src="js/jquery-1.12.3.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/jquery.dataTables.min.js"></script>
+<script src="js/dataTables.bootstrap.js"></script>
+<!--botones DataTables-->
+<script src="js/dataTables.buttons.min.js"></script>
+<script src="js/buttons.bootstrap.min.js"></script>
+<!--Libreria para exportar Excel-->
+<script src="js/jszip.min.js"></script>
+<!--Librerias para exportar PDF-->
+<script src="js/pdfmake.min.js"></script>
+<script src="js/vfs_fonts.js"></script>
+<!--Librerias para botones de exportación-->
+<script src="js/buttons.html5.min.js"></script>
+
+
+</html>
