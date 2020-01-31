@@ -7,7 +7,7 @@
 <!-- Buttons DataTables -->
 <link rel="stylesheet" href="css/buttons.bootstrap.min.css">
 <link rel="stylesheet" href="css/font-awesome.min.css">
-
+<script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
 <title>
 Tablero de seguimiento
 </title>
@@ -28,20 +28,13 @@ Tablero de seguimiento
                 <thead>
                     <tr>
                         <th>Tipo produccion</th>
+                        <th>Tipo produccion</th>
                         <th>Cuando solicito</th>
                         <th>Orden de produccion</th>
                         <th>Numero de parte</th>
                         <th>Cantidad requerida</th>
                         <th>fecha requerida</th>
-                        <th>No. operadores</th>
-                        <th>UPH</th>
-                        <th>Días de trabajo restante</th>
-                        <th>Necesarios para terminar</th>
-                        <th>fecha inicio produccion</th>
-                        <th>Fecha termino</th>
-                        <th>Ingenieria</th>
-                        <th>Calidad</th>
-                        <th>Forma 72</th>
+                        <th>Boton</th>
                     </tr>
                 </thead>
             </table>
@@ -52,29 +45,35 @@ Tablero de seguimiento
 
 
 <script>
-    $(document).on("ready", function() {
-        listar();
-    });
-    $("#btn_listar").on("click", function() {
-        listar();
-    })
+
+$(document).ready(function() {
+    listar();
+});
+
+
     var listar = function() {
         var table = $("#dt_procesos").DataTable({
             "destroy": true,
             "ajax": {
                 "method": "POST",
-                "url": "listar_procesos.php"
+                "url": "listaordenproduccion.php"
             },
             "columns": [{
-                "data": "id_proceso"
+                "data": "id_produccion"
             }, {
-                "data": "nombre_proceso"
+                "data": "tipo_produccion"
             }, {
-                "data": "descripcion"
+                "data": "fecha_solicitud"
             }, {
-                "data": "id_producto"
+                "data": "orden_produccion"
             }, {
-                "data": "tiempo_aprox"
+                "data": "numero_parte"
+            },{
+                "data": "cantidad_requerida"
+            },{
+                "data": "fecha_requerida"
+            },{
+                "defaultContent": "<button></button>"
             }]
         });
     }
