@@ -1,0 +1,135 @@
+  <html>
+
+  <title>Pagina</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="vendor\bootstrap\css\bootstrap.css" crossorigin="anonymous">
+  <script language="JavaScript" type="text/javascript" src="vendor\bootstrap\js\bootstrap.min.js"></script>
+
+<button data-target="#modal_dash" data-toggle="modal" >Presioname</button>
+
+  <div class='modal fade bd-example-modal-xl' id='modal_dash' tabindex='1' role='dialog' aria-labelledby='myExtraLargeModalLabel' aria-hidden='true'>
+    <div class='modal-dialog modal-xl'>
+      <div class='modal-content'>
+        <div class='container'>
+          <div class='modal-header'>
+            <h4>Reporte diario de producción</h4><button class='close' data-dismiss='modal'>×</button>
+          </div class='container'>
+          <br>
+
+          <p style="text-align:right">Fecha: <label id="fechaactual"></label></p>
+          <table class='table table-hove table-condensed table-bordered'>
+            <tr>
+              <td>ID Empleado:</td>
+              <td><input type='text' id='id_empleado' value=''><button id="seleccionaempleado" class="btn-primary btn-sm">+</button></td>
+            </tr>
+            <tr>
+              <td>Orden de Producción:</td>
+              <td><input type='text' id='orden_72' value=""></td>
+            </tr>
+            <tr>
+            </tr>
+            <tr>
+              <td>Maquina: </td>
+
+              <td><input id='maquina72' type='text'><button id="seleccionamaquinaproceso" class="btn-primary btn-sm">+</button></td>
+
+            </tr>
+          </table>
+
+          <br><br>"
+
+          <table class='table table-hove table-condensed table-bordered'>
+            <thead class="thead-dark">
+
+              <tr>
+                <th>Checklist inicio de turno:</th>
+                <th>Check</th>
+              </tr>
+              <tr>
+                <td>Piezas PAP: </td>
+                <td><input type="checkbox" id="PAP"></td>
+              </tr>
+              <tr>
+                <td>Paquetes de operaciones completo:</td>
+                <td><input type="checkbox" id="POC"></td>
+                </td>
+              </tr>
+              <tr>
+                <td>Area de trabajo limpia:</td>
+                <td><input type="checkbox" id="ATL"></td>
+              </tr>
+              <tr>
+                <td>Caja de scrap y reproceso sin material:</td>
+                <td><input type="checkbox" id="SCRAP"></td>
+              </tr>
+              <tr>
+                <td>Equipo de medicion vigente:</td>
+                <td><input type="checkbox" id="EMV"></td>
+              </tr>
+          </table>
+          <br>
+          <table class='table table-hove table-condensed table-bordered'>
+            <thead class="thead-dark">
+
+              <tr>
+                <th>Seleccione la tarea en la que trabajo:</th>
+              </tr>
+              <tr>
+                <td>
+
+                  <input id="tareaActual" type="text"> <button id="seleccionatarea">+</button>
+
+                </td>
+              </tr>
+          </table>
+          <br><br>
+         
+          <table id="tabla72" class="table table-hove  table-condensed table-bordered responsive-table">
+            <thead class="thead-dark">
+              <tr>
+                <th colspan="2">Horas</th>
+                <th colspan="4">Piezas por hora</th>
+              </tr>
+              <tr>
+                <td>Fecha inicial y final</td>
+                <td>Progreso</td>
+                <td>Conforme</td>
+                <td>Reproceso</td>
+                <td>Scrap</td>
+              </tr>
+
+              <tr>
+                <td><input type="text" class="datetime" name="f_inicio" value=""></td>
+                
+                <td><input type="number" name="progreso"></td>
+                <td><input type="number" name="conforme"></td>
+                <td><input type="number" name="reproceso"></td>
+                <td><input type="number" name="scrap"></td>
+              </tr>
+
+
+
+            </thead>
+            
+        </div>
+        <tbody>
+        </tbody>
+        </table>
+        <br><br>
+        <br>
+            <br>
+            <br>
+            <br>
+            <br>
+        <div>
+          <button id=CerrarModal72 text-align='center' class='btn btn-primary' type='submit' value='$idp' type='button'>Aceptar</button>
+          </form>
+          <br><br>
+        </div>
+      </div>
+    </div>
+
+
+  </html>
