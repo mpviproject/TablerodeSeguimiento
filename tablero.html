@@ -1,18 +1,18 @@
 <html>
 
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="">
-  <meta name="author" content="">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="">
+<meta name="author" content="">
 
-  <title>Pueblo Viejo ERP</title>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <!-- Bootstrap core CSS -->
-  <link rel="stylesheet" href="vendor\bootstrap\css\bootstrap.min.css" crossorigin="anonymous">
-  <link rel="stylesheet" href="css/bootstrap.min.css">
-  <link rel="stylesheet" href="css/estilos.css">
-  
-  <title>
+<title>Pueblo Viejo ERP</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<!-- Bootstrap core CSS -->
+<link rel="stylesheet" href="vendor\bootstrap\css\bootstrap.min.css" crossorigin="anonymous">
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<link rel="stylesheet" href="css/estilos.css">
+
+<title>
   Tablero de seguimiento
 </title>
 
@@ -28,7 +28,7 @@
       <h3 class="text-center"> <small class="mensaje"></small></h3>
     </div>
     <div class="table-responsive col-sm-12">
-     
+
       <table id="dt_procesos" class="table table-bordered table-hover" cellspacing="0" width="100%">
         <thead>
           <tr>
@@ -51,16 +51,14 @@
 </div>
 
 <!-- Modal para la forma 72 -->
-<div class='modal fade bd-example-modal-lg' id='modal_dash' tabindex='1' role='dialog' aria-labelledby='myExtraLargeModalLabel' aria-hidden='true'>
+<div class='modal fade bd-example-modal-lg' id='modal_dash' tabindex='1' role='dialog'
+  aria-labelledby='myExtraLargeModalLabel' aria-hidden='true'>
   <div class='modal-dialog modal-lg'>
     <div class='modal-content'>
       <div class='container'>
         <div class='modal-header'>
-          <h4>Reporte diario de producción</h4><button class='close' data-dismiss='modal'>×</button>
-
+          <h4>Reporte diario de producción</h4><button class='close' id='cerrar72'>×</button>
           <br>
-
-
         </div>
         <p style="text-align:right">Fecha: <label id="fechaactual"></label></p>
         <table class='table table-hove table-condensed table-bordered'>
@@ -69,18 +67,17 @@
               <th colspan="2">Datos de produccion</th>
             </tr>
             <tr>
-              <td>ID Empleado:</td>
-              <td><input type='text' id='id_empleado' value=''><button id="seleccionaempleado" class="btn-primary btn-sm">+</button></td>
+              <td>Empleado:</td>
+              <td><input type='text' id='nombre_empleado' value=''>
+                <input type='hidden' id='id_empleado'><button id="seleccionaempleado" class="btn-primary btn-sm">+</button></td>
             </tr>
             <tr>
+              <!-- Crear funcion para llenar este campo al momento de seleccionar el modal de la forma 72 -->
               <td>Orden de Producción:</td>
               <td><input type='text' id='orden_72' value=""></td>
+              <input type='hidden' id='id_orden'>
             </tr>
             <tr>
-            </tr>
-            <tr>
-              <td>Maquina: </td>
-              <td><input id='maquina72' type='text'><button id="seleccionamaquinaproceso" class="btn-primary btn-sm">+</button></td>
             </tr>
           </thead>
         </table>
@@ -132,24 +129,26 @@
           </tbody>
           </thead>
         </table>
-        <button data-toggle="modal" data-target="#modaldeforma72" text-align='center' class="btn btn-secondary btn-lg btn-block">Agregar registro en tabla</button>
+        <button data-toggle="modal" data-target="#modaldeforma72" text-align='center'
+          class="btn btn-secondary btn-lg btn-block">Agregar registro en tabla</button>
         <br>
         <table id="tablaparos" class="table table-bordered table-hover" cellspacing="0" cellpadding="0" width="100%">
-            <thead class="thead-dark">
+          <thead class="thead-dark">
             <tr>
               <th colspan="2">Agregar paro de maquinas</th>
-            </tr>  
+            </tr>
             <tr>
-            <td width="30%">Tiempo de demora (Horas)</td>
-            <td width="70%">Motivo</td>    
-          </tr>
+              <td width="30%">Tiempo de demora (Horas)</td>
+              <td width="70%">Motivo</td>
+            </tr>
           <tbody>
           </tbody>
-            </thead>
-          </table>
-          <button data-toggle="modal" data-target="#modalparo" text-align='center' class="btn btn-secondary btn-lg btn-block">Agregar paro de maquinas</button>
-          <br><br>
-          <button id="guardala72" class="btn btn-primary btn-lg btn-block">Guardar registro</button>
+          </thead>
+        </table>
+        <button data-toggle="modal" data-target="#modalparo" text-align='center'
+          class="btn btn-secondary btn-lg btn-block">Agregar paro de maquinas</button>
+        <br><br>
+        <button id="guardala72" class="btn btn-primary btn-lg btn-block">Guardar registro</button>
         <br><br>
       </div>
     </div>
@@ -162,16 +161,17 @@
 </div>
 <!-- Termina modal de forma 72 -->
 
- <!-- Modal para agregar datos a la tabla -->
+<!-- Modal para agregar datos a la tabla -->
 
- <div class="modal fade bd-example-modal-lg" id="modaldeforma72" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+<div class="modal fade bd-example-modal-lg" id="modaldeforma72" tabindex="-1" role="dialog"
+  aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
 
       <div class="table-responsive col-sm-12">
         <div class='modal-header'>
           <h4>Agregue datos a la tabla</h4>
-          <button id="closemodaldeforma72" style="text-align:right" class="btn btn-danger">×</button>
+          <button id="cerrarregistro" style="text-align:right" class="btn btn-danger">×</button>
         </div>
         <table id="tabla721" class="table table-hove  table-condensed table-bordered responsive-table">
           <thead class="thead-dark">
@@ -217,14 +217,14 @@
 
 
 <!--Modal para seleccionar empleado-->
-<div class="modal fade bd-example-modal-xl" id="modalempleados" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl">
+<div class="modal fade bd-example-modal-lg" id="modalempleados" tabindex="-1" role="dialog"
+  aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="container">
         <div class="table-responsive col-sm-12">
           <div class='modal-header'>
-            <h4>Seleccione el operador</h4>
-            <button id="closemodal" style="text-align:right" class="btn btn-danger">×</button>
+            <h4>Seleccione el operador</h4><button class='close' id='cerrarempleado'>×</button>
           </div>
           <br>
           <table id="tablaempleados" class="table table-bordered table-hover" cellspacing="0" width="100%">
@@ -232,6 +232,8 @@
               <tr>
                 <th>ID Operador</th>
                 <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Turno</th>
                 <th>Seleccionar</th>
               </tr>
             </thead>
@@ -243,7 +245,8 @@
 </div>
 
 <!-- Agregar paro de maquina -->
-<div class="modal fade bd-example-modal-xl" id="modalparo" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+<div class="modal fade bd-example-modal-xl" id="modalparo" tabindex="-1" role="dialog"
+  aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl">
     <div class="modal-content">
       <div class="container">
@@ -256,91 +259,148 @@
           <input class="datetime" id="tiempoparo">
           <br>
           <label for="comment">Comment:</label>
-        <textarea class="form-control" rows="5" id="comment"></textarea>
-        <br>
-        <br>
-        <button id="guardaparo" class="btn btn-secondary btn-lg btn-block">Guardar</button>
-        <br>
+          <textarea class="form-control" rows="5" id="comment"></textarea>
+          <br>
+          <br>
+          <button id="guardaparo" class="btn btn-secondary btn-lg btn-block">Guardar</button>
+          <br>
         </div>
       </div>
     </div>
   </div>
 </div>
-    <script>
+<script>
 
-      $(document).ready(function () {
-        listar();
-      });
+  $(document).ready(function () {
+    listar();
+  });
 
-      var listar = function () {
-        var table = $("#dt_procesos").DataTable({
-          "destroy": true,
-          "ajax": {
-            "method": "POST",
-            "url": "listaordenproduccion.php"
-          },
-          "columns": [{
-            "data": "id_produccion"
-          }, {
-            "data": "tipo_produccion"
-          }, {
-            "data": "fecha_solicitud"
-          }, {
-            "data": "orden_produccion"
-          }, {
-            "data": "numero_parte"
-          }, {
-            "data": "cantidad_requerida"
-          }, {
-            "data": "fecha_requerida"
-          }, {
-            "defaultContent": "<button>Metrica</button>"
-          }, {
-            "defaultContent": "<button>Ingenieria</button>"
-          }, {
-            "defaultContent": "<button>Calidad</button>"
-          }, {
-            "defaultContent": "<button id='forma'>Forma 72</button>"
-          }]
+
+
+  //funcion para listar las ordenes de compra que estan en proceso actualmente,
+  var listar = function () {
+    var table = $("#dt_procesos").DataTable({
+      "destroy": true,
+      "ajax": {
+        "method": "POST",
+        "url": "listaordenproduccion.php"
+      },
+      "columns": [{
+        "data": "id_produccion"
+      }, {
+        "data": "tipo_produccion"
+      }, {
+        "data": "fecha_solicitud"
+      }, {
+        "data": "orden_produccion"
+      }, {
+        "data": "numero_parte"
+      }, {
+        "data": "cantidad_requerida"
+      }, {
+        "data": "fecha_requerida"
+      }, {
+        "defaultContent": "<button>Metrica</button>"
+      }, {
+        "defaultContent": "<button>Ingenieria</button>"
+      }, {
+        "defaultContent": "<button>Calidad</button>"
+      }, {
+        "defaultContent": "<button id='forma'>Forma 72</button>"
+      }]
+    });
+    obtener_orden("#dt_procesos tbody", table);
+  }
+
+  var obtener_orden = function (tbody, table) {
+    //funcion para obtener datos de la tabla para la forma 72
+    $(tbody).on("click", "#forma", function () {
+      var data1 = table.row($(this).parents("tr")).data();
+      //Asigna id_produccion y orden de produccion a campos en la forma 72
+      $("#orden_72").val(data1.orden_produccion);
+      $("#id_orden").val(data1.id_produccion);
+      $("#modal_dash").modal();
+    })
+  }
+
+//Abre modal para seleccionar el empleado
+  $("#seleccionaempleado").on("click", function () {
+    listaempleados();
+    $("#modalempleados").modal();
+  });
+
+
+  //Muestra la tabla de operadores en el modal.
+  var listaempleados = function () {
+    var table = $("#tablaempleados").DataTable({
+      "destroy": true,
+      "paging": false,
+      "bInfo": false,
+      "responsive": true,
+      "ajax": {
+        "method": "POST",
+        "url": "listatablaempleado.php"
+      },
+      "columns": [{
+        "data": "id_operador"
+      },
+      {
+        "data": "nombre_operador"
+      },
+      {
+        "data": "apellido_operador"
+      },
+      {
+        "data": "turno"
+      },
+      {
+        "defaultContent": "<button id='seleccionaoperador'>Seleccionar</button>"
+      }
+      ]
+    });
+     obtener_datos_operador("#tablaempleados tbody", table);
+  }
+
+  //obtiene datos de operador seleccionando 
+  var obtener_datos_operador = function(tbody, table) {
+        $(tbody).on("click", "#seleccionaoperador", function() {
+          var data1 = table.row($(this).parents("tr")).data();
+          var operador = data1.id_operador;
+          var nombre = data1.nombre_operador;
+          $("#nombre_empleado").val(nombre);
+          $("#id_empleado").val(operador);
+          $("#modalempleados").modal('hide');
         });
-        obtener_orden("#dt_procesos tbody", table);
       }
 
-      var obtener_orden = function (tbody, table) {
-        $(tbody).on("click", "#forma", function () {
-          $("#modal_dash").modal();
-        })
-      }
+  //funciones para cerrar modals
+  $("#cerrar72").on("click", function () {
+    $("#modal_dash").modal('hide');
+  })
+  $("#cerrarempleado").on("click", function () {
+    $("#modalempleados").modal('hide');
+  })
+
+  //Encontrar solucion para modal no scrollable
 
 
+</script>
 
 
-
-
-    </script>
-
-
-
-
-
-
-
-
-
-    <script src="js/jquery-1.12.3.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/jquery.dataTables.min.js"></script>
-    <script src="js/dataTables.bootstrap.js"></script>
-    <!--botones DataTables-->
-    <script src="js/dataTables.buttons.min.js"></script>
-    <script src="js/buttons.bootstrap.min.js"></script>
-    <!--Libreria para exportar Excel-->
-    <script src="js/jszip.min.js"></script>
-    <!--Librerias para exportar PDF-->
-    <script src="js/pdfmake.min.js"></script>
-    <script src="js/vfs_fonts.js"></script>
-    <!--Librerias para botones de exportación-->
-    <script src="js/buttons.html5.min.js"></script>
+<script src="js/jquery-1.12.3.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/jquery.dataTables.min.js"></script>
+<script src="js/dataTables.bootstrap.js"></script>
+<!--botones DataTables-->
+<script src="js/dataTables.buttons.min.js"></script>
+<script src="js/buttons.bootstrap.min.js"></script>
+<!--Libreria para exportar Excel-->
+<script src="js/jszip.min.js"></script>
+<!--Librerias para exportar PDF-->
+<script src="js/pdfmake.min.js"></script>
+<script src="js/vfs_fonts.js"></script>
+<!--Librerias para botones de exportación-->
+<script src="js/buttons.html5.min.js"></script>
 
 
 </html>
