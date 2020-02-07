@@ -1,8 +1,4 @@
 <html>
-<<<<<<< HEAD
-<meta name='viewport' content='width=device-width, initial-scale=1'>
-=======
->>>>>>> marco
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -19,11 +15,7 @@
 <script type="text/javascript" src="js\moment.min.js"></script>
 <script type="text/javascript" src="js\daterangepicker.js"></script>
 <title>
-<<<<<<< HEAD
-    Tablero de
-=======
   Tablero de seguimiento
->>>>>>> marco
 </title>
 <!-- Tablero de seguimiento -->
 <div class="row fondo">
@@ -277,46 +269,11 @@
   </div>
 </div>
 <script>
-<<<<<<< HEAD
-    $(document).ready(function() {
-        listar();
-    });
-
-
-    var listar = function() {
-        var table = $("#dt_procesos").DataTable({
-            "destroy": true,
-            "ajax": {
-                "method": "POST",
-                "url": "listaordenproduccion.php"
-            },
-            "columns": [{
-                "data": "id_produccion"
-            }, {
-                "data": "tipo_produccion"
-            }, {
-                "data": "fecha_solicitud"
-            }, {
-                "data": "orden_produccion"
-            }, {
-                "data": "numero_parte"
-            }, {
-                "data": "cantidad_requerida"
-            }, {
-                "data": "fecha_requerida"
-            }, {
-                "defaultContent": "<button></button>"
-            }]
-        });
-    }
-</script>
-=======
 
   $(document).ready(function () {
     listar();
   });
 
->>>>>>> marco
 
 
   //funcion para listar las ordenes de compra que estan en proceso actualmente,
