@@ -15,472 +15,534 @@
 <script type="text/javascript" src="js\moment.min.js"></script>
 <script type="text/javascript" src="js\daterangepicker.js"></script>
 <title>
-  Tablero de seguimiento
+    Tablero de seguimiento
 </title>
 <!-- Tablero de seguimiento -->
 <div class="row fondo">
-  <div class="col-sm-12 col-md-12 col-lg-12">
-    <h1 class="text-center text-uppercase">Tablero de produccion</h1>
-  </div>
+    <div class="col-sm-12 col-md-12 col-lg-12">
+        <h1 class="text-center text-uppercase">Tablero de produccion</h1>
+    </div>
 </div>
 <div class="row">
-  <div id="cuadro1" class="col-sm-12 col-md-12 col-lg-12">
-    <div class="col-sm-offset-2 col-sm-8">
-      <h3 class="text-center"> <small class="mensaje"></small></h3>
-    </div>
-    <div class="table-responsive col-sm-12">
+    <div id="cuadro1" class="col-sm-12 col-md-12 col-lg-12">
+        <div class="col-sm-offset-2 col-sm-8">
+            <h3 class="text-center"> <small class="mensaje"></small></h3>
+        </div>
+        <div class="table-responsive col-sm-12">
 
-      <table id="dt_procesos" class="table table-bordered table-hover" cellspacing="0" width="100%">
-        <thead>
-          <tr>
-            <th>id_produccion</th>
-            <th>Tipo produccion</th>
-            <th>Cuando solicito</th>
-            <th>Orden de produccion</th>
-            <th>Numero de parte</th>
-            <th>Cantidad requerida</th>
-            <th>fecha requerida</th>
-            <th>Metricas</th>
-            <th>Ingenieria</th>
-            <th>Calidad</th>
-            <th>Forma 72</th>
-          </tr>
-        </thead>
-      </table>
+            <table id="dt_procesos" class="table table-bordered table-hover" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <th>id_produccion</th>
+                        <th>Tipo produccion</th>
+                        <th>Cuando solicito</th>
+                        <th>Orden de produccion</th>
+                        <th>Numero de parte</th>
+                        <th>Cantidad requerida</th>
+                        <th>fecha requerida</th>
+                        <th>Metricas</th>
+                        <th>Ingenieria</th>
+                        <th>Calidad</th>
+                        <th>Forma 72</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
     </div>
-  </div>
 </div>
 
 <!-- Modal para la forma 72 -->
-<div class='modal fade bd-example-modal-lg' id='modal_dash' tabindex='1' role='dialog'
-  aria-labelledby='myExtraLargeModalLabel' aria-hidden='true'>
-  <div class='modal-dialog modal-lg'>
-    <div class='modal-content'>
-      <div class='container'>
-        <div class='modal-header'>
-          <h4>Reporte diario de producción</h4><button class='close' id='cerrar72'>×</button>
-          <br>
+<div class='modal fade bd-example-modal-lg' id='modal_dash' tabindex='1' role='dialog' aria-labelledby='myExtraLargeModalLabel' aria-hidden='true'>
+    <div class='modal-dialog modal-lg'>
+        <div class='modal-content'>
+            <div class='container'>
+                <div class='modal-header'>
+                    <h4>Reporte diario de producción</h4><button class='close' id='cerrar72'>×</button>
+                    <br>
+                </div>
+                <p style="text-align:right">Fecha: <label id="fechaactual"></label></p>
+                <!-- Tabla para obtener los datos de la orden de produccion -->
+                <table class='table table-hove table-condensed table-bordered'>
+                    <thead class="thead-dark">
+                        <tr>
+                            <th colspan="2">Datos de produccion</th>
+                        </tr>
+                        <tr>
+                            <td>Empleado:</td>
+                            <td><input type='text' id='nombre_empleado' value=''>
+                                <input type='hidden' id='id_empleado'><button id="seleccionaempleado" class="btn-primary btn-sm">+</button></td>
+                        </tr>
+                        <tr>
+                            <td>Orden de Producción:</td>
+                            <td><input type='text' id='orden_72' value=""></td>
+                            <input type='hidden' id='id_orden'>
+                        </tr>
+                        <tr>
+                        </tr>
+                    </thead>
+                </table>
+                <br><br>
+                <!-- Tabla de checklist de inicio de turno -->
+                <table class='table table-hove table-condensed table-bordered'>
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Checklist inicio de turno:</th>
+                            <th>Check</th>
+                        </tr>
+                        <tr>
+                            <td>Piezas PAP: </td>
+                            <td><input type="checkbox" id="PAP" value="PAP" class="chk72"></td>
+                        </tr>
+                        <tr>
+                            <td>Paquetes de operaciones completo:</td>
+                            <td><input type="checkbox" id="POC" value="POC" class="chk72"></td>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Area de trabajo limpia:</td>
+                            <td><input type="checkbox" id="ATL" value="ATL" class="chk72"></td>
+                        </tr>
+                        <tr>
+                            <td>Caja de scrap y reproceso sin material:</td>
+                            <td><input type="checkbox" id="SCRAP" value="SCRAP" class="chk72"></td>
+                        </tr>
+                        <tr>
+                            <td>Equipo de medicion vigente:</td>
+                            <td><input type="checkbox" id="EMV" value="EMV" class="chk72"></td>
+                        </tr>
+                </table>
+                <br>
+                <!-- Tabla donde se registra el progreso de la produccion-->
+                <table id="tabla72" class="table table-hove  table-condensed table-bordered responsive-table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th colspan="5">Registro de entrada</th>
+                        </tr>
+                        <tr>
+                            <td>Fecha inicio</td>
+                            <td>Fecha fin</td>
+                            <td>Cantidad producida</td>
+                            <td>Reproceso</td>
+                            <td>Scrap</td>
+                        </tr>
+                        <tbody>
+                        </tbody>
+                    </thead>
+                </table>
+                <button data-toggle="modal" data-target="#modaldeforma72" text-align='center' class="btn btn-secondary btn-lg btn-block">Agregar registro en tabla</button>
+                <br>
+                <!-- Tabla donde se registran los paros de las maquinas -->
+                <table id="tablaparos" class="table table-bordered table-hover" cellspacing="0" cellpadding="0" width="100%">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th colspan="2">Agregar paro de maquinas</th>
+                        </tr>
+                        <tr>
+                            <td width="30%">Tiempo de demora (Horas)</td>
+                            <td width="70%">Motivo</td>
+                        </tr>
+                        <tbody>
+                        </tbody>
+                    </thead>
+                </table>
+                <button data-toggle="modal" data-target="#modalparo" text-align='center' class="btn btn-secondary btn-lg btn-block">Agregar paro de maquinas</button>
+                <br><br>
+                <!-- Boton para guardar registro -->
+                <button id="guardala72" class="btn btn-primary btn-lg btn-block">Guardar registro</button>
+                <br><br>
+            </div>
         </div>
-        <p style="text-align:right">Fecha: <label id="fechaactual"></label></p>
-        <!-- Tabla para obtener los datos de la orden de produccion -->
-        <table class='table table-hove table-condensed table-bordered'>
-          <thead class="thead-dark">
-            <tr>
-              <th colspan="2">Datos de produccion</th>
-            </tr>
-            <tr>
-              <td>Empleado:</td>
-              <td><input type='text' id='nombre_empleado' value=''>
-                <input type='hidden' id='id_empleado'><button id="seleccionaempleado"
-                  class="btn-primary btn-sm">+</button></td>
-            </tr>
-            <tr>
-              <td>Orden de Producción:</td>
-              <td><input type='text' id='orden_72' value=""></td>
-              <input type='hidden' id='id_orden'>
-            </tr>
-            <tr>
-            </tr>
-          </thead>
-        </table>
-        <br><br>
-        <!-- Tabla de checklist de inicio de turno -->
-        <table class='table table-hove table-condensed table-bordered'>
-          <thead class="thead-dark">
-            <tr>
-              <th>Checklist inicio de turno:</th>
-              <th>Check</th>
-            </tr>
-            <tr>
-              <td>Piezas PAP: </td>
-              <td><input type="checkbox" id="PAP" value="PAP" class="chk72"></td>
-            </tr>
-            <tr>
-              <td>Paquetes de operaciones completo:</td>
-              <td><input type="checkbox" id="POC" value="POC" class="chk72"></td>
-              </td>
-            </tr>
-            <tr>
-              <td>Area de trabajo limpia:</td>
-              <td><input type="checkbox" id="ATL" value="ATL" class="chk72"></td>
-            </tr>
-            <tr>
-              <td>Caja de scrap y reproceso sin material:</td>
-              <td><input type="checkbox" id="SCRAP" value="SCRAP" class="chk72"></td>
-            </tr>
-            <tr>
-              <td>Equipo de medicion vigente:</td>
-              <td><input type="checkbox" id="EMV" value="EMV" class="chk72"></td>
-            </tr>
-        </table>
         <br>
-        <!-- Tabla donde se registra el progreso de la produccion-->
-        <table id="tabla72" class="table table-hove  table-condensed table-bordered responsive-table">
-          <thead class="thead-dark">
-            <tr>
-              <th colspan="5">Registro de entrada</th>
-            </tr>
-            <tr>
-              <td>Fecha inicio</td>
-              <td>Fecha fin</td>
-              <td>Cantidad producida</td>
-              <td>Reproceso</td>
-              <td>Scrap</td>
-            </tr>
-          <tbody>
-          </tbody>
-          </thead>
-        </table>
-        <button data-toggle="modal" data-target="#modaldeforma72" text-align='center'
-          class="btn btn-secondary btn-lg btn-block">Agregar registro en tabla</button>
         <br>
-        <!-- Tabla donde se registran los paros de las maquinas -->
-        <table id="tablaparos" class="table table-bordered table-hover" cellspacing="0" cellpadding="0" width="100%">
-          <thead class="thead-dark">
-            <tr>
-              <th colspan="2">Agregar paro de maquinas</th>
-            </tr>
-            <tr>
-              <td width="30%">Tiempo de demora (Horas)</td>
-              <td width="70%">Motivo</td>
-            </tr>
-          <tbody>
-          </tbody>
-          </thead>
-        </table>
-        <button data-toggle="modal" data-target="#modalparo" text-align='center'
-          class="btn btn-secondary btn-lg btn-block">Agregar paro de maquinas</button>
-        <br><br>
-        <!-- Boton para guardar registro -->
-        <button id="guardala72" class="btn btn-primary btn-lg btn-block">Guardar registro</button>
-        <br><br>
-      </div>
+        <br>
+        <br>
+        <br>
     </div>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-  </div>
 </div>
 <!-- Termina modal de forma 72 -->
 
 <!-- Modal para agregar datos a la tabla -->
-<div class="modal fade bd-example-modal-lg" id="modaldeforma72" tabindex="-1" role="dialog"
-  aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="table-responsive col-sm-12">
-        <div class='modal-header'>
-          <h4>Agregue datos a la tabla</h4>
-          <button id="cerrarregistro" style="text-align:right" class="btn btn-danger">×</button>
+<div class="modal fade bd-example-modal-lg" id="modaldeforma72" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="table-responsive col-sm-12">
+                <div class='modal-header'>
+                    <h4>Agregue datos a la tabla</h4>
+                    <button id="cerrarregistro" style="text-align:right" class="btn btn-danger">×</button>
+                </div>
+                <!-- Tabla para introducir la hora -->
+                <table class='table table-hove table-condensed table-bordered'>
+                    <thead class="thead-dark">
+                        <tr>
+                            <th colspan="2">Fecha</th>
+                        </tr>
+                        <tr>
+                            <!-- Dato de entrada de rango de fecha -->
+                            <td><input id="rango" type="text" class="datetime" name="rango" value=""></td>
+                            <!-- Metricas auto calculables en horas trabajadas -->
+                            <td><input id="hrs" type="text" disabled="true" value="horas"></td>
+                        </tr>
+                </table>
+                <!-- Tabla para introducir datos de produccion -->
+                <table id="tabla721" class="table table-hove  table-condensed table-bordered responsive-table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th colspan="3">Datos de entrada</th>
+                        </tr>
+                        <tr>
+                            <td>Cantidad Producida</td>
+                            <td>Reproceso</td>
+                            <td>Scrap</td>
+                        </tr>
+                        <tr>
+                            <td><input id="progress" type="number" name="progreso"></td>
+                            <td><input id="reproceso" type="number" name="reproceso"></td>
+                            <td><input id="scrap" type="number" name="scrap"></td>
+                        </tr>
+                    </thead>
+                </table>
+                <button id="guardaentabla" class="btn btn-secondary btn-lg btn-block">Aceptar</button>
+                <br>
+                <br>
+            </div>
         </div>
-        <!-- Tabla para introducir la hora -->
-        <table class='table table-hove table-condensed table-bordered'>
-          <thead class="thead-dark">
-            <tr>
-              <th colspan="2">Fecha</th>
-            </tr>
-            <tr>
-              <!-- Dato de entrada de rango de fecha -->
-              <td><input id="rango" type="text" class="datetime" name="rango" value=""></td>
-              <!-- Metricas auto calculables en horas trabajadas -->
-              <td><input id="hrs" type="text" disabled="true" value="horas"></td>
-            </tr>
-        </table>
-        <!-- Tabla para introducir datos de produccion -->
-        <table id="tabla721" class="table table-hove  table-condensed table-bordered responsive-table">
-          <thead class="thead-dark">
-            <tr>
-              <th colspan="3">Datos de entrada</th>
-            </tr>
-            <tr>
-              <td>Cantidad Producida</td>
-              <td>Reproceso</td>
-              <td>Scrap</td>
-            </tr>
-            <tr>
-              <td><input id="progress" type="number" name="progreso"></td>
-              <td><input id="reproceso" type="number" name="reproceso"></td>
-              <td><input id="scrap" type="number" name="scrap"></td>
-            </tr>
-          </thead>
-        </table>
-        <button id="guardaentabla" class="btn btn-secondary btn-lg btn-block">Aceptar</button>
-        <br>
-        <br>
-      </div>
     </div>
-  </div>
 </div>
 
 
 <!--Modal para seleccionar empleado-->
-<div class="modal fade bd-example-modal-lg" id="modalempleados" tabindex="-1" role="dialog"
-  aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="container">
-        <div class="table-responsive col-sm-12">
-          <div class='modal-header'>
-            <h4>Seleccione el operador</h4><button class='close' id='cerrarempleado'>×</button>
-          </div>
-          <br>
-          <table id="tablaempleados" class="table table-bordered table-hover" cellspacing="0" width="100%">
-            <thead class="thead-dark">
-              <tr>
-                <th>ID Operador</th>
-                <th>Nombre</th>
-                <th>Apellido</th>
-                <th>Turno</th>
-                <th>Seleccionar</th>
-              </tr>
-            </thead>
-          </table>
+<div class="modal fade bd-example-modal-lg" id="modalempleados" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="container">
+                <div class="table-responsive col-sm-12">
+                    <div class='modal-header'>
+                        <h4>Seleccione el operador</h4><button class='close' id='cerrarempleado'>×</button>
+                    </div>
+                    <br>
+                    <table id="tablaempleados" class="table table-bordered table-hover" cellspacing="0" width="100%">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>ID Operador</th>
+                                <th>Nombre</th>
+                                <th>Apellido</th>
+                                <th>Turno</th>
+                                <th>Seleccionar</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+            <br>
+            <input id="btn_mostar" type="button" class="btn btn-primary" value="Agregar Produccion" onClick="ocultars()">
+            <button onclick="goBack()" class='tareas btn btn-primary'><i class='fa fa-home'></i></button>
+            <button role="link" onclick="location.href='maquinaria.html';" class='maquinas btn btn-primary'><i class='fa fa-gavel'></i></button>
+
+            <br>
+            <br>
+            <div class="row">
+
+                <div id="cuadro2" class="col-sm-12 col-md-12 col-lg-12 ocultar">
+                    <form id="mainform" class="form-horizontal" action="" method="POST">
+                        <div class="form-group">
+                            <h3 class="col-sm-offset-2 col-sm-8 text-center">
+                                Registro de Orden de Producción</h3>
+                        </div>
+                        <div class="form-group">
+                            <input id="id_maquina" name="id_maquina" type="hidden">
+                            <label for="id_mpvi" class="col-sm-2 control-label">Tipo de produccion :</label>
+                            <div class="col-sm-8"><input id="tipo_produccion" name="tipo_produccion" type="text" class="form-control" autofocus></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="modelo" class="col-sm-2 control-label">Cuando solicito :</label>
+                            <div class="col-sm-8"><input id="cuando_solicito" name="cuando_solicito" type="date" class="form-control" autofocus></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="marca" class="col-sm-2 control-label">Orden de produccion :</label>
+                            <div class="col-sm-8"><input id="orden_produccion" name="orden_produccion" type="text" class="form-control"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="tipo_maquina" class="col-sm-2 control-label">Numero de parte :</label>
+                            <div class="col-sm-8"><input id="numero_parte" name="numero_parte" type="text" class="form-control" maxlength="8"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="tipo_maquina" class="col-sm-2 control-label">Cantidad requerida :</label>
+                            <div class="col-sm-8"><input id="cantidad_requerida" name="cantidad_requerida" type="text" class="form-control" maxlength="8"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="tipo_maquina" class="col-sm-2 control-label">Fecha requerida :</label>
+                            <div class="col-sm-8"><input id="fecha_requerida" name="fecha_requerida" type="date" class="form-control" maxlength="8"></div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-8">
+                                <input id="guardar" type="button" class="btn btn-primary" value="Guardar">
+                                <input id="btn_listar" type="button" class="btn btn-primary" value="Actualizar">
+                            </div>
+                        </div>
+                    </form>
+                    <div class="col-sm-offset-2 col-sm-8">
+                        <p class="mensaje"> </p>
+                    </div>
+
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  </div>
-</div>
 
-<!-- Agregar paro de maquina -->
-<div class="modal fade bd-example-modal-xl" id="modalparo" tabindex="-1" role="dialog"
-  aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl">
-    <div class="modal-content">
-      <div class="container">
-        <div class="table-responsive col-sm-12">
-          <div class='modal-header'>
-            <h4>Agregue el motivo de paro de maquina</h4>
-            <button id="closemodalparo" style="text-align:right" class="btn btn-danger">×</button>
-          </div>
-          <label for="comment">Seleccione el intervalo de paro de maquina</label>
-          <input class="datetime" id="tiempoparo">
-          <br>
-          <label for="comment">Comment:</label>
-          <textarea class="form-control" rows="5" id="comment"></textarea>
-          <br>
-          <br>
-          <button id="guardaparo" class="btn btn-secondary btn-lg btn-block">Guardar</button>
-          <br>
+        <!-- Agregar paro de maquina -->
+        <div class="modal fade bd-example-modal-xl" id="modalparo" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="container">
+                        <div class="table-responsive col-sm-12">
+                            <div class='modal-header'>
+                                <h4>Agregue el motivo de paro de maquina</h4>
+                                <button id="closemodalparo" style="text-align:right" class="btn btn-danger">×</button>
+                            </div>
+                            <label for="comment">Seleccione el intervalo de paro de maquina</label>
+                            <input class="datetime" id="tiempoparo">
+                            <br>
+                            <label for="comment">Comment:</label>
+                            <textarea class="form-control" rows="5" id="comment"></textarea>
+                            <br>
+                            <br>
+                            <button id="guardaparo" class="btn btn-secondary btn-lg btn-block">Guardar</button>
+                            <br>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  </div>
-</div>
-<script>
-
-  $(document).ready(function () {
-    listar();
-  });
+        <script>
+            $(document).ready(function() {
+                listar();
+            });
 
 
 
-  //funcion para listar las ordenes de compra que estan en proceso actualmente,
-  var listar = function () {
-    var table = $("#dt_procesos").DataTable({
-      "destroy": true,
-      "ajax": {
-        "method": "POST",
-        "url": "listaordenproduccion.php"
-      },
-      "columns": [{
-        "data": "id_produccion"
-      }, {
-        "data": "tipo_produccion"
-      }, {
-        "data": "fecha_solicitud"
-      }, {
-        "data": "orden_produccion"
-      }, {
-        "data": "numero_parte"
-      }, {
-        "data": "cantidad_requerida"
-      }, {
-        "data": "fecha_requerida"
-      }, {
-        "defaultContent": "<button>Metrica</button>"
-      }, {
-        "defaultContent": "<button>Ingenieria</button>"
-      }, {
-        "defaultContent": "<button>Calidad</button>"
-      }, {
-        "defaultContent": "<button id='forma'>Forma 72</button>"
-      }]
-    });
-    obtener_orden("#dt_procesos tbody", table);
-  }
+            //funcion para listar las ordenes de compra que estan en proceso actualmente,
+            var listar = function() {
+                var table = $("#dt_procesos").DataTable({
+                    "destroy": true,
+                    "ajax": {
+                        "method": "POST",
+                        "url": "listaordenproduccion.php"
+                    },
+                    "columns": [{
+                        "data": "id_produccion"
+                    }, {
+                        "data": "tipo_produccion"
+                    }, {
+                        "data": "fecha_solicitud"
+                    }, {
+                        "data": "orden_produccion"
+                    }, {
+                        "data": "numero_parte"
+                    }, {
+                        "data": "cantidad_requerida"
+                    }, {
+                        "data": "fecha_requerida"
+                    }, {
+                        "defaultContent": "<button>Metrica</button>"
+                    }, {
+                        "defaultContent": "<button>Ingenieria</button>"
+                    }, {
+                        "defaultContent": "<button>Calidad</button>"
+                    }, {
+                        "defaultContent": "<button id='forma'>Forma 72</button>"
+                    }]
+                });
+                obtener_orden("#dt_procesos tbody", table);
+            }
 
-  var obtener_orden = function (tbody, table) {
-    //funcion para obtener datos de la tabla para la forma 72
-    $(tbody).on("click", "#forma", function () {
-      var data1 = table.row($(this).parents("tr")).data();
-      //Asigna id_produccion y orden de produccion a campos en la forma 72
-      $("#orden_72").val(data1.orden_produccion);
-      $("#id_orden").val(data1.id_produccion);
-      $("#modal_dash").modal();
-    })
-  }
+            var obtener_orden = function(tbody, table) {
+                //funcion para obtener datos de la tabla para la forma 72
+                $(tbody).on("click", "#forma", function() {
+                    var data1 = table.row($(this).parents("tr")).data();
+                    //Asigna id_produccion y orden de produccion a campos en la forma 72
+                    $("#orden_72").val(data1.orden_produccion);
+                    $("#id_orden").val(data1.id_produccion);
+                    $("#modal_dash").modal();
+                })
+            }
 
-  //Abre modal para seleccionar el empleado
-  $("#seleccionaempleado").on("click", function () {
-    listaempleados();
-    $("#modalempleados").modal();
-  });
+            //Abre modal para seleccionar el empleado
+            $("#seleccionaempleado").on("click", function() {
+                listaempleados();
+                $("#modalempleados").modal();
+            });
+
+            $(document).on('ready', function() {
+                $('#guardar').click(function() {
+                    $.ajax({
+                        type: "POST",
+                        url: "guardar_orden_produccion.php",
+                        data: $("#mainform").serialize()
+                    })
+                    window.location = 'tablero.html'
+                });
+            })
+
+            function ocultars() {
+                var elemento = document.getElementById('cuadro2');
+
+                if (elemento.classList.contains('ocultar')) {
+                    elemento.classList.remove('ocultar');
+
+                } else {
+                    elemento.classList.add('ocultar');
+
+                }
+
+            }
+
+            function goBack() {
+                window.history.back();
+            }
+            //Muestra la tabla de operadores en el modal.
+            var listaempleados = function() {
+                var table = $("#tablaempleados").DataTable({
+                    "destroy": true,
+                    "paging": false,
+                    "bInfo": false,
+                    "responsive": true,
+                    "ajax": {
+                        "method": "POST",
+                        "url": "listatablaempleado.php"
+                    },
+                    "columns": [{
+                        "data": "id_operador"
+                    }, {
+                        "data": "nombre_operador"
+                    }, {
+                        "data": "apellido_operador"
+                    }, {
+                        "data": "turno"
+                    }, {
+                        "defaultContent": "<button id='seleccionaoperador'>Seleccionar</button>"
+                    }]
+                });
+                obtener_datos_operador("#tablaempleados tbody", table);
+            }
+
+            //obtiene datos de operador seleccionando 
+            var obtener_datos_operador = function(tbody, table) {
+                $(tbody).on("click", "#seleccionaoperador", function() {
+                    var data1 = table.row($(this).parents("tr")).data();
+                    var operador = data1.id_operador;
+                    var nombre = data1.nombre_operador;
+                    $("#nombre_empleado").val(nombre);
+                    $("#id_empleado").val(operador);
+                    $("#modalempleados").modal('hide');
+                });
+            }
+
+            //funciones para cerrar modals
+            $("#cerrar72").on("click", function() {
+                $("#modal_dash").modal('hide');
+            })
+            $("#cerrarempleado").on("click", function() {
+                $("#modalempleados").modal('hide');
+            })
+            $("#cerrarregistro").on("click", function() {
+                $("#modaldeforma72").modal('hide');
+            })
+
+            $("#closemodalparo").on("click", function() {
+                $("#modalparo").modal('hide');
+            })
+
+            //Funcion para agregar registro como fila a la tabla 
+            function agregarFila72(fechaini, fechafin, cantidad, reproceso, scrap) {
+                var htmlTags1 = '<tr>' +
+                    '<td class="rango1">' + fechafin + '</td>' +
+                    '<td class="rango1">' + fechafin + '</td>' +
+                    '<td class="progreso1">' + cantidad + '</td>' +
+                    '<td class="reproceso1">' + reproceso + '</td>' +
+                    '<td class="scrap1">' + scrap + '</td>' +
+                    '</tr>';
+                $('#tabla72 tbody:last-child').append(htmlTags1);
+            }
+            //Funciones para incluir el datetime
+            $('.datetime').daterangepicker({
+                timePicker: true,
+                startDate: moment().startOf('hour'),
+                endDate: moment().startOf('hour').add(32, 'hour'),
+                locale: {
+                    format: 'YYYY-MM-DD HH:mm'
+                }
+            });
+            $('.time').daterangepicker({
+                timePicker: true,
+                startDate: moment().startOf('hour'),
+                endDate: moment().startOf('hour').add(32, 'hour'),
+                locale: {
+                    format: 'HH:mm'
+                }
+            });
+            $('.onlydate').daterangepicker({
+                "singleDatePicker": true,
+                "timePicker": true,
+                startDate: moment().startOf('hour'),
+
+                locale: {
+                    format: 'DD/MM/YY hh:mm A '
+                }
+            }, function(start, end, label) {
+                console.log("New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')");
+            });
+            $('.onlydate2').daterangepicker({
+                "singleDatePicker": true,
+                "timePicker": true,
+                startDate: moment().startOf('hour'),
+
+                locale: {
+                    format: 'DD/MM/YY hh:mm A '
+                }
+            }, function(start, end, label) {
+                console.log("New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')");
+            });
+            //Funcion para obtener datos del modal del registro 72
+            $("#guardaentabla").on("click", function() {
+                var uno = $("#rango").val();
+                var inicio = uno.substring(0, 16);
+                var fin = uno.substring(19, 35);
+                var cantidad = $("#progress").val();
+                var reproceso = $("#reproceso").val();
+                var scrap = $("#scrap").val();
+                agregarFila72(inicio, fin, cantidad, reproceso, scrap);
+                $("#modaldeforma72").modal('hide');
+            });
+            //Funcion para obtener datos de paro del modal y ponerlos en la tabla
+            $("#guardaparo").on("click", function() {
+                var datetimes = $("#tiempoparo").val();
+                var inicio = new Date(datetimes.substring(0, 16));
+                var fin = new Date(datetimes.substring(19, 35));
+                var diff = Math.abs(fin - inicio) / 36e5;
+                var comentario = $("#comment").val();
+                var htmlTags2 = '<tr>' +
+                    '<td class="diferencia">' + diff + '</td>' +
+                    '<td class="comentario">' + comentario + '</td>' +
+                    '</tr>';
+                $('#tablaparos tbody:last-child').append(htmlTags2);
+                $("#modalparo").modal('hide');
+            })
+        </script>
 
 
-  //Muestra la tabla de operadores en el modal.
-  var listaempleados = function () {
-    var table = $("#tablaempleados").DataTable({
-      "destroy": true,
-      "paging": false,
-      "bInfo": false,
-      "responsive": true,
-      "ajax": {
-        "method": "POST",
-        "url": "listatablaempleado.php"
-      },
-      "columns": [{
-        "data": "id_operador"
-      },
-      {
-        "data": "nombre_operador"
-      },
-      {
-        "data": "apellido_operador"
-      },
-      {
-        "data": "turno"
-      },
-      {
-        "defaultContent": "<button id='seleccionaoperador'>Seleccionar</button>"
-      }
-      ]
-    });
-    obtener_datos_operador("#tablaempleados tbody", table);
-  }
-
-  //obtiene datos de operador seleccionando 
-  var obtener_datos_operador = function (tbody, table) {
-    $(tbody).on("click", "#seleccionaoperador", function () {
-      var data1 = table.row($(this).parents("tr")).data();
-      var operador = data1.id_operador;
-      var nombre = data1.nombre_operador;
-      $("#nombre_empleado").val(nombre);
-      $("#id_empleado").val(operador);
-      $("#modalempleados").modal('hide');
-    });
-  }
-
-  //funciones para cerrar modals
-  $("#cerrar72").on("click", function () {
-    $("#modal_dash").modal('hide');
-  })
-  $("#cerrarempleado").on("click", function () {
-    $("#modalempleados").modal('hide');
-  })
-  $("#cerrarregistro").on("click", function () {
-    $("#modaldeforma72").modal('hide');
-  })
-
-  $("#closemodalparo").on("click", function () {
-    $("#modalparo").modal('hide');
-  })
-
-  //Funcion para agregar registro como fila a la tabla 
-  function agregarFila72(fechaini, fechafin, cantidad, reproceso, scrap) {
-    var htmlTags1 = '<tr>' +
-      '<td class="rango1">' + fechafin + '</td>' +
-      '<td class="rango1">' + fechafin + '</td>' +
-      '<td class="progreso1">' + cantidad + '</td>' +
-      '<td class="reproceso1">' + reproceso + '</td>' +
-      '<td class="scrap1">' + scrap + '</td>' +
-      '</tr>';
-    $('#tabla72 tbody:last-child').append(htmlTags1);
-  }
-  //Funciones para incluir el datetime
-  $('.datetime').daterangepicker({
-    timePicker: true,
-    startDate: moment().startOf('hour'),
-    endDate: moment().startOf('hour').add(32, 'hour'),
-    locale: {
-      format: 'YYYY-MM-DD HH:mm'
-    }
-  });
-  $('.time').daterangepicker({
-    timePicker: true,
-    startDate: moment().startOf('hour'),
-    endDate: moment().startOf('hour').add(32, 'hour'),
-    locale: {
-      format: 'HH:mm'
-    }
-  });
-  $('.onlydate').daterangepicker({
-    "singleDatePicker": true,
-    "timePicker": true,
-    startDate: moment().startOf('hour'),
-
-    locale: {
-      format: 'DD/MM/YY hh:mm A '
-    }
-  }, function (start, end, label) {
-    console.log("New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')");
-  });
-  $('.onlydate2').daterangepicker({
-    "singleDatePicker": true,
-    "timePicker": true,
-    startDate: moment().startOf('hour'),
-
-    locale: {
-      format: 'DD/MM/YY hh:mm A '
-    }
-  }, function (start, end, label) {
-    console.log("New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')");
-  });
-  //Funcion para obtener datos del modal del registro 72
-  $("#guardaentabla").on("click", function () {
-    var uno = $("#rango").val();
-    var inicio = uno.substring(0, 16);
-    var fin = uno.substring(19, 35);
-    var cantidad = $("#progress").val();
-    var reproceso = $("#reproceso").val();
-    var scrap = $("#scrap").val();
-    agregarFila72(inicio, fin, cantidad, reproceso, scrap);
-    $("#modaldeforma72").modal('hide');
-  });
-  //Funcion para obtener datos de paro del modal y ponerlos en la tabla
-  $("#guardaparo").on("click", function () {
-    var datetimes = $("#tiempoparo").val();
-    var inicio = new Date(datetimes.substring(0, 16));
-    var fin = new Date(datetimes.substring(19, 35));
-    var diff = Math.abs(fin - inicio) / 36e5;
-    var comentario = $("#comment").val();
-    var htmlTags2 = '<tr>' +
-      '<td class="diferencia">' + diff + '</td>' +
-      '<td class="comentario">' + comentario + '</td>' +
-      '</tr>';
-    $('#tablaparos tbody:last-child').append(htmlTags2);
-    $("#modalparo").modal('hide');
-  })
-
-
-</script>
-
-
-<script src="js/jquery-1.12.3.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<script src="js/jquery.dataTables.min.js"></script>
-<script src="js/dataTables.bootstrap.js"></script>
-<!--botones DataTables-->
-<script src="js/dataTables.buttons.min.js"></script>
-<script src="js/buttons.bootstrap.min.js"></script>
-<!--Libreria para exportar Excel-->
-<script src="js/jszip.min.js"></script>
-<!--Librerias para exportar PDF-->
-<script src="js/pdfmake.min.js"></script>
-<script src="js/vfs_fonts.js"></script>
-<!--Librerias para botones de exportación-->
-<script src="js/buttons.html5.min.js"></script>
+        <script src="js/jquery-1.12.3.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/jquery.dataTables.min.js"></script>
+        <script src="js/dataTables.bootstrap.js"></script>
+        <!--botones DataTables-->
+        <script src="js/dataTables.buttons.min.js"></script>
+        <script src="js/buttons.bootstrap.min.js"></script>
+        <!--Libreria para exportar Excel-->
+        <script src="js/jszip.min.js"></script>
+        <!--Librerias para exportar PDF-->
+        <script src="js/pdfmake.min.js"></script>
+        <script src="js/vfs_fonts.js"></script>
+        <!--Librerias para botones de exportación-->
+        <script src="js/buttons.html5.min.js"></script>
 
 
 </html>
