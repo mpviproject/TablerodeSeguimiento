@@ -1,0 +1,264 @@
+<html>
+<meta charset="UTF-8">
+<title>Maquinaria</title>
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<link rel="stylesheet" href="css/dataTables.bootstrap.min.css">
+<link rel="stylesheet" href="css/estilos.css">
+<!-- Buttons DataTables -->
+<link rel="stylesheet" href="css/buttons.bootstrap.min.css">
+<link rel="stylesheet" href="css/font-awesome.min.css">
+
+<head>
+
+</head>
+
+
+<body>
+
+    <body>
+        <div class="row fondo">
+            <div class="col-sm-12 col-md-12 col-lg-12">
+                <h1 class="text-center text-uppercase">Maquinaria</h1>
+            </div>
+        </div>
+        <br>
+        <input id="btn_mostar" type="button" class="btn btn-primary" value="Agregar Maquina" onClick="ocultars()">
+        <button onclick="goBack()" class='tareas btn btn-primary'><i class='fa fa-home'></i></button>
+        <br>
+        <br>
+        <div class="row">
+
+            <div id="cuadro2" class="col-sm-12 col-md-12 col-lg-12 ocultar">
+                <form id="mainform" class="form-horizontal" action="" method="POST">
+                    <div class="form-group">
+                        <h3 class="col-sm-offset-2 col-sm-8 text-center">
+                            Registro de nueva maquinaria</h3>
+                    </div>
+                    <div class="form-group">
+                        <input id="id_maquina" name="id_maquina" type="hidden">
+                        <label for="id_mpvi" class="col-sm-2 control-label">Maquina : </label>
+                        <div class="col-sm-8"><input id="maquina" name="maquina" type="text" class="form-control" autofocus></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="modelo" class="col-sm-2 control-label">Tipo de Maquina :</label>
+                        <div class="col-sm-8"><input id="tipo_maquina" name="tipo_maquina" type="text" class="form-control" autofocus></div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-8">
+                            <input id="guardar" type="submit" class="btn btn-primary" value="Guardar">
+                            <input id="btn_listar" type="button" class="btn btn-primary" value="Actualizar">
+                        </div>
+                    </div>
+                </form>
+                <div class="col-sm-offset-2 col-sm-8">
+                    <p class="mensaje"> </p>
+                </div>
+
+            </div>
+        </div>
+        <div class="row">
+            <div id="cuadro1" class="col-sm-12 col-md-12 col-lg-12">
+                <div class="col-sm-offset-2 col-sm-8">
+                    <h3 class="text-center"> <small class="mensaje"></small></h3>
+                </div>
+                <div class="table-responsive col-sm-12">
+                    <table id="dt_cliente" class="table table-bordered table-hover" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>ID. Maquina</th>
+                                <th>Maquina</th>
+                                <th>Tipo Maquina</th>
+                                <th>Opciones</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div>
+
+            <form id="frmEliminarUsuario" action="" method="POST">
+                <input type="hidden" id="id_maquina2" name="id_maquina2" value="">
+
+                <div class="modal fade" id="modalEliminar" tabindex="-1" role="dialog" aria-labelledby="modalEliminarLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="modalEliminarLabel">Eliminar Maquina</h4>
+                            </div>
+                            <div class="modal-body">
+                                ¿Está seguro de eliminar la maquina?<strong data-name=""></strong>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" id="eliminar1" class="btn btn-primary" data-dismiss="modal">Aceptar</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!-- Modal -->
+        <!-- Modal -->
+
+        <div class="modal fade bd-example-modal-lg" id="modalEditar" tabindex="-1" role="dialog" aria-labelledby="modalEditarLabel">
+            <div class="modal-dialog modal-lg">
+
+                <div class="modal-content">
+                    <div class="container">
+                        <br>
+                        <h4 class="modal-title" id="modalEliminarLabel"> Modificar Maquina </h4>
+                        <br>
+                        <form id="mainform1" class="form-horizontal" action="" method="POST">
+                            <div class="form-group col-md-8">
+                                <input id="id_maquina1" name="id_maquina1" type="hidden">
+                                <label for="modelo" class="control-label">Maquina</label>
+                                <input id="maquina1" name="maquina1" type="text" class="form-control" autofocus>
+                            </div>
+                            <div class="form-group col-md-8">
+                                <label for="marca" class="control-label">Tipo Maquina</label>
+                                <input id="tipo_maquina1" name="tipo_maquina1" type="text" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-8">
+                                    <input id="guardar1" type="button" class="btn btn-primary" value="Actualizar">
+                                    <input id="btn_listar" type="button" class="btn btn-primary" data-dismiss="modal" value="Cerrar">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal -->
+
+
+
+        <script src="js/jquery-1.12.3.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/jquery.dataTables.min.js"></script>
+        <script src="js/dataTables.bootstrap.js"></script>
+        <!--botones DataTables-->
+        <script src="js/dataTables.buttons.min.js"></script>
+        <script src="js/buttons.bootstrap.min.js"></script>
+        <!--Libreria para exportar Excel-->
+        <script src="js/jszip.min.js"></script>
+        <!--Librerias para exportar PDF-->
+        <script src="js/pdfmake.min.js"></script>
+        <script src="js/vfs_fonts.js"></script>
+        <!--Librerias para botones de exportación-->
+        <script src="js/buttons.html5.min.js"></script>
+        <script>
+            $(document).on("ready", function() {
+                listar();
+            });
+            $("#btn_listar").on("click", function() {
+                listar();
+            })
+            var listar = function() {
+                var table = $("#dt_cliente").DataTable({
+                    "destroy": true,
+                    "ajax": {
+                        "method": "POST",
+                        "url": "lista_maquina.php"
+                    },
+                    "columns": [{
+                        "data": "id_maquina"
+                    }, {
+                        "data": "maquina"
+                    }, {
+                        "data": "tipo_maquina"
+                    }, {
+                        "defaultContent": "<button type='button' class='editar btn btn-primary' data-toggle='modal' data-target='#modalEditar' ><i class='fa fa-pencil-square-o'></i></button>	<button id='eliminamesta' type='button' class='eliminar btn btn-danger' data-toggle='modal' data-target='#modalEliminar' ><i class='fa fa-trash-o'></i></button>"
+                    }]
+                });
+                obtener_datos("#dt_cliente tbody", table);
+                obtener_datos_eliminar("#dt_cliente tbody", table);
+            }
+
+
+            $(document).on('ready', function() {
+
+                $('#guardar1').click(function() {
+                    $.ajax({
+                        type: "POST",
+                        url: "actualizar_maquina.php",
+                        data: $("#mainform1").serialize()
+                    })
+                    window.location = 'maquinaria.html'
+                })
+            })
+
+            $(document).on('ready', function() {
+                $('#eliminar1').click(function() {
+                    var x = document.getElementById("id_maquina2").value;
+
+                    $.ajax({
+                        type: "POST",
+                        url: "borrar_maquina.php",
+                        data: $("#frmEliminarUsuario").serialize()
+                    })
+                    window.location = 'maquinaria.html'
+                });
+            })
+
+            $(document).on('ready', function() {
+                $('#guardar').click(function() {
+                    $.ajax({
+                        type: "POST",
+                        url: "guardar_maquina.php",
+                        data: $("#mainform").serialize()
+                    })
+                    window.location = 'maquinaria.html'
+                });
+            })
+
+
+
+
+
+            var obtener_datos = function(tbody, table) {
+                $(tbody).on("click", "button.editar", function() {
+                    var data = table.row($(this).parents("tr")).data();
+                    var id_maquina = $("#id_maquina1").val(data.id_maquina),
+                        id_mpvi = $("#maquina1").val(data.maquina),
+                        modelo = $("#tipo_maquina1").val(data.tipo_maquina);
+                });
+            }
+            var obtener_datos_eliminar = function(tbody, table) {
+                $(tbody).on("click", "#eliminamesta", function() {
+                    var data = table.row($(this).parents("tr")).data();
+                    var id_maquina = $("#id_maquina2").val(data.id_maquina);
+                });
+
+            }
+
+
+
+
+
+            function ocultars() {
+                var elemento = document.getElementById('cuadro2');
+
+                if (elemento.classList.contains('ocultar')) {
+                    elemento.classList.remove('ocultar');
+
+                } else {
+                    elemento.classList.add('ocultar');
+
+                }
+
+            }
+
+            function goBack() {
+                window.history.back();
+            }
+        </script>
+    </body>
+
+</body>
+
+
+
+</html>
