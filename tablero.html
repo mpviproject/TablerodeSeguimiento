@@ -35,7 +35,7 @@
             <form id="mainform" class="form-horizontal" action="" method="POST">
                 <div class="form-group">
                     <h3 class="col-sm-offset-2 col-sm-8 text-center">
-                        Registro de Orden de Producción</h3>
+                        Registro de Orden de Produccion</h3>
                 </div>
                 <div class="form-group">
                     <input id="id_maquina" name="id_maquina" type="hidden">
@@ -81,14 +81,10 @@
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-8">
                         <input id="guardar" type="button" class="btn btn-primary" value="Guardar">
-                        <input id="btn_listar" type="button" class="btn btn-primary" value="Actualizar">
                     </div>
                 </div>
             </form>
-            <div class="col-sm-offset-2 col-sm-8">
-                <input id="guardar" type="button" class="btn btn-primary" value="Guardar">
-                <input id="btn_listar" type="button" class="btn btn-primary" value="Actualizar">
-            </div>
+
         </div>
         </form>
         <div class="col-sm-offset-2 col-sm-8">
@@ -98,25 +94,37 @@
     </div>
     </div>
 
-    <table id="dt_procesos" class="table table-bordered table-hover" cellspacing="0" width="100%">
-        <thead>
-            <tr>
-                <th>id_produccion</th>
-                <th>Tipo produccion</th>
-                <th>Cuando solicito</th>
-                <th>Orden de produccion</th>
-                <th>Numero de parte</th>
-                <th>Cantidad requerida</th>
-                <th>fecha requerida</th>
-                <th>Metricas</th>
-                <th>Ingenieria</th>
-                <th>Calidad</th>
-                <th>Forma 72</th>
-            </tr>
-        </thead>
-    </table>
-    </div>
-    </div>
+    <div class="row">
+        <div id="cuadro1" class="col-sm-12 col-md-12 col-lg-12">
+            <div class="col-sm-offset-2 col-sm-8">
+                <h3 class="text-center"> <small class="mensaje"></small></h3>
+            </div>
+            <div class="table-responsive col-sm-12">
+
+                <table id="dt_procesos" class="table table-bordered table-hover" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th>ID. Produccion</th>
+                            <th>Tipo produccion</th>
+                            <th>Cuando solicito</th>
+                            <th>Orden de produccion</th>
+                            <th>Numero de parte</th>
+                            <th>Cantidad requerida</th>
+                            <th>Fecha requerida</th>
+                            <th>No. Operacion</th>
+                            <th>UPH</th>
+                            <th>Fecha Inicio Produccion</th>
+                            <th>Fecha Fin Produccion</th>
+                            <th>Metricas</th>
+                            <th>Ingenieria</th>
+                            <th>Calidad</th>
+                            <th>Forma 72</th>
+                            <th>Opcciones</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
     </div>
 
     <!-- Modal de la forma 72 -->
@@ -388,7 +396,6 @@
             </div>
         </div>
     </form>
-    </div>
     <!-- Modal -->
     <!-- Modal -->
 
@@ -485,6 +492,14 @@
                 }, {
                     "data": "fecha_requerida"
                 }, {
+                    "data": "numero_operacion"
+                }, {
+                    "data": "UPH"
+                }, {
+                    "data": "fecha_inicio"
+                }, {
+                    "data": "fecha_fin"
+                }, {
                     "defaultContent": "<button>Metrica</button>"
                 }, {
                     "defaultContent": "<button>Ingenieria</button>"
@@ -492,9 +507,16 @@
                     "defaultContent": "<button>Calidad</button>"
                 }, {
                     "defaultContent": "<button id='forma'>Forma 72</button>"
+                }, {
+                    "defaultContent": "<button type='button' class='editar btn btn-primary' data-toggle='modal' data-target='#modalEditar' ><i class='fa fa-pencil-square-o'></i></button>	<button id='eliminamesta' type='button' class='eliminar btn btn-danger' data-toggle='modal' data-target='#modalEliminar' ><i class='fa fa-trash-o'></i></button>"
                 }]
             });
+            var column = table.column($(this).attr('id_produccion'));
+            // Toggle the visibility
+            column.visible(!column.visible());
             obtener_orden("#dt_procesos tbody", table);
+            obtener_datos("#dt_procesos tbody", table);
+            obtener_datos_eliminar("#dt_procesos tbody", table);
         }
         //funciones de pedro  
     $(document).on('ready', function() {
@@ -517,105 +539,76 @@
         } else {
             elemento.classList.add('ocultar');
         }
-        var listar = function() {
-            var table = $("#dt_procesos").DataTable({
-                "destroy": true,
-                "ajax": {
-                    "method": "POST",
-                    "url": "listaordenproduccion.php"
-                },
-                "columns": [{
-                    "data": "id_produccion"
-                }, {
-                    "data": "tipo_produccion"
-                }, {
-                    "data": "fecha_solicitud"
-                }, {
-                    "data": "orden_produccion"
-                }, {
-                    "data": "numero_parte"
-                }, {
-                    "data": "cantidad_requerida"
-                }, {
-                    "data": "fecha_requerida"
-                }, {
-                    "defaultContent": "<button type='button' class='editar btn btn-primary' data-toggle='modal' data-target='#modalEditar' ><i class='fa fa-pencil-square-o'></i></button>	<button id='eliminamesta' type='button' class='eliminar btn btn-danger' data-toggle='modal' data-target='#modalEliminar' ><i class='fa fa-trash-o'></i></button>"
-                }]
-            });
-            obtener_datos("#dt_procesos tbody", table);
-            obtener_datos_eliminar("#dt_procesos tbody", table);
-        }
+    }
 
 
-        $(document).on('ready', function() {
+    $(document).on('ready', function() {
 
-            $('#guardar1').click(function() {
-                $.ajax({
-                    type: "POST",
-                    url: "actualizar_orden_produccion.php",
-                    data: $("#mainform1").serialize()
-                })
-                window.location = 'tablero.html'
+        $('#guardar1').click(function() {
+            $.ajax({
+                type: "POST",
+                url: "actualizar_orden_produccion.php",
+                data: $("#mainform1").serialize()
             })
+            window.location = 'tablero.html'
         })
+    })
 
-        $(document).on('ready', function() {
-            $('#eliminar1').click(function() {
-                var x = document.getElementById("id_produccion2").value;
+    $(document).on('ready', function() {
+        $('#eliminar1').click(function() {
+            var x = document.getElementById("id_produccion2").value;
 
-                $.ajax({
-                    type: "POST",
-                    url: "borrar_orden_produccion.php",
-                    data: $("#frmEliminarUsuario").serialize()
-                })
-                window.location = 'tablero.html'
-            });
-        })
+            $.ajax({
+                type: "POST",
+                url: "borrar_orden_produccion.php",
+                data: $("#frmEliminarUsuario").serialize()
+            })
+            window.location = 'tablero.html'
+        });
+    })
 
-        $(document).on('ready', function() {
-            $('#guardar').click(function() {
-                $.ajax({
-                    type: "POST",
-                    url: "guardar_orden_produccion.php",
-                    data: $("#mainform").serialize()
-                })
-                window.location = 'tablero.html'
-            });
-        })
+    $(document).on('ready', function() {
+        $('#guardar').click(function() {
+            $.ajax({
+                type: "POST",
+                url: "guardar_orden_produccion.php",
+                data: $("#mainform").serialize()
+            })
+            window.location = 'tablero.html'
+        });
+    })
 
-        var obtener_datos = function(tbody, table) {
-            $(tbody).on("click", "button.editar", function() {
-                var data = table.row($(this).parents("tr")).data();
-                var id_maquina = $("#id_produccion1").val(data.id_produccion),
-                    tipo_produccion = $("#tipo_produccion1").val(data.tipo_produccion),
-                    fecha_solicitud = $("#fecha_solicitud1").val(data.fecha_solicitud),
-                    orden_produccion = $("#orden_produccion1").val(data.orden_produccion),
-                    numero_parte = $("#numero_parte1").val(data.numero_parte),
-                    cantidad_requerida = $("#cantidad_requerida1").val(data.cantidad_requerida),
-                    fecha_requerida = $("#fecha_requerida1").val(data.fecha_requerida),
-                    numero_operacion = $("#numero_operacion1").val(data.numero_operacion),
-                    UPH = $("#UPH1").val(data.UPH),
-                    fecha_inicio = $("#fecha_inicio1").val(data.fecha_inicio),
-                    fecha_fin = $("#fecha_fin1").val(data.fecha_fin);
-            });
-        }
-        var obtener_datos_eliminar = function(tbody, table) {
-            $(tbody).on("click", "#eliminamesta", function() {
-                var data = table.row($(this).parents("tr")).data();
-                var id_maquina = $("#id_produccion2").val(data.id_produccion);
-            });
-
-        }
-
-        $(".cerrarModal").click(function() {
-            $("#modalContractCandidatesPre").modal('hide')
+    var obtener_datos = function(tbody, table) {
+        $(tbody).on("click", "button.editar", function() {
+            var data = table.row($(this).parents("tr")).data();
+            var id_maquina = $("#id_produccion1").val(data.id_produccion),
+                tipo_produccion = $("#tipo_produccion1").val(data.tipo_produccion),
+                fecha_solicitud = $("#fecha_solicitud1").val(data.fecha_solicitud),
+                orden_produccion = $("#orden_produccion1").val(data.orden_produccion),
+                numero_parte = $("#numero_parte1").val(data.numero_parte),
+                cantidad_requerida = $("#cantidad_requerida1").val(data.cantidad_requerida),
+                fecha_requerida = $("#fecha_requerida1").val(data.fecha_requerida),
+                numero_operacion = $("#numero_operacion1").val(data.numero_operacion),
+                UPH = $("#UPH1").val(data.UPH),
+                fecha_inicio = $("#fecha_inicio1").val(data.fecha_inicio),
+                fecha_fin = $("#fecha_fin1").val(data.fecha_fin);
+        });
+    }
+    var obtener_datos_eliminar = function(tbody, table) {
+        $(tbody).on("click", "#eliminamesta", function() {
+            var data = table.row($(this).parents("tr")).data();
+            var id_maquina = $("#id_produccion2").val(data.id_produccion);
         });
 
-        function ocultars() {
-            var elemento = document.getElementById('cuadro2');
-        }
-
     }
+
+    $(".cerrarModal").click(function() {
+        $("#modalEditar").modal('hide')
+    });
+
+
+
+
 
     function goBack() {
         window.history.back();
