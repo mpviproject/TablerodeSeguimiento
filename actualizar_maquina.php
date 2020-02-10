@@ -16,7 +16,6 @@ if(!$result){
     die("Error!");
 }
 mysqli_close($conexion);
-header('Location: prueba.php');
 }
 
 ?>

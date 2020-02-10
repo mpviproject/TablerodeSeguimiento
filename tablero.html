@@ -59,6 +59,22 @@
                 <div class="col-sm-8"><input id="fecha_requerida" name="fecha_requerida" type="date" class="form-control" maxlength="8"></div>
             </div>
             <div class="form-group">
+                <label for="tipo_maquina" class="col-sm-2 control-label">Numero de operacion :</label>
+                <div class="col-sm-8"><input id="numero_operacion" name="numero_operacion" type="text" class="form-control" maxlength="8"></div>
+            </div>
+            <div class="form-group">
+                <label for="tipo_maquina" class="col-sm-2 control-label">UPH :</label>
+                <div class="col-sm-8"><input id="UPH" name="UPH" type="text" class="form-control" maxlength="8"></div>
+            </div>
+            <div class="form-group">
+                <label for="tipo_maquina" class="col-sm-2 control-label">Fecha de Inicio de Produccion :</label>
+                <div class="col-sm-8"><input id="fecha_inicio" name="fecha_inicio" type="date" class="form-control" maxlength="8"></div>
+            </div>
+            <div class="form-group">
+                <label for="tipo_maquina" class="col-sm-2 control-label">Fecha de Termino de Produccion :</label>
+                <div class="col-sm-8"><input id="fecha_fin" name="fecha_fin" type="date" class="form-control" maxlength="8"></div>
+            </div>
+            <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-8">
                     <input id="guardar" type="button" class="btn btn-primary" value="Guardar">
                     <input id="btn_listar" type="button" class="btn btn-primary" value="Actualizar">
@@ -76,7 +92,7 @@
     <table id="dt_procesos" class="table table-bordered table-hover" cellspacing="0" width="100%">
         <thead>
             <tr>
-                <th disable>ID. Produccion</th>
+                <th>ID. Produccion</th>
                 <th>Tipo produccion</th>
                 <th>Cuando solicito</th>
                 <th>Orden de produccion</th>
@@ -91,7 +107,94 @@
 </div>
 </div>
 <input id="algo" type="hidden">
+<div>
 
+    <form id="frmEliminarUsuario" action="" method="POST">
+        <input type="hidden" id="id_produccion2" name="id_produccion2" value="">
+
+        <div class="modal fade" id="modalEliminar" tabindex="-1" role="dialog" aria-labelledby="modalEliminarLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="modalEliminarLabel">Eliminar Orden de Produccion</h4>
+                    </div>
+                    <div class="modal-body">
+                        Esta seguro de eliminar la Orden de Produccion?<strong data-name=""></strong>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="eliminar1" class="btn btn-primary" data-dismiss="modal">Aceptar</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<!-- Modal -->
+<!-- Modal -->
+
+<div class="modal fade bd-example-modal-lg" id="modalEditar" tabindex="-1" role="dialog" aria-labelledby="modalEditarLabel">
+    <div class="modal-dialog modal-lg">
+
+        <div class="modal-content">
+            <div class="container">
+                <br>
+                <h4 class="modal-title" id="modalEliminarLabel"> Modificar Orden de Produccion </h4>
+                <br>
+                <form id="mainform1" class="form-horizontal" action="" method="POST">
+                    <div class="form-group">
+                        <input id="id_produccion1" name="id_produccion1" type="hidden">
+                        <label for="id_mpvi" class="col-sm-2 control-label">Tipo de produccion :</label>
+                        <div class="col-sm-6"><input id="tipo_produccion1" name="tipo_produccion1" type="text" class="form-control" autofocus></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="modelo" class="col-sm-2 control-label">Cuando solicito :</label>
+                        <div class="col-sm-6"><input id="cuando_solicito1" name="cuando_solicito1" type="date" class="form-control" autofocus></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="marca" class="col-sm-2 control-label">Orden de produccion :</label>
+                        <div class="col-sm-6"><input id="orden_produccion1" name="orden_produccion1" type="text" class="form-control"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="tipo_maquina" class="col-sm-2 control-label">Numero de parte :</label>
+                        <div class="col-sm-6"><input id="numero_parte1" name="numero_parte1" type="text" class="form-control" maxlength="8"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="tipo_maquina" class="col-sm-2 control-label">Cantidad requerida :</label>
+                        <div class="col-sm-6"><input id="cantidad_requerida1" name="cantidad_requerida1" type="text" class="form-control" maxlength="8"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="tipo_maquina" class="col-sm-2 control-label">Fecha requerida :</label>
+                        <div class="col-sm-6"><input id="fecha_requerida1" name="fecha_requerida1" type="date" class="form-control" maxlength="8"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="tipo_maquina" class="col-sm-2 control-label">Numero de operacion :</label>
+                        <div class="col-sm-6"><input id="numero_operacion1" name="numero_operacion1" type="text" class="form-control" maxlength="8"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="tipo_maquina" class="col-sm-2 control-label">UPH :</label>
+                        <div class="col-sm-6"><input id="UPH1" name="UPH1" type="text" class="form-control" maxlength="8"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="tipo_maquina" class="col-sm-2 control-label">Fecha de Inicio de Produccion :</label>
+                        <div class="col-sm-6"><input id="fecha_inicio1" name="fecha_inicio1" type="date" class="form-control" maxlength="8"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="tipo_maquina" class="col-sm-2 control-label">Fecha de Termino de Produccion :</label>
+                        <div class="col-sm-6"><input id="fecha_fin1" name="fecha_fin1" type="date" class="form-control" maxlength="8"></div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-8">
+                            <input id="guardar1" type="button" class="btn btn-primary" value="Actualizar">
+                            <button type="button" class="btn btn-default cerrarModal">Cerrar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
     $(document).ready(function() {
@@ -121,10 +224,39 @@
             }, {
                 "data": "fecha_requerida"
             }, {
-                "defaultContent": "<button></button>"
+                "defaultContent": "<button type='button' class='editar btn btn-primary' data-toggle='modal' data-target='#modalEditar' ><i class='fa fa-pencil-square-o'></i></button>	<button id='eliminamesta' type='button' class='eliminar btn btn-danger' data-toggle='modal' data-target='#modalEliminar' ><i class='fa fa-trash-o'></i></button>"
             }]
         });
+        obtener_datos("#dt_procesos tbody", table);
+        obtener_datos_eliminar("#dt_procesos tbody", table);
     }
+
+
+    $(document).on('ready', function() {
+
+        $('#guardar1').click(function() {
+            $.ajax({
+                type: "POST",
+                url: "actualizar_orden_produccion.php",
+                data: $("#mainform1").serialize()
+            })
+            window.location = 'tablero.html'
+        })
+    })
+
+    $(document).on('ready', function() {
+        $('#eliminar1').click(function() {
+            var x = document.getElementById("id_produccion2").value;
+
+            $.ajax({
+                type: "POST",
+                url: "borrar_orden_produccion.php",
+                data: $("#frmEliminarUsuario").serialize()
+            })
+            window.location = 'tablero.html'
+        });
+    })
+
     $(document).on('ready', function() {
         $('#guardar').click(function() {
             $.ajax({
@@ -135,6 +267,34 @@
             window.location = 'tablero.html'
         });
     })
+
+    var obtener_datos = function(tbody, table) {
+        $(tbody).on("click", "button.editar", function() {
+            var data = table.row($(this).parents("tr")).data();
+            var id_maquina = $("#id_produccion1").val(data.id_produccion),
+                tipo_produccion = $("#tipo_produccion1").val(data.tipo_produccion),
+                fecha_solicitud = $("#fecha_solicitud1").val(data.fecha_solicitud),
+                orden_produccion = $("#orden_produccion1").val(data.orden_produccion),
+                numero_parte = $("#numero_parte1").val(data.numero_parte),
+                cantidad_requerida = $("#cantidad_requerida1").val(data.cantidad_requerida),
+                fecha_requerida = $("#fecha_requerida1").val(data.fecha_requerida),
+                numero_operacion = $("#numero_operacion1").val(data.numero_operacion),
+                UPH = $("#UPH1").val(data.UPH),
+                fecha_inicio = $("#fecha_inicio1").val(data.fecha_inicio),
+                fecha_fin = $("#fecha_fin1").val(data.fecha_fin);
+        });
+    }
+    var obtener_datos_eliminar = function(tbody, table) {
+        $(tbody).on("click", "#eliminamesta", function() {
+            var data = table.row($(this).parents("tr")).data();
+            var id_maquina = $("#id_produccion2").val(data.id_produccion);
+        });
+
+    }
+
+    $(".cerrarModal").click(function() {
+        $("#modalContractCandidatesPre").modal('hide')
+    });
 
     function ocultars() {
         var elemento = document.getElementById('cuadro2');
