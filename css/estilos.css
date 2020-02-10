@@ -1,5 +1,5 @@
 .fondo{
-	background: rgba(51, 122, 183, 0.8);
+	background: #000000;
 	color: #ffffff;
 }
 
@@ -10,5 +10,9 @@
 .ocultar{
 	display: none;
 }
+<<<<<<< HEAD
 
 .modal { overflow: auto !important; }
+=======
+.modal{ overflow: auto !important; }
+>>>>>>> master
