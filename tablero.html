@@ -12,7 +12,7 @@
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 <title>
-    Tablero de
+    Tablero de seguimiento
 </title>
 
 <body>
@@ -157,6 +157,7 @@
                                 <th colspan="2">Datos de produccion</th>
                             </tr>
                             <tr>
+
                                 <td>Empleado:</td>
                                 <td><input type='text' id='nombre_empleado' value=''>
                                     <input type='hidden' id='id_empleado'><button id="seleccionaempleado"
@@ -382,7 +383,7 @@
 
                     <button data-toggle="modal" data-target="#modalparo" text-align='center'></button>
                     <!-- Boton para guardar registro -->
-                    <button id="guardala72" class="btn btn-primary btn-lg btn-block">Guardar registro</button>
+                    <button id="" class="btn btn-primary btn-lg btn-block">Guardar registro</button>
                     <br><br>
                 </div>
                 <br>
@@ -564,35 +565,143 @@
         }
     }
 
+    /* Funcion para guardar la forma 72 */
+    $("#guardala72").on("click", function () {
+        //Pendiente crear funcion para verificar si la tabla de registros esta vacia.
 
-    $(document).on('ready', function () {
+        //obtiene los ckecboxs que son chekeados de la clase 
+        var pap = 0;
+        var poc = 0;
+        var atl = 0;
+        var scrap = 0;
+        var emv = 0;
+        var equis = $('.chk72:checkbox:checked').each(function () {
+            var sThisVal = $(this).val();
+            switch (sThisVal) {
+                case "PAP":
+                    pap = 1;
+                    break;
+                case "POC":
+                    poc = 1;
+                    break;
+                case "ATL":
+                    atl = 1;
+                    break;
+                case "SCRAP":
+                    scrap = 1;
+                    break;
+                case "emv":
+                    emv = 1;
+                    break;
+            }
+        });
+        //obtiene los datos necesarios restantes
+        var id_empleado = $("#id_empleado").val();
+        var orden_72 = $("#id_orden").val();
 
-        $('#guardar1').click(function () {
+        if (id_empleado == "" || orden_72 == "") {
+            alert("Datos Faltantes: \nAsegurese de llenar todos los datos");
+        } else {
+            var query = "insert into forma_72 values(NULL," + orden_72 + "," + id_empleado + ",NOW()" + "," + pap + "," + poc + "," + atl + "," + scrap + "," + emv + ");";
+            console.log(query);
             $.ajax({
+                url: "guarda72.php",
                 type: "POST",
-                url: "actualizar_orden_produccion.php",
-                data: $("#mainform1").serialize(),
-                success: function (result) {
-                    console.log(result);
+                data: {
+                    query: query
+                },
+                success: function (data) {
+                    guardaregistros(data);
+                    guardaparos(data);
+                    location.reload();
                 }
-            
+            });
+
+        }
+
+
+    });
+
+    function guardaregistros(data) {
+        $('#tabla72 tbody tr').each(function () {
+            var inicio = $(this).find(".inicio1").html();
+            var finn = $(this).find(".fin1").html();
+            var cantidad = $(this).find(".cantidad1").html();
+            var reproceso1 = $(this).find(".reproceso1").html();
+            var scrap1 = $(this).find(".scrap1").html();
+
+            if (typeof data !== 'undefined' || typeof inicio !== 'undefined' || typeof fin !== 'undefined') {
+                if (typeof cantidad == 'undefined') {
+                    cantidad = 0;
+                }
+                if (typeof reproceso1 == 'undefined') {
+                    reproceso1 = 0;
+                }
+                if (typeof scrap1 == 'undefined') {
+                    scrap1 = 0;
+                }
+                query = "insert into registro_72 values (NULL,"+ data + ",'" + inicio + "','" + finn + "'," + cantidad + "," + reproceso1 + "," + scrap1 + ");";
+                console.log(query);
+                $.ajax({
+                    url: 'guarda_registro72.php',
+                    type: 'post',
+                    data: {
+                        "query": query
+                    },
+                    success: function (data2) {
+                    }
+                });
+            } else {
+                alert("Error no se puede guardar sin tarea ligada o sin fecha");
+            }
+        });
+    }
+    
+    function guardaparos(data){
+        var rowCount = $('#tablaparos >tbody >tr').length;
+        if(rowCount>0){
+          $('#tablaparos tbody tr').each(function() {
+            var diferencia = $(this).find(".diferencia").html();
+            var comentario = $(this).find(".comentario").html();
+          var query = "insert into paro_maquinas values(NULL,"+data+","+diferencia+",'"+comentario+"') ;";
+          
+          $.ajax({
+            url: "guarda_registro72.php",
+            type: "POST",
+            data: {
+              "query": query
+            }
+          });
+          });
+        }
+      }
+
+    $('#guardar1').click(function () {
+        $.ajax({
+            type: "POST",
+            url: "actualizar_orden_produccion.php",
+            data: $("#mainform1").serialize(),
+            success: function (result) {
+                console.log(result);
+            }
+
         })
         location.reload();
     })
-    })
 
-    $(document).on('ready', function () {
-        $('#eliminar1').click(function () {
-            var x = document.getElementById("id_produccion2").value;
 
-            $.ajax({
-                type: "POST",
-                url: "borrar_orden_produccion.php",
-                data: $("#frmEliminarUsuario").serialize()
-            })
-            window.location = 'tablero.html'
-        });
-    })
+
+    $('#eliminar1').click(function () {
+        var x = document.getElementById("id_produccion2").value;
+
+        $.ajax({
+            type: "POST",
+            url: "borrar_orden_produccion.php",
+            data: $("#frmEliminarUsuario").serialize()
+        })
+        window.location = 'tablero.html'
+    });
+
 
 
     $('#guardar').click(function () {
@@ -668,7 +777,7 @@
             "responsive": true,
             "ajax": {
                 "method": "POST",
-                "url": "listatablaempleado.php"
+                "url": "lista_operador.php"
             },
             "columns": [{
                 "data": "id_operador"
@@ -715,9 +824,9 @@
     //Funcion para agregar registro como fila a la tabla 
     function agregarFila72(fechaini, fechafin, cantidad, reproceso, scrap) {
         var htmlTags1 = '<tr>' +
-            '<td class="rango1">' + fechafin + '</td>' +
-            '<td class="rango1">' + fechafin + '</td>' +
-            '<td class="progreso1">' + cantidad + '</td>' +
+            '<td class="inicio1">' + fechafin + '</td>' +
+            '<td class="fin1">' + fechafin + '</td>' +
+            '<td class="cantidad1">' + cantidad + '</td>' +
             '<td class="reproceso1">' + reproceso + '</td>' +
             '<td class="scrap1">' + scrap + '</td>' +
             '</tr>';
