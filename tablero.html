@@ -131,7 +131,7 @@
                             <th>Ingenieria</th>
                             <th>Calidad</th>
                             <th>Forma 72</th>
-                            <th>Opcciones</th>
+                            <th>Opciones</th>
                         </tr>
                     </thead>
                 </table>
@@ -353,41 +353,42 @@
             </div>
         </div>
     </div>
-    <button data-target="#modalcalidad" data-toggle="modal"></button>
+ 
     <!-- Modal para calidad -->
     <div class='modal fade bd-example-modal-lg' id='modalcalidad' tabindex='1' role='dialog'
         aria-labelledby='myExtraLargeModalLabel' aria-hidden='true'>
         <div class='modal-dialog modal-lg'>
             <div class='modal-content'>
-                <div class='container'>
+                <!-- Pendiente: Guardar el registro y solo poder editarlo. -->
                     <div class='modal-header'>
                         <h4>Calidad</h4><button class='close' id='cerrarcalidad'>×</button>
                         <br>
                     </div>
-                    <p style="text-align:right">Fecha: <label id="fechaactual"></label></p>
-                    <table class="table table-hove  table-condensed table-bordered responsive-table">
-                        <thead class="thead-dark">
-                            <tr>
-                                <td><label>Autorizó la liberacion: </label></td>
-                                <td><label>Fecha de liberación</label></td>
-                                <td><label>Tiempo de liberación</label></td>
+                    <diV class="modal-body">
+                        <p style="text-align:right">Fecha: <label id="fechaactual"></label></p>
+                        <table class="table table-hove  table-condensed table-bordered responsive-table">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <td><label>Autorizo la liberacion: </label></td>
+                                    <td><label>Fecha de liberacion</label></td>
+                                    <td><label>Tiempo de liberacion</label></td>
+                                </tr>
+                                <tr>
+                                    <td><input type="text" placeholder="nombre"></td>
+                                    <td><input type="text" class="onlydate"></td>
+                                    <td><input type="text" placeholder="minutos"></td>
+                                </tr>
+                            </thead>
+                        </table>
 
-                            </tr>
-                            <tr>
-                                <td><input type="text" placeholder="nombre"></td>
-                                <td><input type="text" class="onlydate"></td>
-                                <td><input type="text" placeholder="minutos"></td>
-                            </tr>
-                        </thead>
-                    </table>
-
-                    <button data-toggle="modal" data-target="#modalparo" text-align='center'></button>
-                    <!-- Boton para guardar registro -->
-                    <button id="" class="btn btn-primary btn-lg btn-block">Guardar registro</button>
-                    <br><br>
-                </div>
-                <br>
-
+                            <!-- Boton para guardar registro -->
+                        <button id="" class="btn btn-primary btn-lg btn-block">Guardar registro</button>
+                        <br><br>
+                 
+                    <br>
+    
+                    </diV>
+                    
             </div>
         </div>
     </div>
@@ -418,8 +419,7 @@
             </div>
         </div>
     </form>
-    <!-- Modal -->
-    <!-- Modal -->
+    <!-- Modal para editar orden de produccion -->
 
     <div class="modal fade bd-example-modal-lg" id="modalEditar" tabindex="-1" role="dialog"
         aria-labelledby="modalEditarLabel">
@@ -539,7 +539,7 @@
             }, {
                 "defaultContent": "<button>Ingenieria</button>"
             }, {
-                "defaultContent": "<button>Calidad</button>"
+                "defaultContent": "<button id='calidad'>Calidad</button>"
             }, {
                 "defaultContent": "<button id='forma'>Forma 72</button>"
             }, {
@@ -551,8 +551,11 @@
         column.visible(!column.visible());
         obtener_orden("#dt_procesos tbody", table);
         obtener_datos("#dt_procesos tbody", table);
+        //Obtiene datos para modal de calidad.
+        obtener_datos_calidad("#dt_procesos tbody", table);
         obtener_datos_eliminar("#dt_procesos tbody", table);
     }
+
     //funciones de pedro  
     function ocultars() {
         var elemento = document.getElementById('cuadro2');
@@ -622,6 +625,7 @@
 
     });
 
+    //Funcion para guardar los registros de la tabla de la forma 72
     function guardaregistros(data) {
         $('#tabla72 tbody tr').each(function () {
             var inicio = $(this).find(".inicio1").html();
@@ -657,6 +661,7 @@
         });
     }
     
+    //Funcion para guardar los paros de las maquinas
     function guardaparos(data){
         var rowCount = $('#tablaparos >tbody >tr').length;
         if(rowCount>0){
@@ -676,6 +681,7 @@
         }
       }
 
+      //actualiza orden de produccion
     $('#guardar1').click(function () {
         $.ajax({
             type: "POST",
@@ -688,12 +694,10 @@
         })
         location.reload();
     })
-
-
-
+    //Elimina orden de produccion
+    //PENDIENTE: Revisar validacion de borrado con foraneas
     $('#eliminar1').click(function () {
         var x = document.getElementById("id_produccion2").value;
-
         $.ajax({
             type: "POST",
             url: "borrar_orden_produccion.php",
@@ -701,9 +705,6 @@
         })
         window.location = 'tablero.html'
     });
-
-
-
     $('#guardar').click(function () {
         $.ajax({
             type: "POST",
@@ -714,6 +715,7 @@
     });
 
 
+    //Obtiene datos para ponerlos en modal de edicion de orden de produccion
     var obtener_datos = function (tbody, table) {
         $(tbody).on("click", "button.editar", function () {
             var data = table.row($(this).parents("tr")).data();
@@ -730,6 +732,7 @@
                 fecha_fin = $("#fecha_fin1").val(data.fecha_fin);
         });
     }
+    //Pone datos en modal para eliminar
     var obtener_datos_eliminar = function (tbody, table) {
         $(tbody).on("click", "#eliminamesta", function () {
             var data = table.row($(this).parents("tr")).data();
@@ -738,12 +741,13 @@
 
     }
 
+
+
     $(".cerrarModal").click(function () {
         $("#modalEditar").modal('hide')
     });
 
-
-
+ 
 
 
     function goBack() {
@@ -760,6 +764,16 @@
             $("#modal_dash").modal();
         })
     }
+    var obtener_datos_calidad = function (tbody, table) {
+        $(tbody).on("click", "#calidad", function () {
+            var data1 = table.row($(this).parents("tr")).data();
+            //Asigna id_produccion y orden de produccion a campos en la forma 72
+            $("#orden_72").val(data1.orden_produccion);
+            $("#id_orden").val(data1.id_produccion);
+            $("#modalcalidad").modal();
+        })
+    }
+
 
     //Abre modal para seleccionar el empleado
     $("#seleccionaempleado").on("click", function () {
