@@ -15,8 +15,8 @@ and ! $cantidad_requerida== ""and ! $fecha_requerida== ""and ! $numero_operacion
 and ! $fecha_inicio== ""and ! $fecha_fin== "" ){
 
 $query= "INSERT INTO orden_produccion VALUES (NULL,'$tipo_produccion',
-'$cuando_solicito','$orden_produccion','$numero_parte','$cantidad_requerida ','$fecha_requerida '
-,'$numero_operacion ','$UPH ','$fecha_inicio ','$fecha_fin ') ;";
+'$cuando_solicito','$orden_produccion','$numero_parte','$cantidad_requerida','$fecha_requerida'
+,'$numero_operacion','$UPH ','$fecha_inicio','$fecha_fin') ;";
 $result = mysqli_query($conexion,$query);
 if(!$result){  
     die("Error!");

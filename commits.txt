@@ -1,0 +1,93 @@
+commit 6e549f995663a01118bf478a428ef2deca5cca48
+Author: Marco <marcorivaspartida@gmail.com>
+Date:   Sun Feb 9 21:06:43 2020 -0600
+
+    Merges tmp
+
+commit c153c12c984283c327512ebf31d66bb8fef6bfd9
+Merge: 99c35ba d4f6f8a
+Author: Marco <marcorivaspartida@gmail.com>
+Date:   Sun Feb 9 21:03:40 2020 -0600
+
+    Version funcional de merge pedro-marco
+
+commit 99c35bafd94d4417b7907918764433f6fb2a0383
+Author: Marco <marcorivaspartida@gmail.com>
+Date:   Sun Feb 9 20:30:51 2020 -0600
+
+    Version funcional de merge pedro-marco
+
+commit ea496e27eb255f07e0ef2cd85de56df3c5124d75
+Author: Pedro <pedrozf_9705@hotmail.com>
+Date:   Sat Feb 8 06:49:34 2020 -0600
+
+    version funcional de maquinaria y agregar orden de produccion
+
+commit d4f6f8a2b08607eea28f7f144f00f4f322423eb4
+Author: Marco <marcorivaspartida@gmail.com>
+Date:   Thu Feb 6 19:13:45 2020 -0600
+
+    Arreglado el merge de branch de marco
+
+commit 5f767e7a46a738a966e1b9f4b74a7911dff20a17
+Merge: 6d76146 77b7e3c
+Author: Marco <marcorivaspartida@gmail.com>
+Date:   Thu Feb 6 19:08:08 2020 -0600
+
+    Merge branch 'marco'
+
+commit 77b7e3cbe126e13d923eeb9565ae06ac02531cb9
+Author: Marco <marcorivaspartida@gmail.com>
+Date:   Wed Feb 5 20:02:28 2020 -0600
+
+    Funciona la interfaz de la forma 72 con sus modals
+
+commit 1b49900c39c87bd7c51c53bf917380881c7016f8
+Author: Marco <marcorivaspartida@gmail.com>
+Date:   Wed Feb 5 16:03:03 2020 -0600
+
+    Funciona la seleccion de empleado
+
+commit 6a6b19fb533aba2a77cdac504e76908d62bc8e49
+Author: Marco <marcorivaspartida@gmail.com>
+Date:   Tue Feb 4 06:01:25 2020 -0600
+
+    Se modifico el formato de la tabla y se dio accion a agregar registro a tabla
+
+commit 4f61a02d9a7301d31fd3f57d461ddf6bdb176de5
+Author: Marco <marcorivaspartida@gmail.com>
+Date:   Tue Feb 4 04:42:02 2020 -0600
+
+    Funciona el modal de la forma 72 con modal lg falta agregar funciones
+
+commit 5c7a412fc01a800e5a973aabe08d2de6bc25f8b6
+Author: marcosrip <marcorivaspartida@gmail.com>
+Date:   Mon Feb 3 20:45:56 2020 -0600
+
+    Logra mostrar un modal grande pero tengo un problema con lo responsivo de la tabla y el boton forma
+
+commit 6d7614696cd7d5e2c8574894725ddef9705a9126
+Author: Pedro <pedrozf_9705@hotmail.com>
+Date:   Sat Feb 1 18:57:35 2020 -0600
+
+    Se borro la palabra tablero
+
+commit d9747ba601f94aa19af515139992e0bd283008b9
+Author: marcosrip <marcorivaspartida@gmail.com>
+Date:   Thu Jan 30 23:29:52 2020 -0600
+
+    base de datos
+    
+    Esto es lo que llevo de la base de datos, en si solo una tabla
+
+commit 39374dcbde8abbfc92d5339e2524ec9b9e6a4289
+Author: marcosrip <marcorivaspartida@gmail.com>
+Date:   Thu Jan 30 21:38:09 2020 -0600
+
+    Se arreglo la tabla y se agregaron consulta a la tabla principal (base)
+
+commit 227ab9b08adcee02b383168c8583b518534e7596
+Author: marcosrip <marcorivaspartida@gmail.com>
+Date:   Mon Jan 27 10:19:28 2020 -0600
+
+    Tablero vacio, solo con campos requeridos

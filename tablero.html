@@ -26,6 +26,8 @@
     <button onclick="goBack()" class='tareas btn btn-primary'><i class='fa fa-home'></i></button>
     <button role="link" onclick="location.href='maquinaria.html';" class='maquinas btn btn-primary'><i
     class='fa fa-gavel'></i></button>
+    <!-- Hacer funcion de redireccionamiento a consulta de operadores -->
+    <button onclick='location.href="operadores.html"' class="btn btn-primary" >Operadores</button>
 
     <br>
     <br>
@@ -519,17 +521,6 @@
             obtener_datos_eliminar("#dt_procesos tbody", table);
         }
         //funciones de pedro  
-    $(document).on('ready', function() {
-        $('#guardar').click(function() {
-            $.ajax({
-                type: "POST",
-                url: "guardar_orden_produccion.php",
-                data: $("#mainform").serialize()
-            })
-            window.location = 'tablero.html'
-        });
-    })
-
     function ocultars() {
         var elemento = document.getElementById('cuadro2');
 
@@ -567,7 +558,7 @@
         });
     })
 
-    $(document).on('ready', function() {
+  
         $('#guardar').click(function() {
             $.ajax({
                 type: "POST",
@@ -576,7 +567,7 @@
             })
             window.location = 'tablero.html'
         });
-    })
+    
 
     var obtener_datos = function(tbody, table) {
         $(tbody).on("click", "button.editar", function() {
