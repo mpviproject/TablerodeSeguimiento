@@ -31,6 +31,8 @@ if(!$result){
     die("Error!");
 }
 mysqli_close($conexion);
+}else{
+    echo "missing parameters";
 }
 
 ?>
