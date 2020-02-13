@@ -428,18 +428,17 @@
             </div>
         </div>
     </div>
-
     <!-- Modal para calidad -->
     <div class='modal fade bd-example-modal-lg' id='modalcalidad' tabindex='1' role='dialog' aria-labelledby='myExtraLargeModalLabel' aria-hidden='true'>
         <div class='modal-dialog modal-lg'>
             <div class='modal-content'>
-                <!-- Pendiente: Guardar el registro y solo poder editarlo. -->
                 <div class='modal-header'>
-                    <h4>Calidad</h4><button class='close' id='cerrarcalidad'>×</button>
-                    <br>
+                    <button class="btn btn-danger" style="float:right;" id='cerrarcalidad'><i
+                            class="fa fa-times"></i></button>
+                    <h1>Calidad</h1>
+                    <input type="hidden" id="ordendeproduccion">
                 </div>
-                <diV class="modal-body">
-                    <p style="text-align:right">Fecha: <label id="fechaactual"></label></p>
+                <div class="modal-body">
                     <table class="table table-hove  table-condensed table-bordered responsive-table">
                         <thead class="thead-dark">
                             <tr>
@@ -448,15 +447,27 @@
                                 <td><label>Tiempo de liberacion</label></td>
                             </tr>
                             <tr>
-                                <td><input type="text" placeholder="nombre"></td>
-                                <td><input type="text" class="onlydate"></td>
-                                <td><input type="text" placeholder="minutos"></td>
+                                <td><input id="nombre_calidad" type="text" placeholder="nombre"></td>
+                                <td><input id="fecha_calidad" type="text" class="onlydate"></td>
+                                <td><input id="tiempo_liberacion" type="number" placeholder="minutos"></td>
                             </tr>
                         </thead>
                     </table>
-
+                    <button id="guarda_calidad" class="btn btn-primary btn-lg btn-block">Guardar registro</button>
+                    <h2>Liberaciones</h2>
+                    <table id="tabla_calidad" class="table table-hove  table-condensed table-bordered responsive-table">
+                        <thead class="thead-dark">
+                            <tr>
+                                <td><label>id_calidad</label></td>
+                                <td><label>id_operacion</label></td>
+                                <td><label>responsable</label></td>
+                                <td><label>fecha_liberacion</label></td>
+                                <td><label>tiempo_liberacion</label></td>
+                                <td><label>opciones</label></td>
+                            </tr>
+                        </thead>
+                    </table>
                     <!-- Boton para guardar registro -->
-                    <button id="" class="btn btn-primary btn-lg btn-block">Guardar registro</button>
                     <br><br>
 
                     <br>
@@ -467,10 +478,39 @@
         </div>
     </div>
 
+    <div class='modal fade bd-example-modal-lg' id='modaleditacalidad' tabindex='1' role='dialog' aria-labelledby='myExtraLargeModalLabel' aria-hidden='true'>
+        <div class='modal-dialog modal-lg'>
+            <div class='modal-content'>
+                <div class='modal-header'><button id="closemodaleditacalidad" style="float:right;" class="btn btn-danger"><i
+                class="fa fa-times"></i></button>
+                    <h4>Editar registro de calidad</h4>
 
+                </div>
+                <div class="modal-body">
+                    <table class="table table-hove  table-condensed table-bordered responsive-table">
+                        <thead class="thead-dark">
+                            <tr>
+                                <td><label>Autorizo la liberacion: </label></td>
+                                <td><label>Fecha de liberacion</label></td>
+                                <td><label>Tiempo de liberacion</label></td>
+                            </tr>
+                            <tr>
+                                <input type="hidden" id="id_calidad">
+                                <td><input id="resp" type="text" placeholder="nombre"></td>
+                                <td><input id="fechalib" type="text" class="onlydate"></td>
+                                <td><input id="tiempolib" type="number" placeholder="minutos"></td>
+                            </tr>
+                        </thead>
+                    </table>
 
+                    <button id="act_calidad" class="btn btn-default btn-lg btn-info">Actualizar</button>
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <form id="frmEliminarUsuario" action="" method="POST">
+    <form id="frmEliminarUsuario" action="">
         <input type="hidden" id="id_produccion2" name="id_produccion2" value="">
 
         <div class="modal fade" id="modalEliminar" tabindex="-1" role="dialog" aria-labelledby="modalEliminarLabel">
@@ -558,11 +598,28 @@
         </div>
     </div>
 </body>
+
+
+
 <script>
     $(document).ready(function() {
         listar();
     });
-
+    $("#act_calidad").on("click", function() {
+        var nombre = $("#resp").val();
+        var fecha = $("#fechalib").val();
+        var tiempo = $("#tiempolib").val();
+        var id_calidad = $("#id_calidad").val();
+        query = "UPDATE calidad SET responsable = '" + nombre + "', fecha_liberacion ='" + fecha + "', tiempo_liberacion=" + tiempo + " where id_calidad =" + id_calidad;
+        $.ajax({
+            url: "guarda_registro72.php",
+            type: "POST",
+            data: {
+                query: query
+            }
+        });
+        location.reload();
+    })
 
 
     //funcion para listar las ordenes de compra que estan en proceso actualmente,
@@ -899,13 +956,9 @@
 
     }
 
-
-
     $(".cerrarModal").click(function() {
         $("#modalEditar").modal('hide')
     });
-
-
 
 
     function goBack() {
@@ -925,19 +978,63 @@
     var obtener_datos_calidad = function(tbody, table) {
         $(tbody).on("click", "#calidad", function() {
             var data1 = table.row($(this).parents("tr")).data();
-            //Asigna id_produccion y orden de produccion a campos en la forma 72
-            $("#orden_72").val(data1.orden_produccion);
-            $("#id_orden").val(data1.id_produccion);
+            //Asigna id_produccion a modal calidad
+            var orden = $("#ordendeproduccion").val(data1.id_produccion);
+            listacalidad($("#ordendeproduccion").val());
             $("#modalcalidad").modal();
         })
     }
-
 
     //Abre modal para seleccionar el empleado
     $("#seleccionaempleado").on("click", function() {
         listaempleados();
         $("#modalempleados").modal();
     });
+
+    //Muestra la tabla de calidad 
+    var listacalidad = function(orden) {
+        var table = $("#tabla_calidad").DataTable({
+            "destroy": true,
+            "paging": false,
+            "bInfo": false,
+            "responsive": true,
+            "ajax": {
+                "method": "POST",
+                "url": "lista_calidad.php",
+                "data": {
+                    id_orden: orden
+                }
+            },
+            "columns": [{
+                "data": "id_calidad"
+            }, {
+                "data": "id_operacion"
+            }, {
+                "data": "responsable"
+            }, {
+                "data": "fecha_liberacion"
+            }, {
+                "data": "tiempo_liberacion"
+            }, {
+                "defaultContent": "<button id='edita_calidad'>Editar</button>"
+            }]
+        });
+        obtener_datos_edita_calidad("#tabla_calidad tbody", table);
+    }
+    var obtener_datos_edita_calidad = function(tbody, table) {
+        $(tbody).on("click", "#edita_calidad", function() {
+            var data1 = table.row($(this).parents("tr")).data();
+            var calidad = data1.id_calidad;
+            var responsable = data1.responsable;
+            var fecha_liberacion = data1.fecha_liberacion;
+            var tiempo_liberacion = data1.tiempo_liberacion;
+            $("#resp").val(responsable);
+            $("#fechalib").val(fecha_liberacion);
+            $("#tiempolib").val(tiempo_liberacion);
+            $("#id_calidad").val(calidad);
+            $("#modaleditacalidad").modal();
+        });
+    }
 
 
     //Muestra la tabla de operadores en el modal.
@@ -968,15 +1065,50 @@
 
     //obtiene datos de operador seleccionando 
     var obtener_datos_operador = function(tbody, table) {
-        $(tbody).on("click", "#seleccionaoperador", function() {
-            var data1 = table.row($(this).parents("tr")).data();
-            var operador = data1.id_operador;
-            var nombre = data1.nombre_operador;
-            $("#nombre_empleado").val(nombre);
-            $("#id_empleado").val(operador);
-            $("#modalempleados").modal('hide');
-        });
-    }
+            $(tbody).on("click", "#seleccionaoperador", function() {
+                var data1 = table.row($(this).parents("tr")).data();
+                var operador = data1.id_operador;
+                var nombre = data1.nombre_operador;
+                $("#nombre_empleado").val(nombre);
+                $("#id_empleado").val(operador);
+                $("#modalempleados").modal('hide');
+            });
+        }
+        //Funcion para guardar datos de calidad
+    $("#guarda_calidad").on("click", function() {
+        var op = $("#ordendeproduccion").val();
+        var nombre = $("#nombre_calidad").val();
+        var fecha = $("#fecha_calidad").val();
+        var tiempo = $("#tiempo_liberacion").val();
+        //comprobacion si es un numero de minutos ingresado es entero
+        if (Number.isInteger(parseInt(tiempo)) || Math.sign(parseInt(tiempo)) == 1) {
+            var query = "INSERT INTO calidad VALUES (NULL," + op + ",'" + nombre + "','" + fecha + "'," + tiempo + ");"
+            $.ajax({
+                type: "POST",
+                url: "consulta_calidad.php",
+                data: {
+                    id_orden: op
+                },
+                success: function(data) {
+
+                    if (data == "NO REGISTRADO") {
+                        $.ajax({
+                            type: "POST",
+                            url: "guarda_registro72.php",
+                            data: {
+                                query: query
+                            }
+                        });
+                        location.reload();
+                    } else {
+                        alert("Solo se puede guardar una liberacion por orden de produccion");
+                    }
+                }
+            })
+        } else {
+            alert("Introduzca un numero de minutos entero");
+        }
+    });
 
     //funciones para cerrar modals
     $("#cerrar72").on("click", function() {
@@ -992,8 +1124,16 @@
     $("#closemodalparo").on("click", function() {
         $("#modalparo").modal('hide');
     })
-
-    //Funcion para agregar registro como fila a la tabla 
+    $("#cerrar72").on("click", function() {
+        $("#modal_dash").modal('hide');
+    })
+    $("#cerrarcalidad").on("click", function() {
+        $("#modalcalidad").modal('hide');
+    })
+    $("#closemodaleditacalidad").on("click", function() {
+            $("#modaleditacalidad").modal('hide');
+        })
+        //Funcion para agregar registro como fila a la tabla 
     function agregarFila72(fechaini, fechafin, cantidad, reproceso, scrap) {
         var htmlTags1 = '<tr>' +
             '<td class="inicio1">' + fechafin + '</td>' +
