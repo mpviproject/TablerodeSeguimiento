@@ -1,0 +1,146 @@
+<html>
+<meta charset="UTF-8">
+<title>Capacidad actual</title>
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="css/estilos.css">
+<!-- Buttons DataTables -->
+<link rel="stylesheet" href="css/buttons.bootstrap.min.css">
+<link rel="stylesheet" href="css/font-awesome.min.css">
+
+<head>
+    <!-- Head de interfaz de operadores -->
+    <div class="row fondo">
+        <div class="col-sm-12 col-md-12 col-lg-12">
+            <h1 class="text-center text-uppercase">Capacidad Actual</h1>
+        </div>
+    </div>
+    <br>
+    <!-- Botones para agregar registro -->
+    <button  class='tareas btn btn-primary' onclick='location.href="tablero.html"'><i class='fa fa-home'></i> Home</button>
+    <br>
+    <br>
+
+</head>
+<!-- Crear metrica para verificar el tiempo de -->
+<div class="container">
+<!--Tabla que muestra los dias y las horas trabajadas-->
+<div class="row">
+    <div id="cuadro1" class="col-sm-12 col-md-12 col-lg-12">
+        <div class="col-sm-offset-2 col-sm-8">
+            <h3 class="text-center"> <small class="mensaje"></small></h3>
+        </div>
+        <div class="table-responsive col-sm-12">
+            <table id="example" class="display" style="width:100%">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Name</th>
+                        <th>Position</th>
+                        <th>Office</th>
+                        <th>Salary</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th></th>
+                        <th>Name</th>
+                        <th>Position</th>
+                        <th>Office</th>
+                        <th>Salary</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+</div>
+<body>
+
+    <body>
+     
+    </body>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script src="js/dataTables.bootstrap.js"></script>
+    <!--botones DataTables-->
+    <script src="js/dataTables.buttons.min.js"></script>
+    <script src="js/buttons.bootstrap.min.js"></script>
+    <!--Libreria para exportar Excel-->
+    <script src="js/jszip.min.js"></script>
+    <!--Librerias para exportar PDF-->
+    <script src="js/pdfmake.min.js"></script>
+    <script src="js/vfs_fonts.js"></script>
+    <!--Librerias para botones de exportación-->
+    <script src="js/buttons.html5.min.js"></script>
+    <script>
+      function format ( d ) {
+    return 'Full name: '+d.first_name+' '+d.last_name+'<br>'+
+        'Salary: '+d.salary+'<br>'+
+        'The child row can contain any data you wish, including links, images, inner tables etc.';
+}
+function format ( d ) {
+    // `d` is the original data object for the row
+    return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
+        '<tr>'+
+            '<td>Full name:</td>'+
+            '<td>'+d.name+'</td>'+
+        '</tr>'+
+        '<tr>'+
+            '<td>Extension number:</td>'+
+            '<td>'+d.extn+'</td>'+
+        '</tr>'+
+        '<tr>'+
+            '<td>Extra info:</td>'+
+            '<td>And any further details here (images etc)...</td>'+
+        '</tr>'+
+    '</table>';
+}
+ 
+$(document).ready(function() {
+    var table = $('#example').DataTable( {
+        "ajax": "ids-objects.txt",
+        "columns": [
+            {
+                "className":      'details-control',
+                "orderable":      false,
+                "data":           null,
+                "defaultContent": ''
+            },
+            { "data": "name" },
+            { "data": "position" },
+            { "data": "office" },
+            { "data": "salary" }
+        ],
+        "order": [[1, 'asc']]
+    } );
+     
+    // Add event listener for opening and closing details
+    $('#example tbody').on('click', 'td.details-control', function () {
+        var tr = $(this).closest('tr');
+        var row = table.row( tr );
+ 
+        if ( row.child.isShown() ) {
+            // This row is already open - close it
+            row.child.hide();
+            tr.removeClass('shown');
+        }
+        else {
+            // Open this row
+            row.child( format(row.data()) ).show();
+            tr.addClass('shown');
+        }
+    } );
+} );
+    </script>
+</body>
+
+</body>
+
+
+
+</html>

@@ -22,13 +22,15 @@
         </div>
     </div>
     <br>
-    <input id="btn_mostar" type="button" class="btn btn-primary" value="Agregar Produccion" onClick="ocultars()">
-    <button onclick="goBack()" class='regresar btn btn-primary'><i class='fa fa-home'></i></button>
+    <button id="btn_mostar" type="button" class="btn btn-primary"  onClick="ocultars()"><i class='fa fa-plus'></i> Agregar Produccion</button>
+    <button onclick="location.href='tablero.html';" class='regresar btn btn-primary'><i class='fa fa-home'></i> Home</button>
     <button role="link" onclick="location.href='maquinaria.html';" class='maquinas btn btn-primary'><i
             class='fa fa-steam'></i>  Maquinaria</button>
     <!-- Hacer funcion de redireccionamiento a consulta de operadores -->
     <button role="link" onclick="location.href='operadores.html';" class='operadores btn btn-primary'><i
         class='fa fa-users'></i>  Operadores</button>
+        <button role="link" onclick="location.href='capacidad.html';" class='operadores btn btn-primary'><i
+            class='fa fa-trophy'></i>  Capacidad actual</button>
     <br>
     <br>
     <div class="row">
@@ -158,6 +160,13 @@
                                 <input type='hidden' id='id_orden'>
                             </tr>
                             <tr>
+                                <td>Turno: </td>
+                                <td>
+                                    <select id="turnos">
+                                      <option value="M">Matutino</option>
+                                      <option value="V">Vespertino</option>
+                                      </select>
+                                </td>
                             </tr>
                         </thead>
                     </table>
@@ -817,13 +826,14 @@
         //obtiene los datos necesarios restantes
         var id_empleado = $("#id_empleado").val();
         var orden_72 = $("#id_orden").val();
-
+        var turnos =document.getElementById('turnos').value;
+        //var turnos = temp.value;
         if (id_empleado == "" || orden_72 == "") {
             alert("Datos Faltantes: \nAsegurese de llenar todos los datos");
         } else {
-            var query = "insert into forma_72 values(NULL," + orden_72 + "," + id_empleado + ",NOW()" + "," + pap + "," + poc + "," + atl + "," + scrap + "," + emv + ");";
+            var query = "insert into forma_72 values(NULL," + orden_72 + "," + id_empleado + ",NOW()" + "," + pap + "," + poc + "," + atl + "," + scrap + "," + emv + ",'"+turnos+"');";
             console.log(query);
-            $.ajax({
+             $.ajax({
                 url: "guarda72.php",
                 type: "POST",
                 data: {
@@ -834,7 +844,7 @@
                     guardaparos(data);
                     location.reload();
                 }
-            });
+            }); 
 
         }
 
