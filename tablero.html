@@ -833,7 +833,7 @@
         } else {
             var query = "insert into forma_72 values(NULL," + orden_72 + "," + id_empleado + ",NOW()" + "," + pap + "," + poc + "," + atl + "," + scrap + "," + emv + ",'"+turnos+"');";
             console.log(query);
-             $.ajax({
+              $.ajax({
                 url: "guarda72.php",
                 type: "POST",
                 data: {
@@ -841,11 +841,11 @@
                 },
                 success: function(data) {
                     guardaregistros(data);
-                    guardaparos(data);
-                    location.reload();
+                   /*  guardaparos(data);
+                    location.reload(); */
                 }
             }); 
-
+ 
         }
 
 
@@ -872,14 +872,14 @@
                 }
                 query = "insert into registro_72 values (NULL," + data + ",'" + inicio + "','" + finn + "'," + cantidad + "," + reproceso1 + "," + scrap1 + ");";
                 console.log(query);
-                $.ajax({
+                 $.ajax({
                     url: 'guarda_registro72.php',
                     type: 'post',
                     data: {
                         "query": query
                     },
                     success: function(data2) {}
-                });
+                }); 
             } else {
                 alert("Error no se puede guardar sin tarea ligada o sin fecha");
             }
@@ -1146,7 +1146,7 @@
         //Funcion para agregar registro como fila a la tabla 
     function agregarFila72(fechaini, fechafin, cantidad, reproceso, scrap) {
         var htmlTags1 = '<tr>' +
-            '<td class="inicio1">' + fechafin + '</td>' +
+            '<td class="inicio1">' + fechaini + '</td>' +
             '<td class="fin1">' + fechafin + '</td>' +
             '<td class="cantidad1">' + cantidad + '</td>' +
             '<td class="reproceso1">' + reproceso + '</td>' +

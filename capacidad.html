@@ -18,12 +18,13 @@
     <br>
     <!-- Botones para agregar registro -->
     <button  class='tareas btn btn-primary' onclick='location.href="tablero.html"'><i class='fa fa-home'></i> Home</button>
+    <button class='tareas btn btn-primary'>Parametros de productividad</button>
     <br>
     <br>
 
 </head>
-<!-- Crear metrica para verificar el tiempo de -->
-<div class="container">
+
+
 <!--Tabla que muestra los dias y las horas trabajadas-->
 <div class="row">
     <div id="cuadro1" class="col-sm-12 col-md-12 col-lg-12">
@@ -34,29 +35,23 @@
             <table id="example" class="display" style="width:100%">
                 <thead>
                     <tr>
-                        <th></th>
-                        <th>Name</th>
-                        <th>Position</th>
-                        <th>Office</th>
-                        <th>Salary</th>
+                        <th>button</th>
+                        <th>id_forma</th>
+                        <th>id_registro</th>
+                        <th>f_inicio</th>
+                        <th>f_fin</th>
+                        <th>turno</th>
+                        <th>hrs trabajadas</th>
+                        <th>capacidad</th>
                     </tr>
                 </thead>
-                <tfoot>
-                    <tr>
-                        <th></th>
-                        <th>Name</th>
-                        <th>Position</th>
-                        <th>Office</th>
-                        <th>Salary</th>
-                    </tr>
-                </tfoot>
             </table>
         </div>
     </div>
 </div>
 
 
-</div>
+
 <body>
 
     <body>
@@ -85,6 +80,7 @@
 }
 function format ( d ) {
     // `d` is the original data object for the row
+    // Que muestre en los detalles lo correspondiente a la forma 72 ligada
     return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
         '<tr>'+
             '<td>Full name:</td>'+
@@ -101,21 +97,26 @@ function format ( d ) {
     '</table>';
 }
  
+ //Reparar consulta para que consulte de la base de datos.
 $(document).ready(function() {
     var table = $('#example').DataTable( {
-        "ajax": "ids-objects.txt",
-        "columns": [
+        "ajax":{"method": "POST",
+        "url":"lista_capacidad.php",
+        },"columns": [
             {
                 "className":      'details-control',
                 "orderable":      false,
                 "data":           null,
                 "defaultContent": ''
             },
-            { "data": "name" },
-            { "data": "position" },
-            { "data": "office" },
-            { "data": "salary" }
-        ],
+            { "data": "id_forma" },
+            { "data": "id_registro" },
+            { "data": "r_inicio" },
+            { "data": "r_fin" },
+            { "data": "turno" },
+            { "data": "ht" },
+            { "defaultContent": "<input type='text'>" }
+        ], 
         "order": [[1, 'asc']]
     } );
      
