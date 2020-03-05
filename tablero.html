@@ -23,12 +23,14 @@
     </div>
     <br>
     <input id="btn_mostar" type="button" class="btn btn-primary" value="Agregar Produccion" onClick="ocultars()">
-    <button onclick="goBack()" class='regresar btn btn-primary'><i class='fa fa-home'></i></button>
     <button role="link" onclick="location.href='maquinaria.html';" class='maquinas btn btn-primary'><i
             class='fa fa-steam'></i>  Maquinaria</button>
     <!-- Hacer funcion de redireccionamiento a consulta de operadores -->
     <button role="link" onclick="location.href='operadores.html';" class='operadores btn btn-primary'><i
         class='fa fa-users'></i>  Operadores</button>
+    <button role="link" onclick="location.href='herramentacion.html';" class='btn btn-primary'><i
+            class='fa fa-simplybuilt'></i>  Herramentacion</button>
+    <button onclick="goBack()" class='regresar btn btn-primary'><i class='fa fa-home'></i></button>
     <br>
     <br>
     <div class="row">
@@ -405,6 +407,35 @@
         </div>
     </div>
 
+    <!--Modal Metricas-->
+
+    <div class="modal fade bd-example-modal-lg" id="modal_metrica">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class='modal-header'>
+                    <h4>Metricas de Orden de Produccion</h4><button class='close' id='cerrar72'>×</button>
+                    <br>
+                </div>
+                <div class="modal-body table-responsive">
+
+                    <table id="dt_metricas" class="table table-bordered table-hover" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <td>ID. Orden</td>
+                                <td>Fecha limite</td>
+                                <td>Dias Necesarios para terminar la Produccion</td>
+                                <td>Cantidad Requerida</td>
+                                <td>Piezas Fabricadas al momento</td>
+                                <td>Porcentaje de Avance</td>
+                                <td>Dias necesarios para terminar la produccion</td>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Agregar paro de maquina -->
     <div class="modal fade bd-example-modal-lg" id="modalparo" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -597,6 +628,104 @@
             </div>
         </div>
     </div>
+
+    <!--Modal Herramentación-->
+
+    <div class="modal fade bd-example-modal-lg" id="modalHerramentacion" tabindex="-1" role="dialog" aria-labelledby="modalEditarLabel">
+        <div class="modal-dialog modal-lg">
+
+            <div class="modal-content">
+                <div class="container">
+                    <br>
+                    <h4 class="modal-title" id="modalEliminarLabel"> Herramentar Maquina </h4>
+                    <br>
+                    <form id="form_herramentacion" class="form-horizontal">
+                        <div class="form-group">
+                            <label for="id_mpvi" class="col-sm-2 control-label">Maquina :</label>
+                            <div class="col-sm-6"><input id="maquina_herramentacion" name="maquina_herramentacion" type="text" class="form-control" readonly> </div>
+                            <div class="col-sm-6"><input id="id_maquina_herramentacion" name="id_maquina_herramentacion" type="hidden" class="form-control" autofocus></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="modelo" class="col-sm-2 control-label">Operador :</label>
+                            <div class="col-sm-2"><input id="operador_herramentacion" name="operador_herramentacion" type="text" class="form-control" readonly></div>
+                            <button id="btnOperador" type="button" class="btn btn-primary"><i class="fa fa-user"></i> </button>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-6"><input id="id_operador_herramentacion" name="id_operador_herramentacion" type="hidden" class="form-control" autofocus></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="marca" class="col-sm-2 control-label">Fecha de Herramentacion :</label>
+                            <div class="col-sm-6"><input id="fecha_herramentacion" name="fecha_herramentacion" type="date" class="form-control"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="tipo_maquina" class="col-sm-2 control-label">Tiempo de Herramentacion :</label>
+                            <div class="col-sm-6"><input id="tiempo_herramentacion" name="tiempo_herramentacion" type="text" class="form-control" maxlength="8"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="tipo_maquina" class="col-sm-2 control-label">Reproceso :</label>
+                            <div class="col-sm-6"><input id="reproceso_herramentacion" name="reproceso_herramentacion" type="number" class="form-control" maxlength="8"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="tipo_maquina" class="col-sm-2 control-label">Scrap :</label>
+                            <div class="col-sm-6"><input id="scrap_herramentacion" name="scrap_herramentacion" type="number" class="form-control" maxlength="8"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="tipo_maquina" class="col-sm-2 control-label">Observaciones :</label>
+                            <div class="col-sm-6"><input id="observacion_herramentacion" name="observacion_herramentacion" type="text" class="form-control" maxlength="8"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="tipo_maquina" class="col-sm-2 control-label">Paquete de OP :</label>
+                            <div class="col-sm-6"><input id="paquete_op" name="paquete_op" type="checkbox" class="form-control" maxlength="2"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="tipo_maquina" class="col-sm-2 control-label">IT :</label>
+                            <div class="col-sm-6"><input id="it_herramentacion" name="it_herramentacion" type="checkbox" class="form-control" maxlength="2"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="tipo_maquina" class="col-sm-2 control-label">Diagrama de Flujo :</label>
+                            <div class="col-sm-6"><input id="diagrama_herramentacion" name="diagrama_herramentacion" type="checkbox" class="form-control" maxlength="2"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="tipo_maquina" class="col-sm-2 control-label">AMEF :</label>
+                            <div class="col-sm-6"><input id="amef_herramentacion" name="amef_herramentacion" type="checkbox" class="form-control" maxlength="2"></div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-8">
+                                <input id="guardar_herramentacion" type="button" class="btn btn-primary" value="Herramentar">
+                                <button type="button" id="cerrar_herramentacion" class="btn btn-default cerrarModal">Cerrar</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Modal operador herramentar-->
+
+    <div class="modal fade bd-example-modal-lg" id="modalOperador">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class='modal-header'>
+                    <h4>Operadores</h4><button class='close' id='cerrar72'>×</button>
+                    <br>
+                </div>
+                <div class="modal-body table-responsive">
+                    <table id="dt_cliente" class="table table-bordered table-hover" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>Id operador</th>
+                                <th>Nombre</th>
+                                <th>Apellido</th>
+                                <th>Opciones</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </body>
 
 
@@ -631,7 +760,8 @@
                 "url": "listaordenproduccion.php"
             },
             "columns": [{
-                "data": "id_produccion"
+                "data": "id_produccion",
+                "visible": false
             }, {
                 "data": "tipo_produccion"
             }, {
@@ -653,26 +783,25 @@
             }, {
                 "data": "fecha_fin"
             }, {
-                "defaultContent": "<button type='button' class='herrmentacion btn btn-primary' data-toggle='modal' data-target='#modal_metrica'><i class='fa fa-bar-chart'></i> Metrica</button>"
+                "defaultContent": "<button id='btn_metricas'type='button' class='btn btn-primary'><i class='fa fa-bar-chart'></i> Metrica</button>"
             }, {
                 "defaultContent": "<button id='maquinas_asignadas1' class='btn btn-primary' ><i class='fa fa-gavel'></i> Ingenieria</button>"
             }, {
-                "defaultContent": "<button id='calidad'>Calidad</button>"
+                "defaultContent": "<button id='calidad'class='btn btn-primary'>Calidad</button>"
             }, {
-                "defaultContent": "<button id='forma'>Forma 72</button>"
+                "defaultContent": "<button id='forma'class='btn btn-primary'>Forma 72</button>"
             }, {
-                "defaultContent": "<button type='button' class='editar btn btn-primary' data-toggle='modal' data-target='#modalEditar' ><i class='fa fa-pencil-square-o'></i></button>	<button id='eliminamesta' type='button' class='eliminar btn btn-danger' data-toggle='modal' data-target='#modalEliminar' ><i class='fa fa-trash-o'></i></button>"
+                "defaultContent": "<button  type='button' class='editar btn btn-primary' data-toggle='modal' data-target='#modalEditar' ><i class='fa fa-pencil-square-o'></i></button>	<button id='eliminamesta' type='button' class='eliminar btn btn-danger' data-toggle='modal' data-target='#modalEliminar' ><i class='fa fa-trash-o'></i></button>"
             }]
         });
-        var column = table.column($(this).attr('id_produccion'));
-        // Toggle the visibility
-        column.visible(!column.visible());
+
         obtener_orden("#dt_procesos tbody", table);
         obtener_datos("#dt_procesos tbody", table);
         //Obtiene datos para modal de calidad.
         obtener_datos_calidad("#dt_procesos tbody", table);
         obtener_datos_eliminar("#dt_procesos tbody", table);
         obtiene_datos_ingenieria("#dt_procesos tbody", table);
+        obtiene_datos_metricas("#dt_procesos tbody", table);
     }
 
     var listar_maquinas_asignadas = function(temporal) {
@@ -703,12 +832,10 @@
             }, {
                 "data": "tiempo_ciclo"
             }, {
-                "defaultContent": "<button type='button' class='editar btn btn-primary' data-toggle='modal' data-target='#modalEditar' ><i class='fa fa-pencil-square-o'></i></button>	<button id='eliminamesta' type='button' class='eliminar btn btn-danger' data-toggle='modal' data-target='#modalEliminar' ><i class='fa fa-trash-o'></i></button>"
+                "defaultContent": "<button ' class='editar btn btn-primary' data-toggle='modal' data-target='#modalEditar' ><i class='fa fa-pencil-square-o'></i></button>	<button id='eliminamesta' type='button' class='eliminar btn btn-danger' data-toggle='modal' data-target='#modalEliminar' ><i class='fa fa-trash-o'></i></button>    <button id='herramentar_maquina' type='button type='button' class='herramentacion btn btn-primary' data-toggle='modal' data-target='#modalHerramentacion' ><i class='fa fa-simplybuilt'></i> Herramentar</button>"
             }]
         });
-
-
-
+        obtiene_datos_herramentar("#dt_maquinas_asignadas tbody", table);
         // obtener_datos_maquina_reservada("#dt_herramentacion tbody", table);
         // obtener_datos_eliminar_maquina_reservada("#dt_herramentacion tbody", table);
     }
@@ -733,6 +860,88 @@
 
         obtener_datos_maquina_validacion("#dt_maquinas tbody", table);
     }
+
+    var listarOperador = function() {
+        var table = $("#dt_cliente").DataTable({
+            "destroy": true,
+            "ajax": {
+                "method": "POST",
+                "url": "lista_operador.php"
+            },
+            "columns": [{
+                "data": "id_operador",
+                "visible": false
+            }, {
+                "data": "nombre_operador"
+            }, {
+                "data": "apellido_operador"
+            }, {
+                "defaultContent": "<button id='btnSeleccionOperador' type='button' class='btn btn-primary'><i class='fa fa-user-plus'></i></button>"
+            }]
+        });
+        obtener_Operador("#dt_cliente tbody", table);
+    }
+
+
+    var listar_metricas = function(temp_metricas) {
+        var table = $("#dt_metricas").DataTable({
+            "destroy": true,
+            "ajax": {
+                "method": "POST",
+                "url": "listar_metricas.php",
+                "data": {
+                    "produccion2": temp_metricas
+                }
+            },
+            "columns": [{
+                "data": "id_produccion",
+                "visible": false
+            }, {
+                "data": "fecha_requerida"
+            }, {
+                "data": "fecha_requerida",
+                render: function(data, type, row) {
+                    let today = new Date().toISOString().slice(0, 10);
+                    const date2 = new Date(data);
+                    var fecha1 = moment(today);
+                    var fecha2 = moment(date2);
+                    var temporal = fecha2.diff(fecha1, 'days');
+                    var tmp = "";
+                    if (temporal < 0) {
+                        tmp = " Dias atrasado";
+                    } else {
+                        tmp = " Dias Restantes";
+                    }
+                    return temporal + tmp;
+                }
+            }, {
+                "data": "cantidad_requerida"
+            }, {
+                render: function(data, type, row) {
+                    var cantidad = row.cantidad;
+                    if (cantidad == 0) {
+                        return 0;
+                    } else {
+                        return cantidad;
+                    }
+                }
+            }, {
+
+                render: function(data, type, row) {
+                    var realizado_porcentaje = (row.cantidad * 100) / row.cantidad_requerida;
+                    return realizado_porcentaje + "%";
+                }
+            }, {
+                render: function(data, type, row) {
+                    var dias_necesarios = ((row.cantidad_requerida - row.cantidad) / row.UPH) / 14;
+                    return dias_necesarios.toFixed(4);
+                }
+            }]
+        });
+    }
+
+
+
     var obtener_datos_maquina_validacion = function(tbody, table) {
         $(tbody).on("click", "#validar_maquina", function() {
             var data = table.row($(this).parents("tr")).data();
@@ -752,6 +961,31 @@
         });
     }
 
+    var obtiene_datos_metricas = function(tbody, table) {
+        $(tbody).on("click", "#btn_metricas", function() {
+            var data4 = table.row($(this).parents("tr")).data();
+            var temp_metricas = data4.id_produccion;
+            listar_metricas(temp_metricas);
+            $("#modal_metrica").modal()
+        });
+    }
+
+    var obtiene_datos_herramentar = function(tbody, table) {
+        $(tbody).on("click", "#herramentar_maquina", function() {
+            var data2 = table.row($(this).parents("tr")).data();
+            $("#id_maquina_herramentacion").val(data2.id_maquina);
+            $("#maquina_herramentacion").val(data2.maquina);
+        });
+    }
+
+    var obtener_Operador = function(tbody, table) {
+        $(tbody).on("click", "#btnSeleccionOperador", function() {
+            var data3 = table.row($(this).parents("tr")).data();
+            $("#id_operador_herramentacion").val(data3.id_operador);
+            $("#operador_herramentacion").val(data3.nombre_operador);
+            $("#modalOperador").modal('hide')
+        });
+    }
 
 
     $("#listar_maquinas").on("click", function() {
@@ -896,6 +1130,22 @@
         }
     }
 
+    //guarda Herramentacion
+
+    $('#guardar_herramentacion').click(function() {
+        $.ajax({
+            type: "POST",
+            url: "guardar_herramentacion.php",
+            data: $("#form_herramentacion").serialize(),
+            success: function(result) {
+                $("#modalHerramentacion").modal('hide')
+                alert("Registro guardado exitosamente");
+            }
+        })
+
+    })
+
+
     //actualiza orden de produccion
     $('#guardar1').click(function() {
             $.ajax({
@@ -958,6 +1208,11 @@
 
     $(".cerrarModal").click(function() {
         $("#modalEditar").modal('hide')
+
+    });
+    $("#btnOperador").on("click", function() {
+        listarOperador();
+        $("#modalOperador").modal()
     });
 
 
@@ -1131,7 +1386,10 @@
         $("#modalcalidad").modal('hide');
     })
     $("#closemodaleditacalidad").on("click", function() {
-            $("#modaleditacalidad").modal('hide');
+        $("#modaleditacalidad").modal('hide');
+    })
+    $("#cerrar_herramentacion").on("click", function() {
+            $("#modalHerramentacion").modal('hide');
         })
         //Funcion para agregar registro como fila a la tabla 
     function agregarFila72(fechaini, fechafin, cantidad, reproceso, scrap) {

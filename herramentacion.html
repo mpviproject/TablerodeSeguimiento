@@ -1,0 +1,113 @@
+<html>
+<meta charset="UTF-8">
+<title>Maquinaria</title>
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<link rel="stylesheet" href="css/dataTables.bootstrap.min.css">
+<link rel="stylesheet" href="css/estilos.css">
+<!-- Buttons DataTables -->
+<link rel="stylesheet" href="css/buttons.bootstrap.min.css">
+<link rel="stylesheet" href="css/font-awesome.min.css">
+
+<head>
+
+</head>
+
+
+<body>
+
+    <body>
+        <div class="row fondo">
+            <div class="col-sm-12 col-md-12 col-lg-12">
+                <h1 class="text-center text-uppercase">Herramentacion de Maquinaria</h1>
+            </div>
+        </div>
+        <br>
+        <!-- <input id="btn_mostar" type="button" class="btn btn-primary" value="Agregar Maquina" onClick="ocultars()"> -->
+        <button onclick='location.href="tablero.html"' class='tareas btn btn-primary'><i class='fa fa-home'></i></button>
+        <br>
+        <br>
+
+        <div class="row">
+            <div id="cuadro1" class="col-sm-12 col-md-12 col-lg-12">
+                <div class="col-sm-offset-2 col-sm-8">
+                    <h3 class="text-center"> <small class="mensaje"></small></h3>
+                </div>
+                <div class="table-responsive col-sm-12">
+                    <table id="dt_cliente" class="table table-bordered table-hover" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>ID. Produccion</th>
+                                <th>Numero de Parte</th>
+                                <th>Maquina</th>
+                                <th>Fecha de Herramentacion</th>
+                                <th>ID. Operador</th>
+                                <th>Quien Herramento</th>
+                                <th>Tiempo de Herramentacion</th>
+                                <th>SCRAP (Piezas)</th>
+                                <th>Cantidad Requerida</th>
+                                <th>NC %</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+
+
+    </body>
+
+
+    <script src="js/jquery-1.12.3.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.dataTables.min.js"></script>
+    <script src="js/dataTables.bootstrap.js"></script>
+    <!--botones DataTables-->
+    <script src="js/dataTables.buttons.min.js"></script>
+    <script src="js/buttons.bootstrap.min.js"></script>
+    <!--Libreria para exportar Excel-->
+    <script src="js/jszip.min.js"></script>
+    <!--Librerias para exportar PDF-->
+    <script src="js/pdfmake.min.js"></script>
+    <script src="js/vfs_fonts.js"></script>
+    <!--Librerias para botones de exportación-->
+    <script src="js/buttons.html5.min.js"></script>
+    <script>
+        $(document).on("ready", function() {
+            listar();
+        });
+        var listar = function() {
+            var table = $("#dt_cliente").DataTable({
+                "destroy": true,
+                "ajax": {
+                    "method": "POST",
+                    "url": "listar_herramentacion.php"
+                },
+                "columns": [{
+                    "data": "id_produccion",
+                    "visible": false
+                }, {
+                    "data": "numero_parte"
+                }, {
+                    "data": "maquina"
+                }, {
+                    "data": "fecha_herramentacion"
+                }, {
+                    "data": "id_operador",
+                    "visible": false
+                }, {
+                    "data": "nombre_operador"
+                }, {
+                    "data": "tiempo_herramentacion"
+                }, {
+                    "data": "scrap"
+                }, {
+                    "data": "cantidad_requerida"
+                }, {
+                    "data": "nc"
+                }]
+            });
+
+        }
+    </script>
