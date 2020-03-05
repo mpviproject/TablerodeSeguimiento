@@ -1,0 +1,302 @@
+<html>
+<meta charset="UTF-8">
+<title>Maquinaria</title>
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<link rel="stylesheet" href="css/dataTables.bootstrap.min.css">
+<link rel="stylesheet" href="css/estilos.css">
+<!-- Buttons DataTables -->
+<link rel="stylesheet" href="css/buttons.bootstrap.min.css">
+<link rel="stylesheet" href="css/font-awesome.min.css">
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+
+<head>
+
+</head>
+
+
+<body>
+
+    <body>
+        <div class="row fondo">
+            <div class="col-sm-12 col-md-12 col-lg-12">
+                <h1 class="text-center text-uppercase">Estatus Produccion</h1>
+            </div>
+        </div>
+        <br>
+        <button onclick='location.href="inicio.html"' class='tareas btn btn-primary'><i class='fa fa-home'></i></button>
+        <br>
+        <br>
+        <div class="row">
+            <div class="row">
+                <div id="cuadro1" class="col-sm-12 col-md-12 col-lg-12">
+                    <div class="col-sm-offset-2 col-sm-8">
+                        <h3 class="text-center"> <small class="mensaje"></small></h3>
+                    </div>
+                    <div class="table-responsive col-sm-12">
+                        <table id="dt_cliente" class="table table-bordered table-hover" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>Orden de Produccion</th>
+                                    <th>Maquinas</th>
+                                    <th>Numero de Parte</th>
+                                    <th>Cantidad Requerida</th>
+                                    <th>Fecha Requerida</th>
+                                    <th>NUM de OP.</th>
+                                    <th>UPH</th>
+                                    <th>Dias de trabajo Restantes</th>
+                                    <th>Dias Necesarios para terminar la Produccion</th>
+                                    <th>% de Fabricacion</th>
+                                    <th>Piezas Fabricadas al Momento</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!--Modal de herramentacion-->
+
+            <div class="modal fade bd-example-modal-lg" id="modal_maquinas_asignadas">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class='modal-header'>
+                            <h4>Maquinas Asignadas</h4><button class='close' id='cerrar72'>×</button>
+                            <br>
+                        </div>
+                        <div class="modal-body table-responsive">
+
+                            <table id="dt_maquinas_asignadas" class="table table-bordered table-hover" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <td>ID. Herramentacion</td>
+                                        <td>ID. Produccion1</td>
+                                        <td>ID. Maquina1</td>
+                                        <td>Maquina</td>
+                                        <td>Tipo Maquina</td>
+                                        <td>Tiempo Operacion</td>
+                                        <td>Tiempo Ciclo</td>
+                                    </tr>
+                                </thead>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+            <script src="js/jquery-1.12.3.js"></script>
+            <script src="js/bootstrap.min.js"></script>
+            <script src="js/jquery.dataTables.min.js"></script>
+            <script src="js/dataTables.bootstrap.js"></script>
+            <!--botones DataTables-->
+            <script src="js/dataTables.buttons.min.js"></script>
+            <script src="js/buttons.bootstrap.min.js"></script>
+            <!--Libreria para exportar Excel-->
+            <script src="js/jszip.min.js"></script>
+            <!--Librerias para exportar PDF-->
+            <script src="js/pdfmake.min.js"></script>
+            <script src="js/vfs_fonts.js"></script>
+            <!--Librerias para botones de exportación-->
+            <script src="js/buttons.html5.min.js"></script>
+            <script>
+                $(document).on("ready", function() {
+                    listar();
+                });
+                $("#btn_listar").on("click", function() {
+                    listar();
+                })
+                var listar = function() {
+                    var table = $("#dt_cliente").DataTable({
+                        "destroy": true,
+                        "ajax": {
+                            "method": "POST",
+                            "url": "listar_estatus.php"
+                        },
+                        "columns": [{
+                            "data": "orden_produccion"
+                        }, {
+                            "defaultContent": "<button id='maquinas_asignadas1' class='btn btn-primary' ><i class='fa fa-gavel'></i> Maquinas</button>"
+                        }, {
+                            "data": "numero_parte"
+                        }, {
+                            "data": "cantidad_requerida"
+                        }, {
+                            "data": "fecha_requerida"
+                        }, {
+                            "data": "numero_operacion"
+                        }, {
+                            "data": "UPH"
+                        }, {
+                            "data": "fecha_requerida",
+                            render: function(data, type, row) {
+                                let today = new Date().toISOString().slice(0, 10);
+                                const date2 = new Date(data);
+                                var fecha1 = moment(today);
+                                var fecha2 = moment(date2);
+                                var temporal = fecha2.diff(fecha1, 'days');
+                                var tmp = "";
+                                if (temporal < 0) {
+                                    tmp = " Dias atrasado";
+                                } else {
+                                    tmp = " Dias Restantes";
+                                }
+                                return temporal + tmp;
+                            }
+                        }, {
+                            render: function(data, type, row) {
+                                var dias_necesarios = ((row.cantidad_requerida - row.cantidad) / row.UPH) / 14;
+                                return dias_necesarios.toFixed(4);
+                            }
+                        }, {
+                            render: function(data, type, row) {
+                                var realizado_porcentaje = (row.cantidad * 100) / row.cantidad_requerida;
+                                return realizado_porcentaje.toFixed(2) + "%";
+                            }
+                        }, {
+                            "data": "cantidad"
+                        }]
+                    });
+                    obtiene_datos_ingenieria("#dt_cliente tbody", table);
+                }
+
+                var listar_maquinas_asignadas = function(temporal) {
+                    var table = $("#dt_maquinas_asignadas").DataTable({
+                        "destroy": true,
+                        "ajax": {
+                            "method": "POST",
+                            "url": "listar_maquinas_asignadas.php",
+                            "data": {
+                                "produccion": temporal
+                            }
+                        },
+                        "columns": [{
+                            "data": "id_reservada",
+                            "visible": false
+                        }, {
+                            "data": "id_produccion",
+                            "visible": false
+                        }, {
+                            "data": "id_maquina",
+                            "visible": false
+                        }, {
+                            "data": "maquina"
+                        }, {
+                            "data": "tipo_maquina"
+                        }, {
+                            "data": "tiempo_operacion"
+                        }, {
+                            "data": "tiempo_ciclo"
+                        }]
+                    });
+                    obtiene_datos_herramentar("#dt_maquinas_asignadas tbody", table);
+                }
+
+                var obtiene_datos_ingenieria = function(tbody, table) {
+                    $(tbody).on("click", "#maquinas_asignadas1", function() {
+                        var data1 = table.row($(this).parents("tr")).data();
+                        var temporal = data1.id_produccion;
+                        $("#id_produccion_maquina").val(data1.id_produccion);
+                        listar_maquinas_asignadas(temporal);
+                        $("#modal_maquinas_asignadas").modal()
+
+
+                    });
+                }
+
+                var obtiene_datos_herramentar = function(tbody, table) {
+                    $(tbody).on("click", "#herramentar_maquina", function() {
+                        var data2 = table.row($(this).parents("tr")).data();
+                        $("#id_maquina_herramentacion").val(data2.id_maquina);
+                        $("#maquina_herramentacion").val(data2.maquina);
+                    });
+                }
+
+                $(document).on('ready', function() {
+
+                    $('#guardar1').click(function() {
+                        $.ajax({
+                            type: "POST",
+                            url: "actualizar_maquina.php",
+                            data: $("#mainform1").serialize()
+                        })
+                        window.location = 'maquinaria.html'
+                    })
+                })
+
+                $(document).on('ready', function() {
+                    $('#eliminar1').click(function() {
+                        var x = document.getElementById("id_maquina2").value;
+
+                        $.ajax({
+                            type: "POST",
+                            url: "borrar_maquina.php",
+                            data: $("#frmEliminarUsuario").serialize()
+                        })
+                        window.location = 'maquinaria.html'
+                    });
+                })
+
+                $(document).on('ready', function() {
+                    $('#guardar').click(function() {
+                        $.ajax({
+                            type: "POST",
+                            url: "guardar_maquina.php",
+                            data: $("#mainform").serialize()
+                        })
+                        window.location = 'maquinaria.html'
+                    });
+                })
+
+
+
+
+
+                var obtener_datos = function(tbody, table) {
+                    $(tbody).on("click", "button.editar", function() {
+                        var data = table.row($(this).parents("tr")).data();
+                        var id_maquina = $("#id_maquina1").val(data.id_maquina),
+                            id_mpvi = $("#maquina1").val(data.maquina),
+                            modelo = $("#tipo_maquina1").val(data.tipo_maquina);
+                    });
+                }
+                var obtener_datos_eliminar = function(tbody, table) {
+                    $(tbody).on("click", "#eliminamesta", function() {
+                        var data = table.row($(this).parents("tr")).data();
+                        var id_maquina = $("#id_maquina2").val(data.id_maquina);
+                    });
+
+                }
+
+
+
+
+
+                function ocultars() {
+                    var elemento = document.getElementById('cuadro2');
+
+                    if (elemento.classList.contains('ocultar')) {
+                        elemento.classList.remove('ocultar');
+
+                    } else {
+                        elemento.classList.add('ocultar');
+
+                    }
+
+                }
+
+                function goBack() {
+                    window.history.back();
+                }
+            </script>
+
+
+    </body>
+
+
+
+</html>

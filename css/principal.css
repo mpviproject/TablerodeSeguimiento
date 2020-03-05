@@ -1,0 +1,14 @@
+#container {
+    border: 1px dotted black;
+    overflow: hidden;
+    width: 450px;
+    padding: 0px;
+}
+
+.element {
+    list-style: none;
+    width: 100px;
+    height: 150px;
+    float: left;
+    margin: 5px;
+}
