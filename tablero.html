@@ -982,6 +982,8 @@
             //Asigna id_produccion y orden de produccion a campos en la forma 72
             $("#orden_72").val(data1.orden_produccion);
             $("#id_orden").val(data1.id_produccion);
+            var actual = moment().format('YYYY-MM-DD');
+          $("#fechaactual").text(actual);
             $("#modal_dash").modal();
         })
     }

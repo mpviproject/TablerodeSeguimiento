@@ -5,8 +5,19 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
 <link rel="stylesheet" href="css/estilos.css">
 <!-- Buttons DataTables -->
+
 <link rel="stylesheet" href="css/buttons.bootstrap.min.css">
 <link rel="stylesheet" href="css/font-awesome.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+<script src="../../../dist/Chart.min.js"></script>
+<script src="utils.js"></script>
+<style>
+    canvas {
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+    }
+</style>
 
 <head>
     <!-- Head de interfaz de operadores -->
@@ -17,127 +28,344 @@
     </div>
     <br>
     <!-- Botones para agregar registro -->
-    <button  class='tareas btn btn-primary' onclick='location.href="tablero.html"'><i class='fa fa-home'></i> Home</button>
-    <button class='tareas btn btn-primary'>Parametros de productividad</button>
+    <button class='tareas btn btn-primary' onclick='location.href="tablero.html"'><i class='fa fa-home'></i>
+        Home</button>
+    <button class='tareas btn btn-primary' id='parametros'>Parametros de productividad</button>
     <br>
     <br>
-
 </head>
 
-
-<!--Tabla que muestra los dias y las horas trabajadas-->
-<div class="row">
-    <div id="cuadro1" class="col-sm-12 col-md-12 col-lg-12">
-        <div class="col-sm-offset-2 col-sm-8">
-            <h3 class="text-center"> <small class="mensaje"></small></h3>
-        </div>
-        <div class="table-responsive col-sm-12">
-            <table id="example" class="display" style="width:100%">
-                <thead>
-                    <tr>
-                        <th>button</th>
-                        <th>id_forma</th>
-                        <th>id_registro</th>
-                        <th>f_inicio</th>
-                        <th>f_fin</th>
-                        <th>turno</th>
-                        <th>hrs trabajadas</th>
-                        <th>capacidad</th>
-                    </tr>
-                </thead>
-            </table>
+<body>
+    <!--Tabla que muestra los dias y las horas trabajadas-->
+    <h1>Capacidad por turno</h1>
+    <div class="row">
+        <div id="cuadro1" class="col-sm-12 col-md-12 col-lg-12">
+            <div class="col-sm-offset-2 col-sm-8">
+                <h3 class="text-center"> <small class="mensaje"></small></h3>
+            </div>
+            <div class="table-responsive col-sm-12">
+                <table id="example" class="display" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>id_forma</th>
+                            <th>id_registro</th>
+                            <th>f_inicio</th>
+                            <th>f_fin</th>
+                            <th>turno</th>
+                            <th>hrs trabajadas</th>
+                            <th>capacidad</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
         </div>
     </div>
-</div>
+    <!-- Muestra la capacidad diaria por fecha (Solo consulta) -->
+    <h1>Capacidad diaria</h1>
+    <div class="row">
+        <div id="cuadro12" class="col-sm-12 col-md-12 col-lg-12">
+            <div class="col-sm-offset-2 col-sm-8">
+                <h3 class="text-center"> <small class="mensaje"></small></h3>
+            </div>
+            <div class="table-responsive col-sm-12">
+                <table id="capacidadpordia" class="display" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>cantidad</th>
+                            <th>reproceso</th>
+                            <th>scrap</th>
+                            <th>capacidad x dia</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para ajustar parametros de productividad -->
+    <div class='modal fade bd-example-modal-lg' id='modal1' tabindex='1' role='dialog'
+        aria-labelledby='myExtraLargeModalLabel' aria-hidden='true'>
+        <div class='modal-dialog modal-lg'>
+            <div class='modal-content'>
+                <div class='modal-header'><button id="closemodaleditaproductividad" style="float:right;"
+                        class="btn btn-danger"><i class="fa fa-times"></i></button>
+                    <h4>Edita parametros de productividad</h4>
+                </div>
+                <div class="modal-body table-responsive">
+                    <p>Estos parametros son modificables y cada cambio se guarda en la base de datos</p>
+                    <table class="table table-hove  table-condensed table-bordered responsive-table">
+                        <thead class="thead-dark">
+                            <tr>
+                                <td><label>Horas productivas del turno </label></td>
+                                <td><label>Horas productivas del día</label></td>
+                                <td><label>Días laborales del mes</label></td>
+                                <td><label>Maquinas consideradas</label></td>
+                                <td><label>Horas productivas del mes</label></td>
+                            </tr>
+                            <tr>
+                                <input type="hidden" id="id_productivos">
+                                <td><input id="horasturno" type="number" placeholder=""></td>
+                                <td><input id="horasdia" type="numeber" class="onlydate"></td>
+                                <td><input id="diaslaborales" type="number" placeholder=""></td>
+                                <td><input id="maquinas" type="number" class=""></td>
+                                <td><input id="horasmes" type="number" placeholder=""></td>
+                            </tr>
+                        </thead>
+                    </table>
+                    <button id="act_calidad" class="btn btn-default btn-lg btn-info">Actualizar</button>
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="width:75%;">
+        <canvas id="canvas"></canvas>
+    </div>
+    <button id="push">presiona</button>
+</body>
+<script src="js/jquery-1.12.3.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script src="js/dataTables.bootstrap.js"></script>
+<!--botones DataTables-->
+<script src="js/dataTables.buttons.min.js"></script>
+<script src="js/buttons.bootstrap.min.js"></script>
 
 
+<script>
+    var arreglotemp=[];
+    $("#push").on("click",function(){
+        console.log(funciongrafica());
+        console.log(arreglotemp);
+    });
 
-<body>
+    var produc = [];
+    $("#parametros").on("click", function () {
+        listaproductivos();
+        $("#modal1").modal();
+    });
+    $("#act_calidad").on("click", function () {
+        registraproduccion();
+    });
 
-    <body>
-     
-    </body>
-
-    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
-    <script src="js/dataTables.bootstrap.js"></script>
-    <!--botones DataTables-->
-    <script src="js/dataTables.buttons.min.js"></script>
-    <script src="js/buttons.bootstrap.min.js"></script>
-    <!--Libreria para exportar Excel-->
-    <script src="js/jszip.min.js"></script>
-    <!--Librerias para exportar PDF-->
-    <script src="js/pdfmake.min.js"></script>
-    <script src="js/vfs_fonts.js"></script>
-    <!--Librerias para botones de exportación-->
-    <script src="js/buttons.html5.min.js"></script>
-    <script>
-      function format ( d ) {
-    return 'Full name: '+d.first_name+' '+d.last_name+'<br>'+
-        'Salary: '+d.salary+'<br>'+
-        'The child row can contain any data you wish, including links, images, inner tables etc.';
-}
-function format ( d ) {
-    // `d` is the original data object for the row
-    // Que muestre en los detalles lo correspondiente a la forma 72 ligada
-    return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
-        '<tr>'+
-            '<td>Full name:</td>'+
-            '<td>'+d.name+'</td>'+
-        '</tr>'+
-        '<tr>'+
-            '<td>Extension number:</td>'+
-            '<td>'+d.extn+'</td>'+
-        '</tr>'+
-        '<tr>'+
-            '<td>Extra info:</td>'+
-            '<td>And any further details here (images etc)...</td>'+
-        '</tr>'+
-    '</table>';
-}
- 
- //Reparar consulta para que consulte de la base de datos.
-$(document).ready(function() {
-    var table = $('#example').DataTable( {
-        "ajax":{"method": "POST",
-        "url":"lista_capacidad.php",
-        },"columns": [
-            {
-                "className":      'details-control',
-                "orderable":      false,
-                "data":           null,
-                "defaultContent": ''
+    var listar_capacidadxdia = function () {
+        var table = $("#capacidadpordia").DataTable({
+            "destroy": true,
+            "ajax": {
+                "method": "POST",
+                "url": "listaproduccionpordia.php"
             },
-            { "data": "id_forma" },
-            { "data": "id_registro" },
-            { "data": "r_inicio" },
-            { "data": "r_fin" },
-            { "data": "turno" },
-            { "data": "ht" },
-            { "defaultContent": "<input type='text'>" }
-        ], 
-        "order": [[1, 'asc']]
-    } );
-     
-    // Add event listener for opening and closing details
-    $('#example tbody').on('click', 'td.details-control', function () {
-        var tr = $(this).closest('tr');
-        var row = table.row( tr );
+            "columns": [{
+                "data": "fecha"
+            }, {
+                "data": "cantidad"
+            }, {
+                "data": "reproceso"
+            }, {
+                "data": "scrap"
+            }, {
+                "defaultContent": "<input type='text'>", "render": function (data, type, row, meta) {
+                    //var query =($("#id_productivos").val())+($("#horasturno").val());
+                    var query = (100 * (row.cantidad / ($("#horasdia").val())));
+                    /* console.log(row.ht);
+                    console.log($("#horasturno").val()); */
+                    return query.toFixed(2) + "%";
+                }
+            }]
+        });
+
+    }
+    
  
-        if ( row.child.isShown() ) {
-            // This row is already open - close it
-            row.child.hide();
-            tr.removeClass('shown');
+    function funciongrafica() {
+     
+        $.ajax({
+            type: "POST",
+            url: "listaproduccionpordia.php",
+            success: function (data) {
+                var array = [];
+                var obj = JSON.parse(data);
+               return getthedata(obj);
+            }
+        });
+    }
+    
+   
+    function getthedata(obj) {
+        
+        //obtenemos el numero de dias del mes para generar el arreglo.
+        var now = new Date();
+        var days = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate() + 1;
+        //creamos el objeto y el arreglo donde se estaria guardando
+        var arreglo = [];
+        for (var x = 1; x <= days; x++) {
+            var produccion = 0;
+            arreglo.push(produccion);
         }
-        else {
-            // Open this row
-            row.child( format(row.data()) ).show();
-            tr.addClass('shown');
+        for (var i = 0; i < obj['data'].length; i++) {
+            var fecha = new Date(obj['data'][i].fecha);
+            arreglo[fecha.getDate() + 1] = (((obj['data'][i].cantidad) / ($("#horasdia").val())) * 100);
         }
-    } );
-} );
-    </script>
+        
+       console.log( config.data.datasets['0'].data=arreglo);
+        return arreglo;
+        
+    }
+    
+    function daysInThisMonth() {
+        var now = new Date();
+        var days = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+        var day = "";
+        var arreglo = [];
+        for (var tmp = 1; tmp <= days; tmp++) {
+            day = day + "dia " + tmp;
+
+            if (tmp === days) {
+                arreglo.push(day);
+            } else {
+                day = day + "";
+                arreglo.push(day);
+            }
+            day = "";
+        }
+        return arreglo;
+    }
+
+    //Reparar consulta para que consulte de la base de datos.
+    $(document).ready(function () {
+        listaproductivos();
+        listar_capacidadxdia();
+        
+
+        var table = $('#example').DataTable({
+            "ajax": {
+                "method": "POST",
+                "url": "lista_capacidad.php",
+            }, "columns": [
+                {
+                    "data": "id_forma",
+                    "visible": false
+                },
+                {
+                    "data": "id_registro",
+                    "visible": false
+                },
+                { "data": "r_inicio" },
+                { "data": "r_fin" },
+                { "data": "turno" },
+                { "data": "ht" },
+                {
+                    "defaultContent": "<input type='text'>", "render": function (data, type, row, meta) {
+                        //var query =($("#id_productivos").val())+($("#horasturno").val());
+                        var query = (100 * (row.ht / ($("#horasturno").val())));
+                        /* console.log(row.ht);
+                        console.log($("#horasdia").val()); */
+                        return query.toFixed(2) + "%";
+                    }
+                }
+            ],
+            "order": [[1, 'asc']]
+        });
+    });
+
+
+
+
+    //Funcion para listar ultimos parametros de dias productivos
+    function listaproductivos() {
+        $.ajax({
+            url: "lista_produccion.php",
+            type: "POST",
+            success: function (data) {
+                Tdata = jQuery.parseJSON(data);
+                $("#id_productivos").val(Tdata['data']['0']['id_productivos']);
+                $("#horasturno").val(Tdata['data']['0']['hrs_prod_turno']);
+                $("#horasdia").val(Tdata['data']['0']['hrs_prod_dia']);
+                $("#diaslaborales").val(Tdata['data']['0']['dias_prod']);
+                $("#maquinas").val(Tdata['data']['0']['maquinas_prod']);
+                $("#horasmes").val(Tdata['data']['0']['hrs_prod_mes']);
+            }
+        });
+        listar_capacidadxdia();
+
+    }
+
+    function registraproduccion() {
+        $("#id_productivos").val();
+        var ht = $("#horasturno").val();
+        var hd = $("#horasdia").val();
+        var dl = $("#diaslaborales").val();
+        var maq = $("#maquinas").val();
+        var hm = $("#horasmes").val();
+        if (ht !== "" || hd !== "" || dl !== "" || maq !== "" || hm !== "") {
+            var query = "INSERT INTO dias_productivos VALUES(NULL," + "NOW()," + ht + "," + hd + "," + dl + "," + maq + "," + hm + ");";
+            $.ajax({
+                url: "guarda_registro72.php",
+                type: "POST",
+                data: { "query": query },
+                success: function () {
+                    location.reload();
+                }
+            });
+
+        }
+    }
+    var dias = daysInThisMonth();
+    console.log(dias);
+    var config = {
+        type: 'line',
+        data: {
+            labels: dias,
+            datasets: [{
+                label: 'Produccion por dias',
+                backgroundColor: window.chartColors.red,
+                borderColor: window.chartColors.red,
+                data: [],
+                fill: false,
+            }]
+        },
+        options: {
+            responsive: true,
+            title: {
+                display: true,
+                text: 'Grafica de produccion por dia'
+            },
+            tooltips: {
+                mode: 'index',
+                intersect: false,
+            },
+            hover: {
+                mode: 'nearest',
+                intersect: true
+            },
+            scales: {
+                x: {
+                    display: true,
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Month'
+                    }
+                },
+                y: {
+                    display: true,
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Value'
+                    }
+                }
+            }
+        }
+    };console.log(config);
+
+    window.onload = function () {
+        funciongrafica();
+        var ctx = document.getElementById('canvas').getContext('2d');
+        
+        window.myLine = new Chart(ctx, config);
+    };
+
+</script>
 </body>
 
 </body>
