@@ -11,9 +11,13 @@
 <link rel="stylesheet" href="vendor\bootstrap\css\bootstrap.min.css" crossorigin="anonymous">
 <link rel="stylesheet" href="css/bootstrap.min.css">
 <link rel="stylesheet" href="css/estilos.css">
-<link rel="stylesheet" type="text/css" href="css/daterangepicker.css">
-<script type="text/javascript" src="js\moment.min.js"></script>
-<script type="text/javascript" src="js\daterangepicker.js"></script>
+<!-- Buttons DataTables -->
+<link rel="stylesheet" href="css/buttons.bootstrap.min.css">
+<link rel="stylesheet" href="css/font-awesome.min.css">
+<script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 <title>
     Tablero de seguimiento
 </title>
@@ -50,6 +54,11 @@
         </div>
     </div>
 </div>
+<br>
+<input id="btn_mostar" type="button" class="btn btn-primary" value="Agregar Produccion" onClick="ocultars()">
+<button onclick="goBack()" class='tareas btn btn-primary'><i class='fa fa-home'></i></button>
+<button role="link" onclick="location.href='maquinaria.html';" class='maquinas btn btn-primary'><i
+    class='fa fa-gavel'></i></button>
 
 <!-- Modal para la forma 72 -->
 <div class='modal fade bd-example-modal-lg' id='modal_dash' tabindex='1' role='dialog' aria-labelledby='myExtraLargeModalLabel' aria-hidden='true'>

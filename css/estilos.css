@@ -10,4 +10,5 @@
 .ocultar{
 	display: none;
 }
-.modal{ overflow: auto !important; }
+
+.modal { overflow: auto !important; }
