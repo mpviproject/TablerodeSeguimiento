@@ -6,7 +6,7 @@ include('conexion.php');
     $query=mysqli_query($conexion, "SELECT op.id_produccion,op.fecha_requerida,op.cantidad_requerida,op.UPH,cantidad from 
     orden_produccion as op,(SELECT SUM(rg.r_cantidad_producida) as cantidad from forma_72 as fm inner join 
     registro_72 as rg on fm.id_forma = rg.id_forma where fm.id_produccion = $id_produccion GROUP by fm.id_produccion) as
-     cantidad where id_produccion =  $id_produccion");
+     cantidad where id_produccion =  $id_produccion"); 
 
 $query2= "SELECT op.id_produccion,op.fecha_requerida,op.cantidad_requerida,op.UPH,cantidad from 
     orden_produccion as op,(SELECT SUM(rg.r_cantidad_producida) as cantidad from forma_72 as fm inner join 

@@ -22,14 +22,14 @@
         </div>
     </div>
     <br>
-    <button id="btn_mostar" type="button" class="btn btn-primary"  onClick="ocultars()"><i class='fa fa-plus'></i> Agregar Produccion</button>
+    <button id="btn_mostar" type="button" class="btn btn-primary" onClick="ocultars()"><i class='fa fa-plus'></i> Agregar Produccion</button>
     <button onclick="location.href='tablero.html';" class='regresar btn btn-primary'><i class='fa fa-home'></i> Home</button>
     <button role="link" onclick="location.href='maquinaria.html';" class='maquinas btn btn-primary'><i
             class='fa fa-steam'></i>  Maquinaria</button>
     <!-- Hacer funcion de redireccionamiento a consulta de operadores -->
     <button role="link" onclick="location.href='operadores.html';" class='operadores btn btn-primary'><i
         class='fa fa-users'></i>  Operadores</button>
-        <button role="link" onclick="location.href='capacidad.html';" class='operadores btn btn-primary'><i
+    <button role="link" onclick="location.href='capacidad.html';" class='operadores btn btn-primary'><i
             class='fa fa-trophy'></i>  Capacidad actual</button>
     <button role="link" onclick="location.href='herramentacion.html';" class='btn btn-primary'><i
             class='fa fa-simplybuilt'></i>  Herramentacion</button>
@@ -939,7 +939,7 @@
 
                 render: function(data, type, row) {
                     var realizado_porcentaje = (row.cantidad * 100) / row.cantidad_requerida;
-                    return realizado_porcentaje + "%";
+                    return realizado_porcentaje.toFixed(4) + "%";
                 }
             }, {
                 render: function(data, type, row) {
@@ -1061,14 +1061,14 @@
         //obtiene los datos necesarios restantes
         var id_empleado = $("#id_empleado").val();
         var orden_72 = $("#id_orden").val();
-        var turnos =document.getElementById('turnos').value;
+        var turnos = document.getElementById('turnos').value;
         //var turnos = temp.value;
         if (id_empleado == "" || orden_72 == "") {
             alert("Datos Faltantes: \nAsegurese de llenar todos los datos");
         } else {
-            var query = "insert into forma_72 values(NULL," + orden_72 + "," + id_empleado + ",NOW()" + "," + pap + "," + poc + "," + atl + "," + scrap + "," + emv + ",'"+turnos+"');";
+            var query = "insert into forma_72 values(NULL," + orden_72 + "," + id_empleado + ",NOW()" + "," + pap + "," + poc + "," + atl + "," + scrap + "," + emv + ",'" + turnos + "');";
             console.log(query);
-              $.ajax({
+            $.ajax({
                 url: "guarda72.php",
                 type: "POST",
                 data: {
@@ -1076,11 +1076,11 @@
                 },
                 success: function(data) {
                     guardaregistros(data);
-                   /*  guardaparos(data);
-                    location.reload(); */
+                    /*  guardaparos(data);
+                     location.reload(); */
                 }
-            }); 
- 
+            });
+
         }
 
 
@@ -1107,14 +1107,14 @@
                 }
                 query = "insert into registro_72 values (NULL," + data + ",'" + inicio + "','" + finn + "'," + cantidad + "," + reproceso1 + "," + scrap1 + ");";
                 console.log(query);
-                 $.ajax({
+                $.ajax({
                     url: 'guarda_registro72.php',
                     type: 'post',
                     data: {
                         "query": query
                     },
                     success: function(data2) {}
-                }); 
+                });
             } else {
                 alert("Error no se puede guardar sin tarea ligada o sin fecha");
             }
@@ -1239,7 +1239,7 @@
             $("#orden_72").val(data1.orden_produccion);
             $("#id_orden").val(data1.id_produccion);
             var actual = moment().format('YYYY-MM-DD');
-          $("#fechaactual").text(actual);
+            $("#fechaactual").text(actual);
             $("#modal_dash").modal();
         })
     }

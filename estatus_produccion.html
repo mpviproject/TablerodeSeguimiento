@@ -43,10 +43,7 @@
                                     <th>Fecha Requerida</th>
                                     <th>NUM de OP.</th>
                                     <th>UPH</th>
-                                    <th>Dias de trabajo Restantes</th>
-                                    <th>Dias Necesarios para terminar la Produccion</th>
-                                    <th>% de Fabricacion</th>
-                                    <th>Piezas Fabricadas al Momento</th>
+                                    <th>Metricas</th>
                                 </tr>
                             </thead>
                         </table>
@@ -84,6 +81,34 @@
                 </div>
             </div>
 
+            <!--Modal Metricas-->
+
+            <div class="modal fade bd-example-modal-lg" id="modal_metrica">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class='modal-header'>
+                            <h4>Metricas de Orden de Produccion</h4><button class='close' id='cerrar72'>×</button>
+                            <br>
+                        </div>
+                        <div class="modal-body table-responsive">
+
+                            <table id="dt_metricas" class="table table-bordered table-hover" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <td>ID. Orden</td>
+                                        <td>Fecha limite</td>
+                                        <td>Dias Necesarios para terminar la Produccion</td>
+                                        <td>Cantidad Requerida</td>
+                                        <td>Piezas Fabricadas al momento</td>
+                                        <td>Porcentaje de Avance</td>
+                                        <td>Dias necesarios para terminar la produccion</td>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
 
 
@@ -132,36 +157,11 @@
                         }, {
                             "data": "UPH"
                         }, {
-                            "data": "fecha_requerida",
-                            render: function(data, type, row) {
-                                let today = new Date().toISOString().slice(0, 10);
-                                const date2 = new Date(data);
-                                var fecha1 = moment(today);
-                                var fecha2 = moment(date2);
-                                var temporal = fecha2.diff(fecha1, 'days');
-                                var tmp = "";
-                                if (temporal < 0) {
-                                    tmp = " Dias atrasado";
-                                } else {
-                                    tmp = " Dias Restantes";
-                                }
-                                return temporal + tmp;
-                            }
-                        }, {
-                            render: function(data, type, row) {
-                                var dias_necesarios = ((row.cantidad_requerida - row.cantidad) / row.UPH) / 14;
-                                return dias_necesarios.toFixed(4);
-                            }
-                        }, {
-                            render: function(data, type, row) {
-                                var realizado_porcentaje = (row.cantidad * 100) / row.cantidad_requerida;
-                                return realizado_porcentaje.toFixed(2) + "%";
-                            }
-                        }, {
-                            "data": "cantidad"
+                            "defaultContent": "<button id='btn_metricas'type='button' class='btn btn-primary'><i class='fa fa-bar-chart'></i> Metrica</button>"
                         }]
                     });
                     obtiene_datos_ingenieria("#dt_cliente tbody", table);
+                    obtiene_datos_metricas("#dt_cliente tbody", table);
                 }
 
                 var listar_maquinas_asignadas = function(temporal) {
@@ -194,6 +194,72 @@
                         }]
                     });
                     obtiene_datos_herramentar("#dt_maquinas_asignadas tbody", table);
+                }
+
+                var listar_metricas = function(temp_metricas) {
+                    var table = $("#dt_metricas").DataTable({
+                        "destroy": true,
+                        "ajax": {
+                            "method": "POST",
+                            "url": "listar_metricas.php",
+                            "data": {
+                                "produccion2": temp_metricas
+                            }
+                        },
+                        "columns": [{
+                            "data": "id_produccion",
+                            "visible": false
+                        }, {
+                            "data": "fecha_requerida"
+                        }, {
+                            "data": "fecha_requerida",
+                            render: function(data, type, row) {
+                                let today = new Date().toISOString().slice(0, 10);
+                                const date2 = new Date(data);
+                                var fecha1 = moment(today);
+                                var fecha2 = moment(date2);
+                                var temporal = fecha2.diff(fecha1, 'days');
+                                var tmp = "";
+                                if (temporal < 0) {
+                                    tmp = " Dias atrasado";
+                                } else {
+                                    tmp = " Dias Restantes";
+                                }
+                                return temporal + tmp;
+                            }
+                        }, {
+                            "data": "cantidad_requerida"
+                        }, {
+                            render: function(data, type, row) {
+                                var cantidad = row.cantidad;
+                                if (cantidad == 0) {
+                                    return 0;
+                                } else {
+                                    return cantidad;
+                                }
+                            }
+                        }, {
+
+                            render: function(data, type, row) {
+                                var realizado_porcentaje = (row.cantidad * 100) / row.cantidad_requerida;
+                                return realizado_porcentaje.toFixed(2) + "%";
+                            }
+                        }, {
+                            render: function(data, type, row) {
+                                var dias_necesarios = ((row.cantidad_requerida - row.cantidad) / row.UPH) / 14;
+                                return dias_necesarios.toFixed(4);
+                            }
+                        }]
+                    });
+                }
+
+                var obtiene_datos_metricas = function(tbody, table) {
+                    $(tbody).on("click", "#btn_metricas", function() {
+                        var data4 = table.row($(this).parents("tr")).data();
+                        var temp_metricas = data4.id_produccion;
+                        listar_metricas(temp_metricas);
+                        $("#modal_metrica").modal()
+                    });
                 }
 
                 var obtiene_datos_ingenieria = function(tbody, table) {
