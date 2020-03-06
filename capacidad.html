@@ -136,7 +136,6 @@
 <script>
     var arreglotemp=[];
     $("#push").on("click",function(){
-        console.log(funciongrafica());
         console.log(arreglotemp);
     });
 
@@ -179,7 +178,6 @@
     
  
     function funciongrafica() {
-     
         $.ajax({
             type: "POST",
             url: "listaproduccionpordia.php",
@@ -194,6 +192,7 @@
    
     function getthedata(obj) {
         
+        
         //obtenemos el numero de dias del mes para generar el arreglo.
         var now = new Date();
         var days = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate() + 1;
@@ -206,11 +205,12 @@
         for (var i = 0; i < obj['data'].length; i++) {
             var fecha = new Date(obj['data'][i].fecha);
             arreglo[fecha.getDate() + 1] = (((obj['data'][i].cantidad) / ($("#horasdia").val())) * 100);
+    
         }
         
        console.log( config.data.datasets['0'].data=arreglo);
+       cargagrafico();
         return arreglo;
-        
     }
     
     function daysInThisMonth() {
@@ -218,7 +218,7 @@
         var days = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
         var day = "";
         var arreglo = [];
-        for (var tmp = 1; tmp <= days; tmp++) {
+        for (var tmp = 0; tmp <= days; tmp++) {
             day = day + "dia " + tmp;
 
             if (tmp === days) {
@@ -234,6 +234,7 @@
 
     //Reparar consulta para que consulte de la base de datos.
     $(document).ready(function () {
+ 
         listaproductivos();
         listar_capacidadxdia();
         
@@ -288,7 +289,8 @@
             }
         });
         listar_capacidadxdia();
-
+        funciongrafica();
+       
     }
 
     function registraproduccion() {
@@ -357,11 +359,11 @@
             }
         }
     };console.log(config);
-
-    window.onload = function () {
-        funciongrafica();
-        var ctx = document.getElementById('canvas').getContext('2d');
+    
+ function cargagrafico() {
         
+      
+        var ctx = document.getElementById('canvas').getContext('2d');
         window.myLine = new Chart(ctx, config);
     };
 

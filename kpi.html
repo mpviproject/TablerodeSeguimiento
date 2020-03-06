@@ -1,0 +1,98 @@
+<html>
+<meta charset="UTF-8">
+<title>Capacidad actual</title>
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="css/estilos.css">
+<!-- Buttons DataTables -->
+
+<link rel="stylesheet" href="css/buttons.bootstrap.min.css">
+<link rel="stylesheet" href="css/font-awesome.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+<script src="../../../dist/Chart.min.js"></script>
+<script src="utils.js"></script>
+<style>
+    canvas {
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+
+    }
+
+    #capacidad {
+        background: rgba(51, 122, 183, 0.8);
+        color: #ffffff;
+        width: 25vh;
+        max-width: 100px;
+        height: 25vh;
+        max-height: 100px;
+        position: relative;
+        margin-left: 50px;
+        text-align: center;
+    }
+</style>
+
+<head>
+    <!-- Head de interfaz de operadores -->
+    <div class="row fondo">
+        <div class="col-sm-12 col-md-12 col-lg-12">
+            <h1 class="text-center text-uppercase">KPI</h1>
+        </div>
+    </div>
+    <br>
+    <!-- Botones para agregar registro -->
+    <button class='tareas btn btn-primary' onclick='location.href="tablero.html"'><i class='fa fa-home'></i>
+        Home</button>
+    <br>
+    <br>
+</head>
+
+<body>
+    <!--Tabla que muestra los dias y las horas trabajadas-->
+    <div >
+        <h1>Capacidad Actual</h1>
+        <div id="capacidad" class="row">
+            <h1><label id="porcentaje"></label></h1>
+            
+        </div>
+      
+
+
+    </div>
+</body>
+<script src="js/jquery-1.12.3.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script src="js/dataTables.bootstrap.js"></script>
+<!--botones DataTables-->
+<script src="js/dataTables.buttons.min.js"></script>
+<script src="js/buttons.bootstrap.min.js"></script>
+
+
+<script>
+$( document ).ready(function() {
+    cargacapacidad();
+});
+
+function cargacapacidad(){
+    $.ajax({
+            type: "POST",
+            url: "porcentajegenteral.php",
+            success: function(result) {
+            
+                $("#porcentaje").text(result +"%");
+               
+            }
+        })
+
+}
+
+
+</script>
+</body>
+
+</body>
+
+
+
+</html>
