@@ -1,9 +1,8 @@
 <?php
 include('conexion.php');
 
-    $query= "SELECT op.id_produccion,op.orden_produccion,op.numero_parte,op.numero_operacion,
-    op.fecha_requerida,op.cantidad_requerida,op.UPH from 
-    orden_produccion as op ORDER BY op.id_produccion";
+    $query= "SELECT o.nombre_operador, SUM(h.scrap) as total_scrap, count(*) as total_h, SUM(h.tiempo_herramentacion) as total_t from herramentacion as h inner 
+    join operadores as o on h.id_operador = o.id_operador GROUP BY h.id_operador";
     
     $result = mysqli_query($conexion,$query);
     while($data = mysqli_fetch_assoc($result)){

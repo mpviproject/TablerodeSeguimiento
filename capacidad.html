@@ -84,12 +84,10 @@
     </div>
 
     <!-- Modal para ajustar parametros de productividad -->
-    <div class='modal fade bd-example-modal-lg' id='modal1' tabindex='1' role='dialog'
-        aria-labelledby='myExtraLargeModalLabel' aria-hidden='true'>
+    <div class='modal fade bd-example-modal-lg' id='modal1' tabindex='1' role='dialog' aria-labelledby='myExtraLargeModalLabel' aria-hidden='true'>
         <div class='modal-dialog modal-lg'>
             <div class='modal-content'>
-                <div class='modal-header'><button id="closemodaleditaproductividad" style="float:right;"
-                        class="btn btn-danger"><i class="fa fa-times"></i></button>
+                <div class='modal-header'><button id="closemodaleditaproductividad" style="float:right;" class="btn btn-danger"><i class="fa fa-times"></i></button>
                     <h4>Edita parametros de productividad</h4>
                 </div>
                 <div class="modal-body table-responsive">
@@ -140,15 +138,15 @@
     });
 
     var produc = [];
-    $("#parametros").on("click", function () {
+    $("#parametros").on("click", function() {
         listaproductivos();
         $("#modal1").modal();
     });
-    $("#act_calidad").on("click", function () {
+    $("#act_calidad").on("click", function() {
         registraproduccion();
     });
 
-    var listar_capacidadxdia = function () {
+    var listar_capacidadxdia = function() {
         var table = $("#capacidadpordia").DataTable({
             "destroy": true,
             "ajax": {
@@ -164,7 +162,8 @@
             }, {
                 "data": "scrap"
             }, {
-                "defaultContent": "<input type='text'>", "render": function (data, type, row, meta) {
+                "defaultContent": "<input type='text'>",
+                "render": function(data, type, row, meta) {
                     //var query =($("#id_productivos").val())+($("#horasturno").val());
                     var query = (100 * (row.cantidad / ($("#horasdia").val())));
                     /* console.log(row.ht);
@@ -175,21 +174,21 @@
         });
 
     }
-    
- 
+
+
     function funciongrafica() {
         $.ajax({
             type: "POST",
             url: "listaproduccionpordia.php",
-            success: function (data) {
+            success: function(data) {
                 var array = [];
                 var obj = JSON.parse(data);
-               return getthedata(obj);
+                return getthedata(obj);
             }
         });
     }
-    
-   
+
+
     function getthedata(obj) {
         
         
@@ -212,7 +211,7 @@
        cargagrafico();
         return arreglo;
     }
-    
+
     function daysInThisMonth() {
         var now = new Date();
         var days = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
@@ -237,36 +236,40 @@
  
         listaproductivos();
         listar_capacidadxdia();
-        
+
 
         var table = $('#example').DataTable({
             "ajax": {
                 "method": "POST",
                 "url": "lista_capacidad.php",
-            }, "columns": [
-                {
-                    "data": "id_forma",
-                    "visible": false
-                },
-                {
-                    "data": "id_registro",
-                    "visible": false
-                },
-                { "data": "r_inicio" },
-                { "data": "r_fin" },
-                { "data": "turno" },
-                { "data": "ht" },
-                {
-                    "defaultContent": "<input type='text'>", "render": function (data, type, row, meta) {
-                        //var query =($("#id_productivos").val())+($("#horasturno").val());
-                        var query = (100 * (row.ht / ($("#horasturno").val())));
-                        /* console.log(row.ht);
-                        console.log($("#horasdia").val()); */
-                        return query.toFixed(2) + "%";
-                    }
+            },
+            "columns": [{
+                "data": "id_forma",
+                "visible": false
+            }, {
+                "data": "id_registro",
+                "visible": false
+            }, {
+                "data": "r_inicio"
+            }, {
+                "data": "r_fin"
+            }, {
+                "data": "turno"
+            }, {
+                "data": "ht"
+            }, {
+                "defaultContent": "<input type='text'>",
+                "render": function(data, type, row, meta) {
+                    //var query =($("#id_productivos").val())+($("#horasturno").val());
+                    var query = (100 * (row.ht / ($("#horasturno").val())));
+                    /* console.log(row.ht);
+                    console.log($("#horasdia").val()); */
+                    return query.toFixed(2) + "%";
                 }
-            ],
-            "order": [[1, 'asc']]
+            }],
+            "order": [
+                [1, 'asc']
+            ]
         });
     });
 
@@ -278,7 +281,7 @@
         $.ajax({
             url: "lista_produccion.php",
             type: "POST",
-            success: function (data) {
+            success: function(data) {
                 Tdata = jQuery.parseJSON(data);
                 $("#id_productivos").val(Tdata['data']['0']['id_productivos']);
                 $("#horasturno").val(Tdata['data']['0']['hrs_prod_turno']);
@@ -305,8 +308,10 @@
             $.ajax({
                 url: "guarda_registro72.php",
                 type: "POST",
-                data: { "query": query },
-                success: function () {
+                data: {
+                    "query": query
+                },
+                success: function() {
                     location.reload();
                 }
             });
@@ -366,7 +371,6 @@
         var ctx = document.getElementById('canvas').getContext('2d');
         window.myLine = new Chart(ctx, config);
     };
-
 </script>
 </body>
 

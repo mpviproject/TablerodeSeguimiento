@@ -1,0 +1,310 @@
+<html>
+<meta charset="UTF-8">
+<title>Desempeño de Tecnicos</title>
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<link rel="stylesheet" href="css/dataTables.bootstrap.min.css">
+<link rel="stylesheet" href="css/estilos.css">
+<!-- Buttons DataTables -->
+<link rel="stylesheet" href="css/buttons.bootstrap.min.css">
+<link rel="stylesheet" href="css/font-awesome.min.css">
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+<script src="../../../dist/Chart.min.js"></script>
+<script src="utils.js"></script>
+
+<head>
+
+</head>
+
+
+<body>
+
+    <body>
+        <div class="row fondo">
+            <div class="col-sm-12 col-md-12 col-lg-12">
+                <h1 class="text-center text-uppercase">Desempeño de Tecnicos</h1>
+            </div>
+        </div>
+        <br>
+        <button onclick='location.href="tablero.html"' class='tareas btn btn-primary'><i class='fa fa-home'></i></button>
+        <br>
+        <br>
+
+        <div class="row">
+            <div id="cuadro1" class="col-sm-12 col-md-12 col-lg-12">
+                <div class="col-sm-offset-2 col-sm-8">
+                    <h3 class="text-center"> <small class="mensaje"></small></h3>
+                </div>
+                <div class="table-responsive col-sm-12">
+                    <table id="dt_desempeñoGeneral" class="table table-bordered table-hover" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>Numero de Parte</th>
+                                <th>Maquina</th>
+                                <th>Fecha de Herramentacion</th>
+                                <th>Quien Herramento</th>
+                                <th>T. de Herramentacion</th>
+                                <th>SCRAP (Piezas)</th>
+                                <th>Cantidad Requerida</th>
+                                <th>% NC</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <br>
+        <br>
+
+
+        <div class="row">
+            <div id="cuadro1" class="col-sm-12 col-md-12 col-lg-12">
+                <div class="col-sm-offset-2 col-sm-8">
+                    <h3 class="text-center"> <small class="mensaje"></small></h3>
+                </div>
+                <div class="table-responsive col-sm-12">
+                    <table id="dt_desempeñoEspecifico" class="table table-bordered table-hover" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>Tecnico</th>
+                                <th>Nivel de Desempeño de Tecnicos</th>
+                                <th>Material No Conforme</th>
+                                <th>Numero de Herramentaciones</th>
+                                <th>Tiempo en Herramentaciones</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="container">
+                <div class="form-group">
+                    <label for="" class="col-sm-2 control-label">Total de herramentaciones :</label>
+                    <div class="col-sm-2"><input id="totalH" name="totalH" type="text" class="form-control" maxlength="2" readonly></div>
+                </div>
+            </div>
+        </div>
+
+        <br>
+        <br>
+        <div id="canvas-holder" style="width:80%">
+            <canvas id="chart-area"></canvas>
+        </div>
+
+        <script src="js/jquery-1.12.3.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/jquery.dataTables.min.js"></script>
+        <script src="js/dataTables.bootstrap.js"></script>
+        <!--botones DataTables-->
+        <script src="js/dataTables.buttons.min.js"></script>
+        <script src="js/buttons.bootstrap.min.js"></script>
+        <!--Libreria para exportar Excel-->
+        <script src="js/jszip.min.js"></script>
+        <!--Librerias para exportar PDF-->
+        <script src="js/pdfmake.min.js"></script>
+        <script src="js/vfs_fonts.js"></script>
+        <!--Librerias para botones de exportación-->
+        <script src="js/buttons.html5.min.js"></script>
+        <script>
+            $(document).on("ready", function() {
+                listar();
+                listarTotal();
+
+                listadata();
+
+
+            });
+
+
+            var listar = function() {
+                var table = $("#dt_desempeñoGeneral").DataTable({
+                    "destroy": true,
+                    "ajax": {
+                        "method": "POST",
+                        "url": "listar_desempeñoGeneral.php"
+                    },
+                    "columns": [{
+                        "data": "numero_parte"
+                    }, {
+                        "data": "maquina"
+                    }, {
+                        "data": "fecha_herramentacion"
+                    }, {
+                        "data": "nombre_operador"
+                    }, {
+                        "data": "tiempo_herramentacion"
+                    }, {
+                        "data": "scrap"
+                    }, {
+                        "data": "cantidad_requerida"
+                    }, {
+                        render: function(data, type, row) {
+                            var n = row.scrap / row.cantidad_requerida;
+                            var nc = n * 100;
+                            return nc + "%";
+                        }
+                    }]
+                });
+            }
+
+            var listar2 = function(total) {
+                var table = $("#dt_desempeñoEspecifico").DataTable({
+                    "destroy": true,
+                    "ajax": {
+                        "method": "POST",
+                        "url": "listar_desempeñoEspecifico.php"
+                    },
+                    "columns": [{
+                        "data": "nombre_operador"
+                    }, {
+                        render: function(data, type, row) {
+                            var nivel = row.total_h / total;
+                            var nivel_total = nivel * 100;
+                            return nivel_total + "%";
+                        }
+                    }, {
+                        "data": "total_scrap"
+                    }, {
+                        "data": "total_h"
+                    }, {
+                        "data": "total_t"
+                    }]
+                });
+            }
+
+            function listarTotal() {
+                $.ajax({
+                    url: "listar_total_desempeño.php",
+                    type: "POST",
+                    success: function(data) {
+                        Tdata = jQuery.parseJSON(data);
+                        $("#totalH").val(Tdata['data']['0']['NUM']);
+                        var total = Tdata['data']['0']['NUM'];
+                        listar2(total);
+                    }
+                });
+
+
+            }
+
+            function ocultars() {
+                var elemento = document.getElementById('cuadro2');
+
+                if (elemento.classList.contains('ocultar')) {
+                    elemento.classList.remove('ocultar');
+
+                } else {
+                    elemento.classList.add('ocultar');
+
+                }
+
+            }
+
+            function goBack() {
+                window.history.back();
+            }
+
+
+
+            var randomScalingFactor = function() {
+                return Math.round(Math.random() * 100);
+            };
+
+
+            function listadata() {
+                $.ajax({
+                    url: "listar_porcentaje_graficas.php",
+                    type: "POST",
+                    success: function(data) {
+                        var obj = JSON.parse(data);
+                        convertir_data_porcentaje(obj);
+                        console.log(config);
+                    }
+                });
+
+
+            }
+
+            function convertir_data_porcentaje(obj) {
+                var arreglo = [];
+                for (var i = 0; i < obj.length; i++) {
+                    arreglo.push(obj[i]);
+                }
+
+                $.ajax({
+                    url: "listar_operadores_graficas.php",
+                    type: "POST",
+                    success: function(data2) {
+                        var obj2 = JSON.parse(data2);
+                        listalabel(obj2, arreglo);
+                        console.log(config);
+                    }
+                });
+
+            }
+
+            function listalabel(obj2, arreglo) {
+                var arreglo2 = [];
+                for (var i = 0; i < obj2.length; i++) {
+                    arreglo2.push(obj2[i]);
+                }
+                config.data.labels = arreglo2;
+                config.data.datasets['0'].data = arreglo;
+                createpy();
+            }
+
+
+
+            var config = {
+                type: 'pie',
+                data: {
+                    datasets: [{
+                        data: [],
+                        backgroundColor: [
+                            "red", "yellow", "purple", "orange", "blue", "green"
+                        ],
+                        label: 'Dataset 1'
+                    }],
+                    labels: []
+                },
+                options: {
+                    responsive: true
+                }
+            };
+
+
+            function createpy() {
+                var ctx = document.getElementById('chart-area').getContext('2d');
+                window.myPie = new Chart(ctx, config);
+            };
+
+
+            var colorNames = Object.keys(window.chartColors);
+            document.getElementById('addDataset').addEventListener('click', function() {
+                var newDataset = {
+                    backgroundColor: [],
+                    data: [],
+                    label: 'New dataset ' + config.data.datasets.length,
+                };
+
+                for (var index = 0; index < config.data.labels.length; ++index) {
+                    newDataset.data.push(randomScalingFactor());
+
+                    var colorName = colorNames[index % colorNames.length];
+                    var newColor = window.chartColors[colorName];
+                    newDataset.backgroundColor.push(newColor);
+                }
+
+                config.data.datasets.push(newDataset);
+                window.myPie.update();
+            });
+        </script>
+
+
+    </body>
+
+
+
+</html>

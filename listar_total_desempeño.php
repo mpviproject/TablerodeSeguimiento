@@ -1,9 +1,7 @@
 <?php
 include('conexion.php');
 
-    $query= "SELECT op.id_produccion,op.orden_produccion,op.numero_parte,op.numero_operacion,
-    op.fecha_requerida,op.cantidad_requerida,op.UPH from 
-    orden_produccion as op ORDER BY op.id_produccion";
+    $query= "SELECT count(*) as NUM FROM herramentacion";
     
     $result = mysqli_query($conexion,$query);
     while($data = mysqli_fetch_assoc($result)){
