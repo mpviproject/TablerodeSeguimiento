@@ -231,7 +231,8 @@
                             </tr>
                             <tr>
                                 <td width="30%">Tiempo de demora (Horas)</td>
-                                <td width="70%">Motivo</td>
+                                <td width="30%">Tipo</td>
+                                <td width="40%">Motivo</td>
                             </tr>
                             <tbody>
                             </tbody>
@@ -459,7 +460,13 @@
                     <label for="comment">Seleccione el intervalo de paro de maquina</label>
                     <input class="datetime" id="tiempoparo">
                     <br>
-                    <label for="comment">Comment:</label>
+                    <select class="form-control" id="tipo_paro"> 
+                        <option value="Mantenimiento">Mantenimiento</option>
+                        <option value="Maquina descompuesta">Maquina descompuesta </option>
+                        <option value="Falla mecanica">Falla mecanica</option>
+                      </select>
+                    <br>
+                    <label class="control-label" for="comment">Comment:</label>
                     <textarea class="form-control" rows="5" id="comment"></textarea>
                     <br>
                     <br>
@@ -1076,8 +1083,8 @@
                 },
                 success: function(data) {
                     guardaregistros(data);
-                    /*  guardaparos(data);
-                     location.reload(); */
+                    guardaparos(data);
+                    location.reload();
                 }
             });
 
@@ -1127,8 +1134,10 @@
         if (rowCount > 0) {
             $('#tablaparos tbody tr').each(function() {
                 var diferencia = $(this).find(".diferencia").html();
+                var tipo_paro = $(this).find(".tipoparos").html();
+                alert("pasa");
                 var comentario = $(this).find(".comentario").html();
-                var query = "insert into paro_maquinas values(NULL," + data + "," + diferencia + ",'" + comentario + "') ;";
+                var query = "insert into paro_maquinas values(NULL," + data + "," + diferencia + ",'" + tipo_paro + "','" + comentario + "') ;";
 
                 $.ajax({
                     url: "guarda_registro72.php",
@@ -1471,13 +1480,17 @@
         var inicio = new Date(datetimes.substring(0, 16));
         var fin = new Date(datetimes.substring(19, 35));
         var diff = Math.abs(fin - inicio) / 36e5;
+        var tipo_paro = $("#tipo_paro").val();
+        alert(tipo_paro);
         var comentario = $("#comment").val();
         var htmlTags2 = '<tr>' +
             '<td class="diferencia">' + diff + '</td>' +
+            '<td class="tipoparos">' + tipo_paro + '</td>' +
             '<td class="comentario">' + comentario + '</td>' +
             '</tr>';
         $('#tablaparos tbody:last-child').append(htmlTags2);
         $("#modalparo").modal('hide');
+        alert("pasa");
     })
 </script>
 
