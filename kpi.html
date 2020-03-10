@@ -19,23 +19,19 @@
 
     }
 
-    #capacidad {
-        background: rgba(51, 122, 183, 0.8);
-        color: #ffffff;
-        width: 25vh;
-        max-width: 100px;
-        height: 25vh;
-        max-height: 100px;
-        position: relative;
-        margin-left: 50px;
+    #capacidad{
         text-align: center;
+    
+    }
+    #grafica{
+
     }
 </style>
 
 <head>
     <!-- Head de interfaz de operadores -->
     <div class="row fondo">
-        <div class="col-sm-12 col-md-12 col-lg-12">
+                <div class="col-sm-12 col-md-12 col-lg-12">
             <h1 class="text-center text-uppercase">KPI</h1>
         </div>
     </div>
@@ -49,16 +45,31 @@
 
 <body>
     <!--Tabla que muestra los dias y las horas trabajadas-->
-    <div >
-        <h1>Capacidad Actual</h1>
-        <div id="capacidad" class="row">
-            <h1><label id="porcentaje"></label></h1>
-            
+    <div class="container" >
+        <table border="1">
+<tr>
+    <td>
+        <section id="capacidad" >
+            <h1>Capacidad Actual</h1>
+            <h1><label id="porcentaje"></label></h1>  
+        </section>   
+    </td>
+    <td style="width: 600px; height: 300px;">
+          <h4 style="text-align: center;">Produccion de piezas por turno</h4>
+        <div id="canvas-holder" style="width:100%">
+            <canvas id="chart-area"></canvas>
         </div>
-      
-
-
+           
+        
+     
+    </td>
+    <td>
+        <h3>Balance de horawwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww</h3>
+    </td>
+    </tr>
+    </table>
     </div>
+   
 </body>
 <script src="js/jquery-1.12.3.js"></script>
 <script src="js/bootstrap.min.js"></script>
@@ -72,6 +83,7 @@
 <script>
 $( document ).ready(function() {
     cargacapacidad();
+    piezasporturno()
 });
 
 function cargacapacidad(){
@@ -79,13 +91,66 @@ function cargacapacidad(){
             type: "POST",
             url: "porcentajegenteral.php",
             success: function(result) {
-            
-                $("#porcentaje").text(result +"%");
-               
+                $("#porcentaje").text(result +"%");              
+            }
+        })
+}
+
+function piezasporturno(){
+
+    $.ajax({
+            type: "POST",
+            url: "consultapiezasporturno.php",
+            success: function(result) {
+                var obj2 = JSON.parse(result); 
+                var arreglo2 = [];
+                for (var i = 0; i < obj2.length; i++) {
+                    arreglo2.push(obj2[i]);
+                }
+                console.log(arreglo2);
+                config.data.datasets['0'].data = arreglo2;
+                grafica();
+               console.log(config.data.datasets.data);
             }
         })
 
 }
+
+
+
+        var config = {
+            type: 'pie',
+            data: {
+                datasets: [{
+                    data: [],
+                    backgroundColor: [
+                        window.chartColors.orange,
+                        window.chartColors.yellow,
+                        window.chartColors.green,
+                        window.chartColors.blue,
+                    ],
+                    label: 'Dataset 1'
+                }],
+                labels: [
+                    'Matutino',
+                    'Vespertino'
+                ]
+            },
+            options: {
+                responsive: true
+            }
+        };
+
+        function grafica() {
+            var ctx = document.getElementById('chart-area').getContext('2d');
+            window.myPie = new Chart(ctx, config);
+        };
+
+     
+
+        var colorNames = Object.keys(window.chartColors);
+     
+
 
 
 </script>
