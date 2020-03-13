@@ -1,0 +1,670 @@
+<html>
+<meta charset="UTF-8">
+<title>Forma 74</title>
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<link rel="stylesheet" href="css/dataTables.bootstrap.min.css">
+<link rel="stylesheet" href="css/estilos.css">
+<!-- Buttons DataTables -->
+<link rel="stylesheet" href="css/buttons.bootstrap.min.css">
+<link rel="stylesheet" href="css/font-awesome.min.css">
+<link rel="stylesheet" href="css/buttons.bootstrap.min.css">
+<link rel="stylesheet" href="css/font-awesome.min.css">
+<script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+
+
+<head>
+    <!-- Head de interfaz de operadores -->
+    <div class="row fondo">
+        <div class="col-sm-12 col-md-12 col-lg-12">
+            <h1 class="text-center text-uppercase">Formas 74</h1>
+        </div>
+    </div>
+    <br>
+    <!-- Botones para agregar registro -->
+
+    <button class='tareas btn btn-primary' onclick='location.href="tablero.html"'><i class='fa fa-home'></i></button>
+    <br>
+    <br>
+
+</head>
+
+<body>
+
+    <body>
+
+        <div class="row">
+            <!-- Tabla donde muestra los registros de los operadores -->
+            <div id="cuadro1" class="col-sm-12 col-md-12 col-lg-12">
+                <div class="col-sm-offset-2 col-sm-8">
+                    <h3 class="text-center"> <small class="mensaje"></small></h3>
+                </div>
+                <div class="table-responsive col-sm-12">
+                    <table id="dt_forma" class="table table-bordered table-hover" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th style="text-align:center;">Id Forma</th>
+                                <th style="text-align:center;">Id Produccion</th>
+                                <th style="text-align:center;">Orden produccion</th>
+                                <th style="text-align:center;">Id Operador</th>
+                                <th style="text-align:center;">Operador</th>
+                                <th style="text-align:center;">Fecha de Realizacion</th>
+                                <th style="text-align:center;">Turno</th>
+                                <th style="text-align:center;">PAP</th>
+                                <th style="text-align:center;">POC</th>
+                                <th style="text-align:center;">ATL</th>
+                                <th style="text-align:center;">SCRAP</th>
+                                <th style="text-align:center;">EMV</th>
+                                <th style="text-align:center;">Opciones</th>
+                                <th style="text-align:center;">Registros</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div>
+
+
+
+            <!-- Modal de confirmacion para eliminar usuario -->
+            <form id="frmEliminarUsuario">
+                <input type="hidden" id="id_operador2" name="id_operador2" value="">
+
+                <div class="modal fade" id="modalEliminar" tabindex="-1" role="dialog" aria-labelledby="modalEliminarLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                        aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="modalEliminarLabel">Eliminar Maquina</h4>
+                            </div>
+                            <div class="modal-body">
+                                ¿Está seguro de eliminar al operador?<strong data-name=""></strong>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" id="eliminar1" class="btn btn-primary" data-dismiss="modal">Aceptar</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!-- Modal para editar Forma 74 -->
+        <div class="modal fade bd-example-modal-lg" id="modalEditarForma74" tabindex="-1" role="dialog" aria-labelledby="modalEditarLabel">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="container">
+                        <br>
+                        <h4 class="modal-title" id="modalEliminarLabel"> Modificar Formar 74 </h4>
+                        <br>
+                        <form id="mainform1" class="form-horizontal">
+                            <input id="id_forma" name="id_forma" type="hidden" class="form-control" autofocus>
+                            <div class="form-group">
+                                <label for="modelo" class="col-sm-2 control-label">Orden Produccion :</label>
+                                <input id="id_produccion" name="id_produccion" type="hidden">
+                                <div class="col-sm-5"> <input id="orden_produccion" name="orden_produccion" type="text" class="form-control" readonly></div>
+                                <button type='button' class='btn btn-primary btn-m' data-toggle='modal' data-target='#modalOP'><i class='fa fa-file-text'></i></button>
+                            </div>
+                            <div class="form-group ">
+                                <label for="marca" class="col-sm-2 control-label">Operador :</label>
+                                <input id="id_operador" name="id_operador" type="hidden">
+                                <div class="col-sm-5"> <input id="operador" name="operador" type="text" class="form-control" readonly></div>
+                                <button type='button' class='btn btn-primary btn-m' data-toggle='modal' data-target='#modalO'><i class='fa fa-user'></i></button>
+                            </div>
+
+                            <div class="form-group ">
+                                <label for="marca" class="col-sm-2 control-label">Fecha de Realizacion :</label>
+                                <div class="col-sm-2"> <input id="fecha_realizacion" name="fecha_realizacion" type="date" class="form-control"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="marca" class="col-sm-2 control-label">Turno :</label>
+                                <div class="col-sm-1"> <select id="turno" name="turno" class="form-control">
+                                        <option class="form-control" value="M">M</option>
+                                        <option class="form-control" value="V">V</option>
+                                        </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="marca" class="col-sm-2 control-label">PAP :</label>
+                                <div class="col-sm-6"> <input id="PAP" name="PAP" type="checkbox" class="form-control"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="marca" class="col-sm-2 control-label">POC :</label>
+                                <div class="col-sm-6"> <input id="POC" name="POC" type="checkbox" class="form-control"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="marca" class="col-sm-2 control-label">ATL :</label>
+                                <div class="col-sm-6"> <input id="ATL" name="ATL" type="checkbox" class="form-control"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="marca" class="col-sm-2 control-label">SCRAP :</label>
+                                <div class="col-sm-6"> <input id="SCRAP" name="SCRAP" type="checkbox" class="form-control"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="marca" class="col-sm-2 control-label">EMV :</label>
+                                <div class="col-sm-6"> <input id="EMV" name="EMV" type="checkbox" class="form-control"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-8">
+                                    <button id="guardar1" type="button" class="btn btn-primary" value="">Actualizar</button>
+                                    <button id="btn_listar" type="button" class="btn btn-primary" data-dismiss="modal" value="">Cerrar</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="modal fade bd-example-modal-lg" id="modalOP">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class='modal-header'>
+                        <h4>Ordenes de Produccion</h4>
+                        <br>
+                    </div>
+                    <div class="modal-body table-responsive">
+
+                        <table id="dt_OrdenProduccion" class="table table-bordered table-hover" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th style="text-align:center;"> ID. Produccion</th>
+                                    <th style="text-align:center;">Orden de Produccion</th>
+                                    <th style="text-align:center;">Seleccionar</th>
+                                </tr>
+                            </thead>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade bd-example-modal-lg" id="modalO">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class='modal-header'>
+                        <h4>Operadores</h4>
+                        <br>
+                    </div>
+                    <div class="modal-body table-responsive">
+
+                        <table id="dt_operador" class="table table-bordered table-hover" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th style="text-align:center;">ID. Operador</th>
+                                    <th style="text-align:center;">Operador</th>
+                                    <th style="text-align:center;">Seleccionar</th>
+                                </tr>
+                            </thead>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade bd-example-modal-lg" id="modalRegistro74">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class='modal-header'>
+                        <h4>Regristro Forma 74</h4>
+                        <br>
+                    </div>
+                    <div class="modal-body table-responsive">
+
+                        <table id="dt_registro" class="table table-bordered table-hover" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th style="text-align:center;">ID. Registro</th>
+                                    <th style="text-align:center;">ID. Forma</th>
+                                    <th style="text-align:center;">Fecha Inicio</th>
+                                    <th style="text-align:center;">Fecha Fin</th>
+                                    <th style="text-align:center;">Cantidad Producida</th>
+                                    <th style="text-align:center;">Reproceso</th>
+                                    <th style="text-align:center;">SCRAP</th>
+                                    <th style="text-align:center;">Editar</th>
+                                </tr>
+                            </thead>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade bd-example-modal-lg" id="modalEditarRegistro" tabindex="-1" role="dialog" aria-labelledby="modalEditarLabel">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="container">
+                        <br>
+                        <h4 class="modal-title" id="modalEliminarLabel"> Modificar Registro 74 </h4>
+                        <br>
+                        <form id="mainform2" class="form-horizontal">
+                            <input id="id_registro" name="id_registro" type="hidden" class="form-control" autofocus>
+                            <div class="form-group">
+                                <label for="modelo" class="col-sm-2 control-label">Fecha Inicio :</label>
+                                <div class="col-sm-5"> <input class="onlydate form-control" id="r_inicio" name="r_inicio"></div>
+                            </div>
+                            <div class="form-group ">
+                                <label for="marca" class="col-sm-2 control-label">Fecha Fin :</label>
+                                <div class="col-sm-5"> <input class="onlydate form-control" type="text" id="r_fin" name="r_fin"></div>
+                            </div>
+
+                            <div class="form-group ">
+                                <label for="marca" class="col-sm-2 control-label">Cantidad Requerida :</label>
+                                <div class="col-sm-2"> <input id="r_cantidad_producida" name="r_cantidad_producida" type="text" class="form-control"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="marca" class="col-sm-2 control-label">Reproceso :</label>
+                                <div class="col-sm-6"> <input id="reproceso2" name="reproceso2" type="text" class="form-control"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="marca" class="col-sm-2 control-label">SCRAP :</label>
+                                <div class="col-sm-6"> <input id="scrap2" name="scrap2" type="text" class="form-control"></div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-8">
+                                    <button id="guardar2" type="button" class="btn btn-primary" value="">Actualizar</button>
+                                    <button id="btn_listar" type="button" class="btn btn-primary" data-dismiss="modal" value="">Cerrar</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </body>
+
+    <script>
+    </script>
+
+
+    <script>
+        $(document).on("ready", function() {
+            listar();
+            listar2();
+            listar3();
+        });
+        $("#btn_listar").on("click", function() {
+            listar();
+        })
+        var listar = function() {
+            var table = $("#dt_forma").DataTable({
+                "destroy": true,
+                "ajax": {
+                    "method": "POST",
+                    "url": "lista_forma74.php"
+                },
+                "columns": [{
+                    "data": "id_forma"
+                }, {
+                    "data": "id_produccion",
+                    "visible": false
+                }, {
+                    "data": "orden_produccion"
+                }, {
+                    "data": "id_operador",
+                    "visible": false
+                }, {
+                    render: function(data, type, row) {
+                        return row.nombre_operador + " " + row.apellido_operador;
+
+                    }
+                }, {
+                    "data": "fecha_actual"
+                }, {
+                    "data": "turno"
+                }, {
+                    render: function(data, type, row) {
+                        if (row.PAP == 0) {
+                            return "NO"
+                        } else {
+                            return "SI"
+                        }
+
+                    }
+                }, {
+                    render: function(data, type, row) {
+                        if (row.POC == 0) {
+                            return "NO"
+                        } else {
+                            return "SI"
+                        }
+
+                    }
+                }, {
+                    render: function(data, type, row) {
+                        if (row.ATL == 0) {
+                            return "NO"
+                        } else {
+                            return "SI"
+                        }
+
+                    }
+                }, {
+                    render: function(data, type, row) {
+                        if (row.SCRAP == 0) {
+                            return "NO"
+                        } else {
+                            return "SI"
+                        }
+
+                    }
+                }, {
+                    render: function(data, type, row) {
+                        if (row.EMV == 0) {
+                            return "NO"
+                        } else {
+                            return "SI"
+                        }
+
+                    }
+                }, {
+                    "defaultContent": "<button id='btn_editarForma' type='button' class='editar btn btn-primary'><i class='fa fa-pencil-square-o'></i> Modificar</button>"
+                }, {
+                    "defaultContent": "<button id='btn_registro' type='button' class='btn btn-primary'><i class='fa fa-file'></i> Registro</button>	"
+                }]
+            });
+            obtener_datos("#dt_forma tbody", table);
+            obtener_datos_r("#dt_forma tbody", table);
+        }
+
+        var listar2 = function() {
+            var table = $("#dt_operador").DataTable({
+                "destroy": true,
+                "ajax": {
+                    "method": "POST",
+                    "url": "lista_operador.php"
+                },
+                "columns": [{
+                    "data": "id_operador",
+                    "visible": false
+                }, {
+                    render: function(data, type, row) {
+                        return row.nombre_operador + " " + row.apellido_operador;
+
+                    }
+                }, {
+                    "defaultContent": "<button id='btnSelOperador' type='button' class='editar btn btn-primary' >SELECCIONAR</button>"
+                }]
+            });
+            obtener_datos_operador("#dt_operador tbody", table);
+        }
+
+        var listar3 = function() {
+            var table = $("#dt_OrdenProduccion").DataTable({
+                "destroy": true,
+                "ajax": {
+                    "method": "POST",
+                    "url": "listaordenproduccion.php"
+                },
+                "columns": [{
+                    "data": "id_produccion",
+                    "visible": false
+                }, {
+                    "data": "orden_produccion"
+                }, {
+                    "defaultContent": "<button id='btnSelOP' type='button' class='editar btn btn-primary' >SELECCIONAR</button>"
+                }]
+            });
+            obtener_datos_orden("#dt_OrdenProduccion tbody", table);
+        }
+
+        var listar4 = function(tmp) {
+            var table = $("#dt_registro").DataTable({
+                "destroy": true,
+                "ajax": {
+                    "method": "POST",
+                    "url": "lista_registro74.php",
+                    "data": {
+                        "tmp": tmp
+                    }
+                },
+                "columns": [{
+                    "data": "id_registro",
+                    "visible": false
+                }, {
+                    "data": "id_forma"
+                }, {
+                    "data": "r_inicio"
+                }, {
+                    "data": "r_fin"
+                }, {
+                    "data": "r_cantidad_producida"
+                }, {
+                    "data": "reproceso"
+                }, {
+                    "data": "scrap"
+                }, {
+                    "defaultContent": "<button id='btn_editarRegistro' type='button' class='editar btn btn-primary'><i class='fa fa-pencil-square-o'></i> Modificar</button>"
+                }]
+            });
+            obtener_datos_registro("#dt_registro tbody", table);
+        }
+
+
+
+        var obtener_datos_operador = function(tbody, table) {
+
+            $(tbody).on("click", "#btnSelOperador", function() {
+                if ($('#modalO').hasClass('in')) {
+                    var data = table.row($(this).parents("tr")).data();
+                    $("#id_operador").val(data.id_operador);
+                    $("#operador").val(data.nombre_operador + " " + data.apellido_operador);
+                    $('#modalO').modal('hide');
+                } else {
+                    $("#id_operador").val(data.id_operador);
+                    $("#operador").val(data.nombre_operador + " " + data.apellido_operador);
+                    $('#modalO').modal('hide');
+                }
+            });
+        }
+
+        var obtener_datos_orden = function(tbody, table) {
+
+            $(tbody).on("click", "#btnSelOP", function() {
+                if ($('#modalOP').hasClass('in')) {
+                    var data = table.row($(this).parents("tr")).data();
+                    $("#id_produccion").val(data.id_produccion);
+                    $("#orden_produccion").val(data.orden_produccion);
+                    $('#modalOP').modal('hide');
+                } else {
+                    $("#id_produccion").val(data.id_produccion);
+                    $("#orden_produccion").val(data.orden_produccion);
+                    $('#modalOP').modal('hide');
+                }
+            });
+        }
+
+        var obtener_datos_r = function(tbody, table) {
+            $(tbody).on("click", "#btn_registro", function() {
+                var data2 = table.row($(this).parents("tr")).data();
+                var tmp = data2.id_forma;
+                listar4(tmp);
+                $('#modalRegistro74').modal("show");
+            });
+        }
+
+        var obtener_datos_registro = function(tbody, table) {
+            $(tbody).on("click", "#btn_editarRegistro", function() {
+                var data3 = table.row($(this).parents("tr")).data();
+                $("#id_registro").val(data3.id_registro);
+                $("#r_inicio").val(data3.r_inicio);
+                $("#r_fin").val(data3.r_fin);
+                $("#r_cantidad_producida").val(data3.r_cantidad_producida);
+                $("#reproceso2").val(data3.reproceso);
+                $("#scrap2").val(data3.scrap);
+                $('#modalEditarRegistro').modal("show");
+            });
+        }
+
+
+        $('#guardar1').click(function() {
+            $.ajax({
+                type: "POST",
+                url: "actualizar_forma74.php",
+                data: $("#mainform1").serialize()
+            })
+            location.reload();
+        })
+
+        $('#guardar2').click(function() {
+            $.ajax({
+                type: "POST",
+                url: "actualizar_registro74.php",
+                data: $("#mainform2").serialize()
+            })
+            location.reload();
+        })
+
+        $('#eliminar1').click(function() {
+            var x = document.getElementById("id_operador2").value;
+            $.ajax({
+                type: "POST",
+                url: "borrar_operador.php",
+                data: {
+                    "id_operador": x
+                }
+            })
+            location.reload();
+        });
+
+        $('#guardar').click(function() {
+            $.ajax({
+                type: "POST",
+                url: "guardar_operador.php",
+                data: $("#mainform").serialize()
+            })
+            location.reload();
+        });
+
+
+
+
+
+
+        var obtener_datos = function(tbody, table) {
+            $(tbody).on("click", "#btn_editarForma", function() {
+                var data = table.row($(this).parents("tr")).data();
+                $("#id_forma").val(data.id_forma);
+                $("#id_produccion").val(data.id_produccion);
+                $("#orden_produccion").val(data.orden_produccion);
+                $("#id_operador").val(data.id_operador);
+                $("#operador").val(data.nombre_operador + " " + data.apellido_operador);
+                $("#fecha_realizacion").val(data.fecha_actual);
+                $("#turno").val(data.turno);
+                if (data.PAP == 1) {
+                    $('#PAP').prop('checked', true);
+                }
+                if (data.POC == 1) {
+                    $('#POC').prop('checked', true);
+                }
+                if (data.ATL == 1) {
+                    $('#ATL').prop('checked', true);
+                }
+                if (data.SCRAP == 1) {
+                    $('#SCRAP').prop('checked', true);
+                }
+                if (data.EMV == 1) {
+                    $('#EMV').prop('checked', true);
+                }
+                $("#modalEditarForma74").modal()
+            });
+        }
+        var obtener_datos_eliminar = function(tbody, table) {
+            $(tbody).on("click", "#eliminamesta", function() {
+                var data = table.row($(this).parents("tr")).data();
+                var id_operador = $("#id_operador2").val(data.id_operador);
+            });
+
+        }
+
+
+
+
+
+        function ocultars() {
+            var elemento = document.getElementById('cuadro2');
+
+            if (elemento.classList.contains('ocultar')) {
+                elemento.classList.remove('ocultar');
+
+            } else {
+                elemento.classList.add('ocultar');
+
+            }
+
+        }
+
+        function goBack() {
+            window.history.back();
+        }
+        $('.datetime').daterangepicker({
+            timePicker: true,
+            startDate: moment().startOf('hour'),
+            endDate: moment().startOf('hour').add(32, 'hour'),
+            locale: {
+                format: 'YYYY-MM-DD HH:mm'
+            }
+        });
+        $('.time').daterangepicker({
+            timePicker: true,
+            startDate: moment().startOf('hour'),
+            endDate: moment().startOf('hour').add(32, 'hour'),
+            locale: {
+                format: 'HH:mm'
+            }
+        });
+        $('.onlydate').daterangepicker({
+            "singleDatePicker": true,
+            "timePicker": true,
+            startDate: moment().startOf('hour'),
+
+            locale: {
+                format: 'DD/MM/YY hh:mm A '
+            }
+        }, function(start, end, label) {
+            console.log("New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')");
+        });
+        $('.onlydate2').daterangepicker({
+            "singleDatePicker": true,
+            "timePicker": true,
+            startDate: moment().startOf('hour'),
+
+            locale: {
+                format: 'DD/MM/YY hh:mm A '
+            }
+        }, function(start, end, label) {
+            console.log("New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')");
+        });
+    </script>
+</body>
+
+</body>
+
+<script src="js/jquery-1.12.3.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/jquery.dataTables.min.js"></script>
+<script src="js/dataTables.bootstrap.js"></script>
+<!--botones DataTables-->
+<script src="js/dataTables.buttons.min.js"></script>
+<script src="js/buttons.bootstrap.min.js"></script>
+<!--Libreria para exportar Excel-->
+<script src="js/jszip.min.js"></script>
+<!--Librerias para exportar PDF-->
+<script src="js/pdfmake.min.js"></script>
+<script src="js/vfs_fonts.js"></script>
+<!--Librerias para botones de exportación-->
+<script src="js/buttons.html5.min.js"></script>
+
+</html>

@@ -37,6 +37,7 @@
                             <thead>
                                 <tr>
                                     <th>Orden de Produccion</th>
+                                    <th>%</th>
                                     <th>Maquinas</th>
                                     <th>Numero de Parte</th>
                                     <th>Cantidad Requerida</th>
@@ -144,6 +145,11 @@
                         },
                         "columns": [{
                             "data": "orden_produccion"
+                        }, {
+                            render: function(data, type, row) {
+                                var realizado_porcentaje = (row.cantidad * 100) / row.cantidad_requerida;
+                                return realizado_porcentaje.toFixed(2) + "%";
+                            }
                         }, {
                             "defaultContent": "<button id='maquinas_asignadas1' class='btn btn-primary' ><i class='fa fa-gavel'></i> Maquinas</button>"
                         }, {

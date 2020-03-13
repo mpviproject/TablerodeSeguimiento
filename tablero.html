@@ -8,8 +8,8 @@
 <link rel="stylesheet" href="css/buttons.bootstrap.min.css">
 <link rel="stylesheet" href="css/font-awesome.min.css">
 <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 <title>
     Tablero de seguimiento
@@ -22,20 +22,22 @@
         </div>
     </div>
     <br>
-    <button id="btn_mostar" type="button" class="btn btn-primary" onClick="ocultars()"><i class='fa fa-plus'></i> Agregar Produccion</button>
-    <button onclick="location.href='tablero.html';" class='regresar btn btn-primary'><i class='fa fa-home'></i> Home</button>
-    <button role="link" onclick="location.href='maquinaria.html';" class='maquinas btn btn-primary'><i
+    <button id="btn_mostar" type="button" class="btn btn-primary btn-lg" onClick="ocultars()"><i class='fa fa-plus'></i> Agregar Produccion</button>
+    <button onclick="location.href='tablero.html';" class='regresar btn btn-primary btn-lg'><i class='fa fa-home'></i> Home</button>
+    <button role="link" onclick="location.href='maquinaria.html';" class='maquinas btn btn-primary btn-lg'><i
             class='fa fa-steam'></i>  Maquinaria</button>
     <!-- Hacer funcion de redireccionamiento a consulta de operadores -->
-    <button role="link" onclick="location.href='operadores.html';" class='operadores btn btn-primary'><i
+    <button role="link" onclick="location.href='operadores.html';" class='operadores btn btn-primary btn-lg'><i
         class='fa fa-users'></i>  Operadores</button>
-    <button role="link" onclick="location.href='capacidad.html';" class='operadores btn btn-primary'><i
+    <button role="link" onclick="location.href='capacidad.html';" class='operadores btn btn-primary btn-lg'><i
             class='fa fa-trophy'></i>  Capacidad actual</button>
-    <button role="link" onclick="location.href='herramentacion.html';" class='btn btn-primary'><i
+    <button role="link" onclick="location.href='herramentacion.html';" class='btn btn-primary btn-lg'><i
             class='fa fa-simplybuilt'></i>  Herramentacion</button>
-            <button role="link" onclick="location.href='desempenos_tecnicos.html';" class='btn btn-primary'><i
+    <button role="link" onclick="location.href='desempenos_tecnicos.html';" class='btn btn-primary btn-lg'><i
                 class='fa fa-user'></i>  Desempenos Tecnicos</button>
-    <button onclick="goBack()" class='regresar btn btn-primary'><i class='fa fa-home'></i></button>
+    <button role="link" onclick="location.href='forma74.html';" class='btn btn-primary btn-lg'><i
+                    class='fa fa-file-o'></i>  Forma 74</button>
+    <button onclick="goBack()" class='regresar btn btn-primary btn-lg'><i class='fa fa-home'></i></button>
     <br>
     <br>
     <div class="row">
@@ -114,21 +116,23 @@
                     <thead>
                         <tr>
                             <th>ID. Produccion</th>
-                            <th>Tipo produccion</th>
-                            <th>Cuando solicito</th>
-                            <th>Orden de produccion</th>
-                            <th>Numero de parte</th>
-                            <th>Cantidad requerida</th>
-                            <th>Fecha requerida</th>
-                            <th>No. Operacion</th>
-                            <th>UPH</th>
-                            <th>Fecha Inicio Produccion</th>
-                            <th>Fecha Fin Produccion</th>
-                            <th>Metricas</th>
-                            <th>Ingenieria</th>
-                            <th>Calidad</th>
-                            <th>Forma 72</th>
-                            <th>Opciones</th>
+                            <th style="text-align:center;">Numero de parte</th>
+                            <th style="text-align:center;">%</th>
+                            <th style="text-align:center;">Tipo produccion</th>
+                            <th style="text-align:center;">Cuando solicito</th>
+                            <th style="text-align:center;">Orden de produccion</th>
+                            <th style="text-align:center;">Cantidad requerida</th>
+                            <th style="text-align:center;">Fecha requerida</th>
+                            <th style="text-align:center;">No. Operacion</th>
+                            <th style="text-align:center;">UPH</th>
+                            <th style="text-align:center;">Fecha Inicio Produccion</th>
+                            <th style="text-align:center;">Fecha Fin Produccion</th>
+                            <th style="text-align:center;">Metricas</th>
+                            <th style="text-align:center;">Ingenieria</th>
+                            <th style="text-align:center;">Calidad</th>
+                            <th style="text-align:center;">Forma 74</th>
+                            <th style="text-align:center;">Opciones</th>
+                            <th style="text-align:center;">Finalizar Orden</th>
                         </tr>
                     </thead>
                 </table>
@@ -160,7 +164,7 @@
                                     <input type='hidden' id='id_empleado'><button id="seleccionaempleado" class="btn-primary btn-sm">+</button></td>
                             </tr>
                             <tr>
-                                <td>Orden de Producción:</td>
+                                <td>Orden de Produccion:</td>
                                 <td><input type='text' id='orden_72' value=""></td>
                                 <input type='hidden' id='id_orden'>
                             </tr>
@@ -324,7 +328,7 @@
                     <div class="form-group col-md-8">
                         <input type="hidden" id="id_produccion_maquina" name="id_produccion_maquina" value="">
                         <label for="modelo" class="control-label">Tiempo Operacion : </label>
-                        <input id="tiempo_operacion" name="tiempo_operacion" type="text" class="form-control" autofocus>
+                        <input id="tiempo_operacion" name="tiempo_operacion" type="text" class="form-control" readonly>
                     </div>
                     <div class="form-group col-md-8">
                         <label for="modelo" class="control-label">Tiempo Ciclo</label>
@@ -560,7 +564,7 @@
         </div>
     </div>
 
-    <form id="frmEliminarUsuario" action="">
+    <form id="frmEliminarUsuario">
         <input type="hidden" id="id_produccion2" name="id_produccion2" value="">
 
         <div class="modal fade" id="modalEliminar" tabindex="-1" role="dialog" aria-labelledby="modalEliminarLabel">
@@ -581,6 +585,30 @@
                 </div>
             </div>
         </div>
+    </form>
+
+
+
+    <div class="modal fade" id="finalizarOrden" tabindex="-1" role="dialog" aria-labelledby="modalEliminarLabel">
+        <form id="frmfinalizarOrden">
+            <input type="hidden" id="id_produccion3" name="id_produccion3" value="">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                    aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="modalEliminarLabel">Finalizar Orden de Produccion</h4>
+                    </div>
+                    <div class="modal-body">
+                        Esta seguro de dar como terminada la Orden de Produccion?<strong data-name=""></strong>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="aceptar_finalizar" class="btn btn-primary" data-dismiss="modal">Aceptar</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+    </div>
     </form>
     <!-- Modal para editar orden de produccion -->
 
@@ -772,56 +800,65 @@
 
     //funcion para listar las ordenes de compra que estan en proceso actualmente,
     var listar = function() {
-        var table = $("#dt_procesos").DataTable({
-            "destroy": true,
-            "ajax": {
-                "method": "POST",
-                "url": "listaordenproduccion.php"
-            },
-            "columns": [{
-                "data": "id_produccion",
-                "visible": false
-            }, {
-                "data": "tipo_produccion"
-            }, {
-                "data": "fecha_solicitud"
-            }, {
-                "data": "orden_produccion"
-            }, {
-                "data": "numero_parte"
-            }, {
-                "data": "cantidad_requerida"
-            }, {
-                "data": "fecha_requerida"
-            }, {
-                "data": "numero_operacion"
-            }, {
-                "data": "UPH"
-            }, {
-                "data": "fecha_inicio"
-            }, {
-                "data": "fecha_fin"
-            }, {
-                "defaultContent": "<button id='btn_metricas'type='button' class='btn btn-primary'><i class='fa fa-bar-chart'></i> Metrica</button>"
-            }, {
-                "defaultContent": "<button id='maquinas_asignadas1' class='btn btn-primary' ><i class='fa fa-gavel'></i> Ingenieria</button>"
-            }, {
-                "defaultContent": "<button id='calidad'class='btn btn-primary'>Calidad</button>"
-            }, {
-                "defaultContent": "<button id='forma'class='btn btn-primary'>Forma 72</button>"
-            }, {
-                "defaultContent": "<button  type='button' class='editar btn btn-primary' data-toggle='modal' data-target='#modalEditar' ><i class='fa fa-pencil-square-o'></i></button>	<button id='eliminamesta' type='button' class='eliminar btn btn-danger' data-toggle='modal' data-target='#modalEliminar' ><i class='fa fa-trash-o'></i></button>"
-            }]
-        });
+            var table = $("#dt_procesos").DataTable({
+                "destroy": true,
+                "ajax": {
+                    "method": "POST",
+                    "url": "listaordenproduccion.php"
+                },
+                "columns": [{
+                    "data": "id_produccion",
+                    "visible": false
+                }, {
+                    "data": "numero_parte"
+                }, {
+                    render: function(data, type, row) {
+                        var realizado_porcentaje = (row.cantidad * 100) / row.cantidad_requerida;
+                        return realizado_porcentaje.toFixed(2) + "%";
 
-        obtener_orden("#dt_procesos tbody", table);
-        obtener_datos("#dt_procesos tbody", table);
-        //Obtiene datos para modal de calidad.
-        obtener_datos_calidad("#dt_procesos tbody", table);
-        obtener_datos_eliminar("#dt_procesos tbody", table);
-        obtiene_datos_ingenieria("#dt_procesos tbody", table);
-        obtiene_datos_metricas("#dt_procesos tbody", table);
-    }
+                    }
+                }, {
+                    "data": "tipo_produccion"
+                }, {
+                    "data": "fecha_solicitud"
+                }, {
+                    "data": "orden_produccion"
+                }, {
+                    "data": "cantidad_requerida"
+                }, {
+                    "data": "fecha_requerida"
+                }, {
+                    "data": "numero_operacion"
+                }, {
+                    "data": "UPH"
+                }, {
+                    "data": "fecha_inicio"
+                }, {
+                    "data": "fecha_fin"
+                }, {
+                    "defaultContent": "<button id='btn_metricas'type='button' class='btn btn-primary btn-lg'><i class='fa fa-bar-chart'></i> Metrica</button>"
+                }, {
+                    "defaultContent": "<button id='maquinas_asignadas1' class='btn btn-warning btn-lg' ><i class='fa fa-gavel'></i> Ingenieria</button>"
+                }, {
+                    "defaultContent": "<button id='calidad'class='btn btn-primary btn-lg'><i class='fa fa-smile-o'></i> Calidad</button>"
+                }, {
+                    "defaultContent": "<button id='forma'class='btn btn-info btn-lg'><i class='fa fa-file-o'></i> Forma 74</button>"
+                }, {
+                    "defaultContent": "<button  type='button' class='editar btn btn-primary  btn-lg' data-toggle='modal' data-target='#modalEditar' ><i class='fa fa-pencil-square-o'></i>Modificar OP</button>"
+                }, {
+                    "defaultContent": "	<button id='finalizar_orden' type='button' class='btn btn-success btn-lg' data-toggle='modal' data-target='#finalizarOrden' ><i class='fa fa-check-circle'></i></button>"
+                }]
+            });
+            obtener_orden("#dt_procesos tbody", table);
+            obtener_datos("#dt_procesos tbody", table);
+            obtener_datos_calidad("#dt_procesos tbody", table);
+            obtener_datos_eliminar("#dt_procesos tbody", table);
+            obtener_datos_finalizar("#dt_procesos tbody", table);
+            obtiene_datos_ingenieria("#dt_procesos tbody", table);
+            obtiene_datos_metricas("#dt_procesos tbody", table);
+            obtiene_datos_herramentar2("#dt_procesos tbody", table);
+        }
+        //Boton eliminar	<button id='eliminamesta' type='button' class='eliminar btn btn-danger' data-toggle='modal' data-target='#modalEliminar' ><i class='fa fa-trash-o'></i></button>
 
     var listar_maquinas_asignadas = function(temporal) {
         var table = $("#dt_maquinas_asignadas").DataTable({
@@ -948,7 +985,7 @@
 
                 render: function(data, type, row) {
                     var realizado_porcentaje = (row.cantidad * 100) / row.cantidad_requerida;
-                    return realizado_porcentaje.toFixed(4) + "%";
+                    return realizado_porcentaje.toFixed(2) + "%";
                 }
             }, {
                 render: function(data, type, row) {
@@ -986,6 +1023,14 @@
             var temp_metricas = data4.id_produccion;
             listar_metricas(temp_metricas);
             $("#modal_metrica").modal()
+        });
+    }
+
+    var obtiene_datos_herramentar2 = function(tbody, table) {
+        $(tbody).on("click", "#maquinas_asignadas1", function() {
+            var data5 = table.row($(this).parents("tr")).data();
+            var total_op = 60 / data5.UPH;
+            $("#tiempo_operacion").val(total_op);
         });
     }
 
@@ -1137,7 +1182,6 @@
             $('#tablaparos tbody tr').each(function() {
                 var diferencia = $(this).find(".diferencia").html();
                 var tipo_paro = $(this).find(".tipoparos").html();
-                alert("pasa");
                 var comentario = $(this).find(".comentario").html();
                 var query = "insert into paro_maquinas values(NULL," + data + "," + diferencia + ",'" + tipo_paro + "','" + comentario + "') ;";
 
@@ -1192,6 +1236,17 @@
         })
         window.location = 'tablero.html'
     });
+
+    $('#aceptar_finalizar').click(function() {
+        var x = document.getElementById("id_produccion3").value;
+        $.ajax({
+            type: "POST",
+            url: "finalizar_orden.php",
+            data: $("#frmfinalizarOrden").serialize()
+        })
+        window.location = 'tablero.html'
+    });
+
     $('#guardar').click(function() {
         $.ajax({
             type: "POST",
@@ -1227,6 +1282,15 @@
         });
 
     }
+
+    var obtener_datos_finalizar = function(tbody, table) {
+        $(tbody).on("click", "#finalizar_orden", function() {
+            var data = table.row($(this).parents("tr")).data();
+            var id_maquina = $("#id_produccion3").val(data.id_produccion);
+        });
+
+    }
+
 
     $(".cerrarModal").click(function() {
         $("#modalEditar").modal('hide')
@@ -1492,7 +1556,6 @@
             '</tr>';
         $('#tablaparos tbody:last-child').append(htmlTags2);
         $("#modalparo").modal('hide');
-        alert("pasa");
     })
 </script>
 
