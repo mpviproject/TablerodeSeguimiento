@@ -1,0 +1,300 @@
+<html>
+<meta charset="UTF-8">
+<title>Capacidad actual</title>
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="css/estilos.css">
+<!-- Buttons DataTables -->
+
+<link rel="stylesheet" href="css/buttons.bootstrap.min.css">
+<link rel="stylesheet" href="css/font-awesome.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+<script src="../../../dist/Chart.min.js"></script>
+<script src="utils.js"></script>
+<style>
+    canvas {
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+
+    }
+
+    #capacidad {
+        text-align: center;
+
+    }
+</style>
+
+<head>
+    <!-- Head de interfaz de operadores -->
+    <div class="row fondo">
+        <div class="col-sm-12 col-md-12 col-lg-12">
+            <h1 class="text-center text-uppercase">Paros Generales</h1>
+        </div>
+    </div>
+    <br>
+    <!-- Botones para agregar registro -->
+    <button class='tareas btn btn-primary' onclick='location.href="tablero.html"'><i class='fa fa-home'></i>
+        Home</button>
+    <br>
+    <br>
+</head>
+
+<body>
+    <label>
+        <h3>Seleccione un mes para consultar</h3>
+    </label>
+    <select id="mes" autofocus>
+        <option value="1">Enero</option>
+        <option value="2">Febrero</option>
+        <option value="3">Marzo</option>
+        <option value="4">Abril</option>
+        <option value="5">Mayo</option>
+        <option value="6">Junio</option>
+        <option value="7">Julio</option>
+        <option value="8">Agosto</option>
+        <option value="9">Septiembre</option>
+        <option value="10">Octubre</option>
+        <option value="11">Noviembre</option>
+        <option value="12">Diciembre</option>
+    </select>
+    <button id="consulta">Consultar</button>
+    <button id="consultatodo">Consultar todos los registros</button>
+    <button id="tipo_paro" data-target="#modal_tipos_paros" data-toggle="modal">Tipos de paro</button>
+
+    <div class="row">
+        <div id="cuadro1" class="col-sm-12 col-md-12 col-lg-12">
+            <div class="col-sm-offset-2 col-sm-8">
+                <h3 class="text-center"> <small class="mensaje"></small></h3>
+            </div>
+            <div class="table-responsive col-sm-12">
+                <table id="dt_paros" class="table table-bordered table-hover" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th>id_paro</th>
+                            <th>id_forma</th>
+                            <th>Operador</th>
+                            <th>nombre_operador</th>
+                            <th>Apellido_operador</th>
+                            <th>turno</th>
+                            <th>Fecha de forma</th>
+                            <th>horas_paro</th>
+                            <th>tipo_paro</th>
+                            <th>descripcion</th>
+                            <th>comentario</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- Modal para agregar y modificar tipos de paros -->
+    <div class="modal fade bd-example-modal-lg" id="modal_tipos_paros">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class='modal-header'>
+                    <h4>Tipos de paro</h4><button class="close" data-dismiss="modal" aria-label="Close">×</button>
+                    <br>
+                    <button id="listar_maquinas" data-target="#modal_add_paros" data-toggle="modal" type='button'
+                        class='herrmentacion btn btn-primary'><i class='fa fa-plus-circle'></i> Agregar Tipo de paro</button>
+                </div>
+                <div class="modal-body table-responsive">
+
+                    <table id="dt_tipo_paro" class="table table-bordered table-hover" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <td>Id_tipo</td>
+                                <td>descripcion</td>
+                                <td>opciones</td>
+                            </tr>
+                        </thead>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal para agregar tipos de paros -->
+    <div class="modal fade bd-example-modal-lg" id="modal_add_paros">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class='modal-header'>
+                    <h2>Agregar tipo de paro</h2><button class="close" data-dismiss="modal" aria-label="Close">×</button>
+                    <br>
+                </div>
+                <div class="modal-body table-responsive">
+                    <div class="form-group">
+                        <h3>Descripcion</h3>
+                        <input style="text-transform:uppercase;" class="form-control input-lg" id="inputlg" type="text">
+                      </div>
+                    <br>
+                    <br>
+                    <br>
+                    <button class="btn btn-primary btn-lg btn-block" id="guardatipo" >Guardar</button>
+                    <br>
+                    <br>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="js/jquery-1.12.3.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script src="js/dataTables.bootstrap.js"></script>
+<!--botones DataTables-->
+<script src="js/dataTables.buttons.min.js"></script>
+<script src="js/buttons.bootstrap.min.js"></script>
+
+
+<script>
+    $(document).ready(function () {
+        listar_paros();
+    });
+    //boton de consulta para cargar nuevos datos
+    $("#consulta").on("click", function () {
+        var selectedmonth = $("#mes").children("option:selected").val();
+        listar(selectedmonth);
+    });
+    //boton que consulta todos los registros de paros
+    $("#consultatodo").on("click", function () {
+        listar();
+    });
+    //Carga tabla que muestra todos los paros
+    var listar = function () {
+        var table = $("#dt_paros").DataTable({
+            "destroy": true,
+            "ajax": {
+                "method": "POST",
+                "url": "listaparos.php"
+            },
+            "columns": [{
+                "data": "id_paro",
+                "visible": false
+            }, {
+                "data": "id_forma",
+                "visible": false
+            }, {
+                "data": "id_operador",
+                "visible": false
+            }, {
+                "data": "nombre_operador"
+            }, {
+                "data": "apellido_operador"
+            }, {
+                "data": "turno"
+            }, {
+                "data": "fecha_actual"
+            }, {
+                "data": "horas_paro"
+            }, {
+                "data": "tipo_paro"
+            }, {
+                "data": "comentario"
+            }
+            ]
+        });
+    }
+    //carga tabla que muestra los paros por mes
+    var listar = function (month) {
+        var table = $("#dt_paros").DataTable({
+            "destroy": true,
+            "ajax": {
+                "method": "POST",
+                "url": "listaparos.php",
+                "data": { "mesconsulta": month }
+            },
+            "columns": [{
+                "data": "id_paro",
+                "visible": false
+            }, {
+                "data": "id_forma",
+                "visible": false
+            }, {
+                "data": "id_operador",
+                "visible": false
+            }, {
+                "data": "nombre_operador"
+            }, {
+                "data": "apellido_operador"
+            }, {
+                "data": "turno"
+            }, {
+                "data": "fecha_actual"
+            }, {
+                "data": "horas_paro"
+            }, {
+                "data": "id_paro"
+            }, {
+                "data": "descripcion"
+            }, {
+                "data": "comentario"
+            }
+            ]
+        });
+    }
+    //Lista tabla de tipos de paros en modal
+    var listar_paros = function () {
+        var table = $("#dt_tipo_paro").DataTable({
+            "destroy": true,
+            "ajax": {
+                "method": "POST",
+                "url": "lista_tipos_paro.php"
+            },
+            "columns": [{
+                "data": "id_tipo"
+            }, {
+                "data": "descripcion"
+            }, {
+                "defaultContent": "<button id='eliminaparo'>eliminar</button>"
+            }]
+        });
+        obtener_datos_paros("#dt_tipo_paro tbody", table);
+    }
+//Funcion para eliminar un tipo de paro
+    var obtener_datos_paros = function (tbody, table) {
+        $(tbody).on("click", "#eliminaparo", function () {
+            var data = table.row($(this).parents("tr")).data();
+            var id_paro = data.id_tipo;
+            var x = confirm("Desea eliminar este registro");
+            if (x) {
+                $.ajax({
+                    "method": "POST",
+                    "url": "borrar_tipo_paro.php",
+                    "data": { query: id_paro }
+                }
+                )
+                listar_paros();
+            }
+        });
+
+    }
+
+    //Funcion para guardar un nuevo tipo de paro
+    $("#guardatipo").on("click", function(){
+        var x = $("#inputlg").val();
+        
+        if (x!==undefined) {
+         
+                $.ajax({
+                    "method": "POST",
+                    "url": "inserta_tipo_paro.php",
+                    "data": { descripcion: x }
+                }
+                )
+                listar_paros();
+                $("#modal_add_paros").modal('hide');
+            }
+    });
+
+    
+
+</script>
+</body>
+
+</body>
+
+
+
+</html>

@@ -1,7 +1,10 @@
 <?php
 
 include('conexion.php');
-    $query ="SELECT date(r_inicio) as fecha, SUM(r_cantidad_producida) as cantidad,(SELECT hrs_prod_dia from dias_productivos order by id_productivos DESC LIMIT 1 ) as horas FROM registro_72 as horadia GROUP BY date(r_inicio);";
+if(isset($_POST['mesconsulta'])){
+    $mes = $_POST['mesconsulta'];
+
+    $query ="SELECT date(r_inicio) as fecha, SUM(r_cantidad_producida) as cantidad,(SELECT hrs_prod_dia from dias_productivos order by id_productivos DESC LIMIT 1 ) as horas FROM registro_72 as horadia  where MONTH(r_inicio) = $mes GROUP BY date(r_inicio)";
     $result = mysqli_query($conexion,$query);
     
     if(!$result){
@@ -20,6 +23,8 @@ include('conexion.php');
     }
     mysqli_free_result($result);
     mysqli_close($conexion);
-    
+}else{
+    echo "Missing parameters";
+}    
 
 ?>

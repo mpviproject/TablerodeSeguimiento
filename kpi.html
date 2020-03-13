@@ -44,6 +44,22 @@
 </head>
 
 <body>
+    <label><h3>Seleccione un mes para consultar</h3></label>
+    <select id="mes" autofocus>
+        <option value="1">Enero</option>
+        <option value="2">Febrero</option>
+        <option value="3">Marzo</option>
+        <option value="4">Abril</option>
+        <option value="5">Mayo</option>
+        <option value="6">Junio</option>
+        <option value="7">Julio</option>
+        <option value="8">Agosto</option>
+        <option value="9">Septiembre</option>
+        <option value="10">Octubre</option>
+        <option value="11">Noviembre</option>
+        <option value="12">Diciembre</option>
+    </select>
+    <button id="consulta">Consultar</button>
     <!--Tabla que muestra los dias y las horas trabajadas-->
     <div class="container" >
         <table border="1">
@@ -55,7 +71,7 @@
         </section>   
     </td>
     <td style="width: 600px; height: 300px;">
-          <h4 style="text-align: center;">Produccion de piezas por turno</h4>
+        <h4 style="text-align: center;">Produccion de piezas por turno</h4>
         <div id="canvas-holder" style="width:100%">
             <canvas id="chart-area"></canvas>
         </div>
@@ -63,8 +79,11 @@
         
      
     </td>
-    <td>
-        <h3>Balance de horawwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww</h3>
+    <td style="width: 600px; height: 300px;">
+        <h4 style="text-align: center;">Demoras del mes</h4>
+        <div id="canvas-holder" style="width:100%">
+            <canvas id="chart-area2"></canvas>
+        </div>
     </td>
     </tr>
     </table>
@@ -82,25 +101,33 @@
 
 <script>
 $( document ).ready(function() {
-    cargacapacidad();
-    piezasporturno()
+    
 });
 
-function cargacapacidad(){
+//boton de consulta para cargar nuevos datos
+$("#consulta").on("click",function(){
+    var selectedmonth = $("#mes").children("option:selected").val();
+    cargacapacidad(selectedmonth);
+    piezasporturno(selectedmonth);
+});
+
+
+function cargacapacidad(mes){
     $.ajax({
             type: "POST",
             url: "porcentajegenteral.php",
+            data: {mesconsulta:mes},
             success: function(result) {
                 $("#porcentaje").text(result +"%");              
             }
         })
 }
 
-function piezasporturno(){
-
+function piezasporturno(mes){
     $.ajax({
             type: "POST",
             url: "consultapiezasporturno.php",
+            data: {mesconsulta:mes},
             success: function(result) {
                 var obj2 = JSON.parse(result); 
                 var arreglo2 = [];
@@ -110,12 +137,12 @@ function piezasporturno(){
                 console.log(arreglo2);
                 config.data.datasets['0'].data = arreglo2;
                 grafica();
+                grafica2();
                console.log(config.data.datasets.data);
             }
         })
 
 }
-
 
 
         var config = {
@@ -141,12 +168,39 @@ function piezasporturno(){
             }
         };
 
+        var config2 = {
+            type: 'pie',
+            data: {
+                datasets: [{
+                    data: [3,4,2],
+                    backgroundColor: [
+                        window.chartColors.green,
+                        window.chartColors.blue,
+                        window.chartColors.orange,
+                        window.chartColors.yellow,
+                    ],
+                    label: 'Dataset 1'
+                }],
+                labels: [
+                    'Mantenimiento',
+                    'Maquina descompuesta',
+                    'Falla mecanica'
+                ]
+            },
+            options: {
+                responsive: true
+            }
+        };
         function grafica() {
             var ctx = document.getElementById('chart-area').getContext('2d');
             window.myPie = new Chart(ctx, config);
         };
 
-     
+        function grafica2() {
+            var ctx = document.getElementById('chart-area2').getContext('2d');
+            window.myPie = new Chart(ctx, config2);
+        };
+
 
         var colorNames = Object.keys(window.chartColors);
      

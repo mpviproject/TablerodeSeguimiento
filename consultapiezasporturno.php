@@ -2,14 +2,15 @@
 
 include('conexion.php');
     //cambiar parametros del mes que se quiera solicitar
-    $queryv ="SELECT SUM(r_cantidad_producida) as cantidad from forma_72 as f inner join registro_72 as r on f.id_forma = r.id_forma where f.turno ='V' and MONTH(f.fecha_actual) = 02;";
-    $querym ="SELECT SUM(r_cantidad_producida) as cantidad from forma_72 as f inner join registro_72 as r on f.id_forma = r.id_forma where f.turno ='M' and MONTH(f.fecha_actual) = 02;";
+    if(isset($_POST['mesconsulta'])){
+        $mes = $_POST['mesconsulta'];
+    $queryv ="SELECT SUM(r_cantidad_producida) as cantidad from forma_72 as f inner join registro_72 as r on f.id_forma = r.id_forma where f.turno ='V' and MONTH(f.fecha_actual) = $mes;";
+    $querym ="SELECT SUM(r_cantidad_producida) as cantidad from forma_72 as f inner join registro_72 as r on f.id_forma = r.id_forma where f.turno ='M' and MONTH(f.fecha_actual) = $mes;";
     $resultv = mysqli_query($conexion,$queryv);
     $resultm = mysqli_query($conexion,$querym);
     if(!$resultv ||!$resultm){
         die("Error!");
     }else{
-    
     while($data = mysqli_fetch_assoc($resultv)){
     $arreglov["data"][]=$data;
     }
@@ -23,4 +24,7 @@ include('conexion.php');
     }
     mysqli_free_result($resultv);
     mysqli_close($conexion);
+}else{
+    echo "Missing Parameters";
+}
 ?>
