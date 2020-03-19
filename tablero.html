@@ -844,11 +844,17 @@
         location.reload();
     })
 
-
     //funcion para listar las ordenes de compra que estan en proceso actualmente,
     var listar = function () {
         var table = $("#dt_procesos").DataTable({
             "destroy": true,
+            dom: 'Bfrtip',
+    "buttons": [{
+                extend: 'pdfHtml5',
+                orientation: 'landscape',
+                pageSize: 'LEGAL'
+            },
+            'copy', 'csv', 'excel'],
             "ajax": {
                 "method": "POST",
                 "url": "listaordenproduccion.php"

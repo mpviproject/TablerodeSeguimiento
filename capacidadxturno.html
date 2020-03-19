@@ -1,0 +1,97 @@
+<html>
+<meta charset="UTF-8">
+<title>Desempeño por turno </title>
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="css/estilos.css">
+<!-- Buttons DataTables -->
+
+<link rel="stylesheet" href="css/buttons.bootstrap.min.css">
+<link rel="stylesheet" href="css/font-awesome.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+<script src="../../../dist/Chart.min.js"></script>
+<script src="utils.js"></script>
+
+
+<head>
+    <!-- Head de interfaz de operadores -->
+    <div class="row fondo">
+        <div class="col-sm-12 col-md-12 col-lg-12">
+            <h1 class="text-center text-uppercase">Desempeño por turno</h1>
+        </div>
+    </div>
+    <br>
+    <!-- Botones para agregar registro -->
+    <button class='tareas btn btn-primary' onclick='location.href="tablero.html"'><i class='fa fa-home'></i>
+        Home</button>
+    <br>
+    <br>
+    <!-- Tabla de capacidad por turno matutino -->
+    <div class="row">
+        <div id="cuadro1" class="col-sm-12 col-md-12 col-lg-12">
+            <div class="col-sm-offset-2 col-sm-8">
+                <h3 class="text-center"> <small class="mensaje"></small></h3>
+            </div>
+            <div class="table-responsive col-sm-12">
+                <table id="dt_prod" class="table table-bordered table-hover" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Eficacia</th>
+                            <th>Productividad</th>
+                            <th>Reproceso</th>
+                            <th>Scrap</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</head>
+
+<body>
+
+
+</body>
+<script src="js/jquery-1.12.3.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script src="js/dataTables.bootstrap.js"></script>
+<!--botones DataTables-->
+<script src="js/dataTables.buttons.min.js"></script>
+<script src="js/buttons.bootstrap.min.js"></script>
+
+
+<script>
+    $(document).ready(function () {
+        listar();
+    });
+    var listar = function () {
+        var table = $("#dt_prod").DataTable({
+            "destroy": true,
+            "ajax": {
+                "url": "eficacia_produccionM.php",
+                "dataSrc": ""
+            },
+            "columns": [{
+                "data": "fecha"
+            }, {
+                "data": "productividadtotal"
+            }, {
+                "data": "eficaciatotal"
+            }, {
+                "data": "reprocesototal"
+            }, {
+                "data": "scraptotal"
+            }]
+        });
+
+    }
+
+</script>
+
+
+
+
+
+</html>

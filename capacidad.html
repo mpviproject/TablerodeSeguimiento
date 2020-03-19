@@ -84,10 +84,12 @@
     </div>
 
     <!-- Modal para ajustar parametros de productividad -->
-    <div class='modal fade bd-example-modal-lg' id='modal1' tabindex='1' role='dialog' aria-labelledby='myExtraLargeModalLabel' aria-hidden='true'>
+    <div class='modal fade bd-example-modal-lg' id='modal1' tabindex='1' role='dialog'
+        aria-labelledby='myExtraLargeModalLabel' aria-hidden='true'>
         <div class='modal-dialog modal-lg'>
             <div class='modal-content'>
-                <div class='modal-header'><button id="closemodaleditaproductividad" style="float:right;" class="btn btn-danger"><i class="fa fa-times"></i></button>
+                <div class='modal-header'><button id="closemodaleditaproductividad" style="float:right;"
+                        class="btn btn-danger"><i class="fa fa-times"></i></button>
                     <h4>Edita parametros de productividad</h4>
                 </div>
                 <div class="modal-body table-responsive">
@@ -132,21 +134,21 @@
 
 
 <script>
-    var arreglotemp=[];
-    $("#push").on("click",function(){
+    var arreglotemp = [];
+    $("#push").on("click", function () {
         console.log(arreglotemp);
     });
 
     var produc = [];
-    $("#parametros").on("click", function() {
+    $("#parametros").on("click", function () {
         listaproductivos();
         $("#modal1").modal();
     });
-    $("#act_calidad").on("click", function() {
+    $("#act_calidad").on("click", function () {
         registraproduccion();
     });
 
-    var listar_capacidadxdia = function() {
+    var listar_capacidadxdia = function () {
         var table = $("#capacidadpordia").DataTable({
             "destroy": true,
             "ajax": {
@@ -163,7 +165,7 @@
                 "data": "scrap"
             }, {
                 "defaultContent": "<input type='text'>",
-                "render": function(data, type, row, meta) {
+                "render": function (data, type, row, meta) {
                     //var query =($("#id_productivos").val())+($("#horasturno").val());
                     var query = (100 * (row.cantidad / ($("#horasdia").val())));
                     /* console.log(row.ht);
@@ -180,7 +182,7 @@
         $.ajax({
             type: "POST",
             url: "listaproduccionpordia.php",
-            success: function(data) {
+            success: function (data) {
                 var array = [];
                 var obj = JSON.parse(data);
                 return getthedata(obj);
@@ -190,8 +192,6 @@
 
 
     function getthedata(obj) {
-        
-        
         //obtenemos el numero de dias del mes para generar el arreglo.
         var now = new Date();
         var days = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate() + 1;
@@ -204,11 +204,10 @@
         for (var i = 0; i < obj['data'].length; i++) {
             var fecha = new Date(obj['data'][i].fecha);
             arreglo[fecha.getDate() + 1] = (((obj['data'][i].cantidad) / ($("#horasdia").val())) * 100);
-    
+
         }
-        
-       console.log( config.data.datasets['0'].data=arreglo);
-       cargagrafico();
+        console.log(config.data.datasets['0'].data = arreglo);
+        cargagrafico();
         return arreglo;
     }
 
@@ -233,7 +232,7 @@
 
     //Reparar consulta para que consulte de la base de datos.
     $(document).ready(function () {
- 
+
         listaproductivos();
         listar_capacidadxdia();
 
@@ -259,7 +258,7 @@
                 "data": "ht"
             }, {
                 "defaultContent": "<input type='text'>",
-                "render": function(data, type, row, meta) {
+                "render": function (data, type, row, meta) {
                     //var query =($("#id_productivos").val())+($("#horasturno").val());
                     var query = (100 * (row.ht / ($("#horasturno").val())));
                     /* console.log(row.ht);
@@ -281,7 +280,7 @@
         $.ajax({
             url: "lista_produccion.php",
             type: "POST",
-            success: function(data) {
+            success: function (data) {
                 Tdata = jQuery.parseJSON(data);
                 $("#id_productivos").val(Tdata['data']['0']['id_productivos']);
                 $("#horasturno").val(Tdata['data']['0']['hrs_prod_turno']);
@@ -293,7 +292,7 @@
         });
         listar_capacidadxdia();
         funciongrafica();
-       
+
     }
 
     function registraproduccion() {
@@ -311,7 +310,7 @@
                 data: {
                     "query": query
                 },
-                success: function() {
+                success: function () {
                     location.reload();
                 }
             });
@@ -363,11 +362,11 @@
                 }
             }
         }
-    };console.log(config);
-    
- function cargagrafico() {
-        
-      
+    }; console.log(config);
+
+    function cargagrafico() {
+
+
         var ctx = document.getElementById('canvas').getContext('2d');
         window.myLine = new Chart(ctx, config);
     };
