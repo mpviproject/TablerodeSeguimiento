@@ -1,7 +1,7 @@
 <?php
 include('conexion.php');
 
-    $query= "SELECT o.nombre_operador, SUM(h.scrap) as total_scrap, count(*) as total_h, SUM(h.tiempo_herramentacion) as total_t from herramentacion as h inner 
+    $query= "SELECT o.nombre_operador, SUM(h.scrap+h.reproceso) as total_scrap, count(*) as total_h, SUM(h.tiempo_herramentacion) as total_t from herramentacion as h inner 
     join operadores as o on h.id_operador = o.id_operador GROUP BY h.id_operador";
     
     $result = mysqli_query($conexion,$query);

@@ -1,7 +1,11 @@
 <?php
 include('conexion.php');
 
-    $query ="select * from orden_produccion";
+    $query ="SELECT o.numero_parte, o.tipo_produccion,o.fecha_solicitud,
+     o.orden_produccion, o.cantidad_requerida,o.fecha_requerida,o.numero_operacion,o.UPH, 
+     o.fecha_inicio, o.fecha_fin, o.id_produccion,IFNULL(SUM(r_cantidad_producida),0) as cantidad 
+     from orden_produccion as o left join forma_72 as f on o.id_produccion=f.id_produccion 
+     left join registro_72 as r on r.id_forma = f.id_forma WHERE o.estado=1 GROUP by f.id_produccion";
     $result = mysqli_query($conexion,$query);
     while($data = mysqli_fetch_assoc($result)){
         $arreglo["data"][]=$data;
