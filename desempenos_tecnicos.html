@@ -122,6 +122,14 @@
             var listar = function() {
                 var table = $("#dt_desempeñoGeneral").DataTable({
                     "destroy": true,
+                    dom: 'Bfrtip',
+                    buttons: [{
+                            extend: 'pdfHtml5',
+                            orientation: 'landscape',
+                            pageSize: 'LEGAL'
+                        },
+                        'copy', 'csv', 'excel'
+                    ],
                     "ajax": {
                         "method": "POST",
                         "url": "listar_desempeñoGeneral.php"
@@ -155,6 +163,10 @@
             var listar2 = function(total) {
                 var table = $("#dt_desempeñoEspecifico").DataTable({
                     "destroy": true,
+                    dom: 'Bfrtip',
+                    buttons: [
+                        'copy', 'csv', 'excel', 'pdf'
+                    ],
                     "ajax": {
                         "method": "POST",
                         "url": "listar_desempeñoEspecifico.php"
@@ -165,7 +177,7 @@
                         render: function(data, type, row) {
                             var nivel = row.total_h / total;
                             var nivel_total = nivel * 100;
-                            return nivel_total + "%";
+                            return nivel_total.toFixed(2) + "%";
                         }
                     }, {
                         "data": "total_scrap"

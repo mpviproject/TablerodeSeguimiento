@@ -139,6 +139,10 @@
                 var listar = function() {
                     var table = $("#dt_cliente").DataTable({
                         "destroy": true,
+                        dom: 'Bfrtip',
+                        buttons: [
+                            'csv', 'excel', 'pdf'
+                        ],
                         "ajax": {
                             "method": "POST",
                             "url": "listar_estatus.php"

@@ -80,6 +80,14 @@
         var listar = function() {
             var table = $("#dt_cliente").DataTable({
                 "destroy": true,
+                dom: 'Bfrtip',
+                buttons: [{
+                        extend: 'pdfHtml5',
+                        orientation: 'landscape',
+                        pageSize: 'LEGAL'
+                    },
+                    'csv', 'excel'
+                ],
                 "ajax": {
                     "method": "POST",
                     "url": "listar_herramentacion.php"

@@ -301,6 +301,14 @@
         var listar = function() {
             var table = $("#dt_forma").DataTable({
                 "destroy": true,
+                dom: 'Bfrtip',
+                buttons: [{
+                        extend: 'pdfHtml5',
+                        orientation: 'landscape',
+                        pageSize: 'LEGAL'
+                    },
+                    'csv', 'excel'
+                ],
                 "ajax": {
                     "method": "POST",
                     "url": "lista_forma74.php"
