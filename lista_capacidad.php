@@ -2,9 +2,9 @@
 
 include('conexion.php');
 
-
-
-    $query ="SELECT f.id_forma, r.id_registro,r.r_inicio,r.r_fin,f.turno,TIMESTAMPDIFF(hour,r.r_inicio,r.r_fin) as ht from forma_72 as f inner join registro_72 as r on f.id_forma = r.id_forma";
+if(isset($_POST['mesconsulta'])){
+    $mes = $_POST['mesconsulta'];
+    $query ="SELECT f.id_forma, r.id_registro,r.r_inicio,r.r_fin,f.turno,TIMESTAMPDIFF(hour,r.r_inicio,r.r_fin) as ht from forma_72 as f inner join registro_72 as r on f.id_forma = r.id_forma where MONTH(r.r_inicio)=$mes";
     $result = mysqli_query($conexion,$query);
     
     if(!$result){
@@ -18,6 +18,7 @@ include('conexion.php');
     }
     mysqli_free_result($result);
     mysqli_close($conexion);
+}
     
 
 ?>

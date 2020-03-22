@@ -38,6 +38,25 @@
 <body>
     <!--Tabla que muestra los dias y las horas trabajadas-->
     <h1>Capacidad por turno</h1>
+    <label>
+        <h3>Elija el mes que se desea mostrar</h3>
+    </label>
+    <select id="mes" autofocus>
+        <option value="1">Enero</option>
+        <option value="2">Febrero</option>
+        <option value="3">Marzo</option>
+        <option value="4">Abril</option>
+        <option value="5">Mayo</option>
+        <option value="6">Junio</option>
+        <option value="7">Julio</option>
+        <option value="8">Agosto</option>
+        <option value="9">Septiembre</option>
+        <option value="10">Octubre</option>
+        <option value="11">Noviembre</option>
+        <option value="12">Diciembre</option>
+    </select>
+    <button id="consulta">Consultar</button>
+    <button id="consultatodo">Consultar todos los registros</button>
     <div class="row">
         <div id="cuadro1" class="col-sm-12 col-md-12 col-lg-12">
             <div class="col-sm-offset-2 col-sm-8">
@@ -93,7 +112,7 @@
                     <h4>Edita parametros de productividad</h4>
                 </div>
                 <div class="modal-body table-responsive">
-                    <p>Estos parametros son modificables y cada cambio se guarda en la base de datos</p>
+                    <p>Solo se permite un parametro de productividad por mes</p>
                     <table class="table table-hove  table-condensed table-bordered responsive-table">
                         <thead class="thead-dark">
                             <tr>
@@ -141,19 +160,28 @@
 
     var produc = [];
     $("#parametros").on("click", function () {
-        listaproductivos();
+       // listaproductivos();
         $("#modal1").modal();
     });
     $("#act_calidad").on("click", function () {
         registraproduccion();
     });
 
-    var listar_capacidadxdia = function () {
+    //Funcion para mostrar consulta por día 
+    $("#consulta").on("click", function () {
+        var selectedmonth = $("#mes").children("option:selected").val();
+        listaproductivos(selectedmonth);
+        listar_capacidadxdia(selectedmonth);
+        listaporturno(selectedmonth);
+      
+    });
+    var listar_capacidadxdia = function (mes) {
         var table = $("#capacidadpordia").DataTable({
             "destroy": true,
             "ajax": {
                 "method": "POST",
-                "url": "listaproduccionpordia.php"
+                "url": "listaproduccionpordia.php",
+                "data" : {mesconsulta:mes}
             },
             "columns": [{
                 "data": "fecha"
@@ -174,18 +202,19 @@
                 }
             }]
         });
-
+        funciongrafica(mes);
     }
 
 
-    function funciongrafica() {
+    function funciongrafica(mes) {
         $.ajax({
             type: "POST",
             url: "listaproduccionpordia.php",
+            data: {mesconsulta:mes},
             success: function (data) {
-                var array = [];
-                var obj = JSON.parse(data);
-                return getthedata(obj);
+                /* var array = [];
+                var obj = JSON.parse(data); */
+                return getthedata(data);
             }
         });
     }
@@ -233,14 +262,20 @@
     //Reparar consulta para que consulte de la base de datos.
     $(document).ready(function () {
 
-        listaproductivos();
-        listar_capacidadxdia();
+        //listaproductivos();
+        //listar_capacidadxdia();
 
 
-        var table = $('#example').DataTable({
+    });
+
+    //funcion para listar la capacidad por turno
+    function listaporturno(mes){    
+    var table = $('#example').DataTable({
+        "destroy": true,
             "ajax": {
                 "method": "POST",
                 "url": "lista_capacidad.php",
+                "data": {mesconsulta:mes}
             },
             "columns": [{
                 "data": "id_forma",
@@ -270,17 +305,22 @@
                 [1, 'asc']
             ]
         });
-    });
 
-
-
-
+    }
     //Funcion para listar ultimos parametros de dias productivos
-    function listaproductivos() {
+    //Programar funcionalidad para que muestre el registro guardado en el mes que se esta haciendo la consulta.
+    //Agregar opcion de a que mes quieres asignarle esos parametros
+    
+    function listaproductivos(mes) {
         $.ajax({
             url: "lista_produccion.php",
             type: "POST",
+            data: {mesconsulta:mes},
             success: function (data) {
+                console.log(data);
+                if(data =="Missing Parameters"||data =="No coincidence"|| data ==""){         
+                    alert("No se encuentran parametros guardados para este mes!");       
+                }else{
                 Tdata = jQuery.parseJSON(data);
                 $("#id_productivos").val(Tdata['data']['0']['id_productivos']);
                 $("#horasturno").val(Tdata['data']['0']['hrs_prod_turno']);
@@ -288,11 +328,11 @@
                 $("#diaslaborales").val(Tdata['data']['0']['dias_prod']);
                 $("#maquinas").val(Tdata['data']['0']['maquinas_prod']);
                 $("#horasmes").val(Tdata['data']['0']['hrs_prod_mes']);
+            
+            }
             }
         });
-        listar_capacidadxdia();
-        funciongrafica();
-
+        //listar_capacidadxdia();
     }
 
     function registraproduccion() {
