@@ -12,8 +12,8 @@ if(!$result){
 if (mysqli_num_rows($result) >= 1) {
 while($data = mysqli_fetch_assoc($result)){
     $arreglo["data"][]=$data;
-    echo json_encode($arreglo);    
     }
+    echo json_encode($arreglo);  
    } else {
      echo "0";
    }

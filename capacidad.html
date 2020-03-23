@@ -42,15 +42,15 @@
         <h3>Elija el mes que se desea mostrar</h3>
     </label>
     <select id="mes" autofocus>
-        <option value="1">Enero</option>
-        <option value="2">Febrero</option>
-        <option value="3">Marzo</option>
-        <option value="4">Abril</option>
-        <option value="5">Mayo</option>
-        <option value="6">Junio</option>
-        <option value="7">Julio</option>
-        <option value="8">Agosto</option>
-        <option value="9">Septiembre</option>
+        <option value="01">Enero</option>
+        <option value="02">Febrero</option>
+        <option value="03">Marzo</option>
+        <option value="04">Abril</option>
+        <option value="05">Mayo</option>
+        <option value="06">Junio</option>
+        <option value="07">Julio</option>
+        <option value="08">Agosto</option>
+        <option value="09">Septiembre</option>
         <option value="10">Octubre</option>
         <option value="11">Noviembre</option>
         <option value="12">Diciembre</option>
@@ -138,7 +138,7 @@
             </div>
         </div>
     </div>
-    <div style="width:75%;">
+    <div id="canbas" style="width:75%;" style="display:none" >
         <canvas id="canvas"></canvas>
     </div>
     <button id="push">presiona</button>
@@ -160,20 +160,30 @@
 
     var produc = [];
     $("#parametros").on("click", function () {
-       // listaproductivos();
+        // listaproductivos();
         $("#modal1").modal();
     });
     $("#act_calidad").on("click", function () {
-        registraproduccion();
+        var selectedmonth = $("#mes").children("option:selected").val();
+        registraproduccion(selectedmonth);
     });
 
     //Funcion para mostrar consulta por día 
     $("#consulta").on("click", function () {
+        //Limpia los datos de la consulta anterior
+        $("#id_productivos").val("");
+        $("#horasturno").val("");
+        $("#horasdia").val("");
+        $("#diaslaborales").val("");
+        $("#maquinas").val("");
+        $("#horasmes").val("");
+        $("#canvas").css({"display":"none"});
+        //obtiene el mes seleccionado, y lanza las consultas 
         var selectedmonth = $("#mes").children("option:selected").val();
         listaproductivos(selectedmonth);
         listar_capacidadxdia(selectedmonth);
         listaporturno(selectedmonth);
-      
+
     });
     var listar_capacidadxdia = function (mes) {
         var table = $("#capacidadpordia").DataTable({
@@ -181,7 +191,7 @@
             "ajax": {
                 "method": "POST",
                 "url": "listaproduccionpordia.php",
-                "data" : {mesconsulta:mes}
+                "data": { mesconsulta: mes }
             },
             "columns": [{
                 "data": "fecha"
@@ -210,11 +220,15 @@
         $.ajax({
             type: "POST",
             url: "listaproduccionpordia.php",
-            data: {mesconsulta:mes},
+            data: { mesconsulta: mes },
             success: function (data) {
-                /* var array = [];
-                var obj = JSON.parse(data); */
-                return getthedata(data);
+                if (data == "0") {
+                    console.log("No data to display in the graphic!");
+                    $("#canvas").css({"display":"none"});
+                } else {
+                    var obj = JSON.parse(data);
+                    getthedata(obj);
+                }
             }
         });
     }
@@ -222,6 +236,7 @@
 
     function getthedata(obj) {
         //obtenemos el numero de dias del mes para generar el arreglo.
+       
         var now = new Date();
         var days = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate() + 1;
         //creamos el objeto y el arreglo donde se estaria guardando
@@ -233,10 +248,10 @@
         for (var i = 0; i < obj['data'].length; i++) {
             var fecha = new Date(obj['data'][i].fecha);
             arreglo[fecha.getDate() + 1] = (((obj['data'][i].cantidad) / ($("#horasdia").val())) * 100);
-
         }
         console.log(config.data.datasets['0'].data = arreglo);
         cargagrafico();
+        $("#canvas").css({"display":"block"});
         return arreglo;
     }
 
@@ -269,93 +284,136 @@
     });
 
     //funcion para listar la capacidad por turno
-    function listaporturno(mes){    
-    var table = $('#example').DataTable({
-        "destroy": true,
-            "ajax": {
-                "method": "POST",
-                "url": "lista_capacidad.php",
-                "data": {mesconsulta:mes}
-            },
-            "columns": [{
-                "data": "id_forma",
-                "visible": false
-            }, {
-                "data": "id_registro",
-                "visible": false
-            }, {
-                "data": "r_inicio"
-            }, {
-                "data": "r_fin"
-            }, {
-                "data": "turno"
-            }, {
-                "data": "ht"
-            }, {
-                "defaultContent": "<input type='text'>",
-                "render": function (data, type, row, meta) {
-                    //var query =($("#id_productivos").val())+($("#horasturno").val());
-                    var query = (100 * (row.ht / ($("#horasturno").val())));
-                    /* console.log(row.ht);
-                    console.log($("#horasdia").val()); */
-                    return query.toFixed(2) + "%";
-                }
-            }],
-            "order": [
-                [1, 'asc']
-            ]
-        });
+    function listaporturno(mes) {
+        try {
+            var table = $('#example').DataTable({
+                "destroy": true,
+                "ajax": {
+                    "method": "POST",
+                    "url": "lista_capacidad.php",
+                    "data": { mesconsulta: mes }
+                },
+                "columns": [{
+                    "data": "id_forma",
+                    "visible": false
+                }, {
+                    "data": "id_registro",
+                    "visible": false
+                }, {
+                    "data": "r_inicio"
+                }, {
+                    "data": "r_fin"
+                }, {
+                    "data": "turno"
+                }, {
+                    "data": "ht"
+                }, {
+                    "defaultContent": "<input type='text'>",
+                    "render": function (data, type, row, meta) {
+                        //var query =($("#id_productivos").val())+($("#horasturno").val());
+                        var query = (100 * (row.ht / ($("#horasturno").val())));
+                        /* console.log(row.ht);
+                        console.log($("#horasdia").val()); */
+                        return query.toFixed(2) + "%";
+                    }
+                }],
+                "order": [
+                    [1, 'asc']
+                ]
+            });
+        } catch (error) {
+            alert("No hay datos en la tabla");
+        };
 
     }
     //Funcion para listar ultimos parametros de dias productivos
     //Programar funcionalidad para que muestre el registro guardado en el mes que se esta haciendo la consulta.
     //Agregar opcion de a que mes quieres asignarle esos parametros
-    
+
     function listaproductivos(mes) {
         $.ajax({
             url: "lista_produccion.php",
             type: "POST",
-            data: {mesconsulta:mes},
+            data: { mesconsulta: mes },
             success: function (data) {
                 console.log(data);
-                if(data =="Missing Parameters"||data =="No coincidence"|| data ==""){         
-                    alert("No se encuentran parametros guardados para este mes!");       
-                }else{
-                Tdata = jQuery.parseJSON(data);
-                $("#id_productivos").val(Tdata['data']['0']['id_productivos']);
-                $("#horasturno").val(Tdata['data']['0']['hrs_prod_turno']);
-                $("#horasdia").val(Tdata['data']['0']['hrs_prod_dia']);
-                $("#diaslaborales").val(Tdata['data']['0']['dias_prod']);
-                $("#maquinas").val(Tdata['data']['0']['maquinas_prod']);
-                $("#horasmes").val(Tdata['data']['0']['hrs_prod_mes']);
-            
-            }
+                if (data == "Missing Parameters" || data == "No coincidence" || data == "") {
+                    alert("No se encuentran parametros guardados para este mes!");
+                } else {
+                    Tdata = jQuery.parseJSON(data);
+                    $("#id_productivos").val(Tdata['data']['0']['id_productivos']);
+                    $("#horasturno").val(Tdata['data']['0']['hrs_prod_turno']);
+                    $("#horasdia").val(Tdata['data']['0']['hrs_prod_dia']);
+                    $("#diaslaborales").val(Tdata['data']['0']['dias_prod']);
+                    $("#maquinas").val(Tdata['data']['0']['maquinas_prod']);
+                    $("#horasmes").val(Tdata['data']['0']['hrs_prod_mes']);
+
+                }
             }
         });
         //listar_capacidadxdia();
     }
 
-    function registraproduccion() {
-        $("#id_productivos").val();
-        var ht = $("#horasturno").val();
-        var hd = $("#horasdia").val();
-        var dl = $("#diaslaborales").val();
-        var maq = $("#maquinas").val();
-        var hm = $("#horasmes").val();
-        if (ht !== "" || hd !== "" || dl !== "" || maq !== "" || hm !== "") {
-            var query = "INSERT INTO dias_productivos VALUES(NULL," + "NOW()," + ht + "," + hd + "," + dl + "," + maq + "," + hm + ");";
-            $.ajax({
-                url: "guarda_registro72.php",
-                type: "POST",
-                data: {
-                    "query": query
-                },
-                success: function () {
-                    location.reload();
-                }
-            });
+    function registraproduccion(mes) {
+        console.log("Mostrando registros de mes: "+mes);
+        $.ajax({
+            url: "consulta_capacidad_produccion.php",
+            type: "POST",
+            data: {
+                "mesconsulta": mes
+            },
+            success: function (data) {
+                //Comprueba si el registro de ese mes existe, si existe lo sobreescribe si no lo crea
+                if (data == "REGISTRADO") {
+                    var id = $("#id_productivos").val();
+                    var ht = $("#horasturno").val();
+                    var hd = $("#horasdia").val();
+                    var dl = $("#diaslaborales").val();
+                    var maq = $("#maquinas").val();
+                    var hm = $("#horasmes").val();
+                    if (ht != "" || hd != "" || dl != "" || maq != "" || hm != "") {
+                        var query = "UPDATE dias_productivos set hrs_prod_turno=" + ht + ",hrs_prod_dia=" + hd + ",dias_prod=" + dl + ",maquinas_prod=" + maq + ",hrs_prod_mes=" + hm + " where id_productivos=" + id;
+                        $.ajax({
+                            url: "guarda_registro72.php",
+                            type: "POST",
+                            data: {
+                                "query": query
+                            },
+                            success: function () {
+                                location.reload();
+                            }
+                        });
+                    } else {
+                        console.log("Llene todos los campos!");
+                    }
 
-        }
+                } else if (data == "NO REGISTRADO") {
+                    var id = $("#id_productivos").val();
+                    var ht = $("#horasturno").val();
+                    var hd = $("#horasdia").val();
+                    var dl = $("#diaslaborales").val();
+                    var maq = $("#maquinas").val();
+                    var hm = $("#horasmes").val();
+                    if (ht != "" || hd != "" || dl != "" || maq != "" || hm != "") {
+                        var query = "INSERT INTO dias_productivos VALUES(NULL," + "'2020-"+mes+"-01'," + ht + "," + hd + "," + dl + "," + maq + "," + hm + ");";
+                    
+                         $.ajax({
+                            url: "guarda_registro72.php",
+                            type: "POST",
+                            data: {
+                                "query": query
+                            },
+                            success: function () {
+                                
+                                location.reload();
+                            }
+                        }); 
+                    }
+                } else {
+                    console.log(data);
+                }
+            }
+        });
     }
     var dias = daysInThisMonth();
     console.log(dias);
@@ -405,8 +463,6 @@
     }; console.log(config);
 
     function cargagrafico() {
-
-
         var ctx = document.getElementById('canvas').getContext('2d');
         window.myLine = new Chart(ctx, config);
     };

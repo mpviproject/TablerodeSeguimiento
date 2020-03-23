@@ -1,10 +1,10 @@
 <?php
 
 include('conexion.php');
-$query=mysqli_query($conexion,"SELECT o.nombre_operador FROM herramentacion as h 
-inner join operadores as o WHERE h.id_operador = o.id_operador GROUP BY h.id_operador");
-$Qoperadores ="SELECT o.nombre_operador FROM herramentacion as h 
-inner join operadores as o WHERE h.id_operador = o.id_operador GROUP BY h.id_operador";
+if(isset($_POST['mesconsulta'])){
+    $mes = $_POST['mesconsulta'];
+$query=mysqli_query($conexion,"SELECT o.nombre_operador FROM herramentacion as h inner join operadores as o on h.id_operador = o.id_operador where month(h.fecha_herramentacion)= $mes GROUP BY h.id_operador");
+$Qoperadores ="SELECT o.nombre_operador FROM herramentacion as h inner join operadores as o on h.id_operador = o.id_operador where month(h.fecha_herramentacion)= $mes GROUP BY h.id_operador";
 $operadores= mysqli_query($conexion,$Qoperadores);
 
 if(!$operadores){
@@ -27,5 +27,7 @@ echo json_encode($arreglo3);
 }
 mysqli_free_result($operadores);
 mysqli_close($conexion);
-
+}else{
+    echo "Missing Parameters";
+}
 ?>

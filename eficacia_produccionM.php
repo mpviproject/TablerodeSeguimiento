@@ -23,7 +23,7 @@ if (isset($_POST['mesconsulta'])) {
         public $scraptotal;
     }
     $sql = "SELECT f.id_forma,DATE(r.r_inicio) as fecha, r.r_cantidad_producida,r.reproceso,r.scrap, TIMESTAMPDIFF(HOUR,r.r_inicio,r.r_fin) as horas,o.UPH,SUM(ifnull(p.horas_paro,0)) as tiempo_demora,(o.UPH/60) as tiempo_operacion from forma_72 as f INNER JOIN registro_72 as r on f.id_forma = r.id_forma inner join orden_produccion as o on f.id_produccion = o.id_produccion left JOIN paro_maquinas as p on p.id_forma = f.id_forma where f.turno='M' && MONTH(r.r_inicio)=$mes GROUP BY f.id_forma";
-    $sql2 = "SELECT f.id_forma,(((IFNULL(r.r_cantidad_producida,0))/ (TIMESTAMPDIFF(HOUR,r.r_inicio,r.r_fin) * IFNULL(o.UPH,0)))*100) as eficacia ,(IFNULL(r.reproceso,0))/IFNULL(r.r_cantidad_producida,0) as reproceso, (IFNULL(r.scrap,0)/IFNULL(r.r_cantidad_producida,0)) as SCRAP from forma_72 as f INNER JOIN registro_72 as r on f.id_forma = r.id_forma inner join orden_produccion as o on f.id_produccion = o.id_produccion where f.turno='M' && MONTH(r.r_inicio)=$mes ";
+    $sql2 = "SELECT f.id_forma,(((IFNULL(r.r_cantidad_producida,0))/ (TIMESTAMPDIFF(HOUR,r.r_inicio,r.r_fin) * IFNULL(o.UPH,0)))) as eficacia ,(IFNULL(r.reproceso,0))/IFNULL(r.r_cantidad_producida,0) as reproceso, (IFNULL(r.scrap,0)/IFNULL(r.r_cantidad_producida,0)) as SCRAP from forma_72 as f INNER JOIN registro_72 as r on f.id_forma = r.id_forma inner join orden_produccion as o on f.id_produccion = o.id_produccion where f.turno='M' && MONTH(r.r_inicio)=$mes ";
     $result2 = mysqli_query($conexion, $sql2);
     $result = mysqli_query($conexion, $sql);
     $count = 0;
@@ -75,7 +75,7 @@ if (isset($_POST['mesconsulta'])) {
         $totalobj = new totales;
         $totalobj->fecha = $arreglos[$i]->fecha;
         $totalobj->productividadtotal = array_sum($arreglos[$i]->value) / sizeof($arreglos[$i]->value);
-        $totalobj->eficaciatotal = array_sum($arreglos[$i]->eficacia);
+        $totalobj->eficaciatotal = array_sum($arreglos[$i]->eficacia)/sizeof($arreglos[$i]->eficacia);
         $totalobj->reprocesototal = array_sum($arreglos[$i]->reproceso);
         $totalobj->scraptotal = array_sum($arreglos[$i]->scrap);
         $arreglostotales[$i] = $totalobj;

@@ -14,6 +14,8 @@ while($data = mysqli_fetch_assoc($result)){
 $arreglo["data"][]=$data;
 }
 echo json_encode($arreglo);
+    }else{
+        echo "No coincidence";
     }
 }
 mysqli_free_result($result);

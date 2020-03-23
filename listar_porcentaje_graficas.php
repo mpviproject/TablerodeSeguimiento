@@ -1,10 +1,11 @@
 <?php
 
 include('conexion.php');
-$query=mysqli_query($conexion,"SELECT count(*) FROM herramentacion GROUP BY id_operador");
-
-$Qoperadores ="SELECT count(*) FROM herramentacion GROUP BY id_operador";
-$Qtotal ="SELECT count(*) FROM herramentacion";
+if(isset($_POST['mesconsulta'])){
+    $mes = $_POST['mesconsulta'];
+$query=mysqli_query($conexion,"SELECT count(*) FROM herramentacion where month(fecha_herramentacion)=$mes GROUP BY id_operador");
+$Qoperadores ="SELECT count(*) FROM herramentacion where month(fecha_herramentacion)=$mes GROUP BY id_operador";
+$Qtotal ="SELECT count(*) FROM herramentacion where month(fecha_herramentacion)=$mes";
 $operadores= mysqli_query($conexion,$Qoperadores);
 $total = mysqli_query($conexion,$Qtotal);
 
@@ -31,5 +32,7 @@ echo json_encode($arreglo3);
 }
 mysqli_free_result($total);
 mysqli_close($conexion);
-
+}else{
+    echo "Missing parameters";
+}
 ?>
